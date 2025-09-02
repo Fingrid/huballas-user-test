@@ -1,0 +1,360 @@
+﻿eventID,DescriptionEN
+0,Unknown
+ACP.PRP.HST,Search Accounting Point History
+AGR.CNF.GRD,Grid Agreement Confirmation (DH-312)
+AGR.CRE.EXP.REQ,New metering point authorisation request
+AGR.CRE.PRU.REQ,New metering point authorisation request
+AGR.RTR.GRD,Grid Agreement Retrieve
+AGR.RTR.SLS,Sales Agreement Retrieve
+AGR.UPD.EXP.REQ,Update Metering Point Authorisation request
+BMS.LST,Search Business Messages
+BTD.RSM,Retrieve BTD Step Messages
+CAP.AUT.CRE.CUS,Process New Customer Authorisation Request With MeteringPointEAN
+CAP.CUS.PVC,Update Customer Restricted Info
+Create Organisation Address,Create Organisation Address
+Create Organisation Contact,Create Organisation Contact
+Create Portal User Identity,Create Portal User Identity
+Create Scheduled Job Template,Create Scheduled Job Template
+Create Scheduled Job Template Accounting Points where the consumption quota is exceeded Report,Create Scheduled Job Template Accounting Points where the consumption quota is exceeded Report
+Create Scheduled Job Template Agreement and Invoice Address Control Report,Create Scheduled Job Template Agreement and Invoice Address Control Report
+Create Scheduled Job Template Agreement Contacts Control Report,Create Scheduled Job Template Agreement Contacts Control Report
+Create Scheduled Job Template Agreement Customer Relations Control Report,Create Scheduled Job Template Agreement Customer Relations Control Report
+Create Scheduled Job Template Agreement Product Relations Control Report,Create Scheduled Job Template Agreement Product Relations Control Report
+Create Scheduled Job Template Balance Data Validity Control Report,Create Scheduled Job Template Balance Data Validity Control Report
+Create Scheduled Job Template balance settlement connections Control Report,Create Scheduled Job Template balance settlement connections Control Report
+Create Scheduled Job Template Customer Control Report,Create Scheduled Job Template Customer Control Report
+Create Scheduled Job Template Imbalance Settlement Metering Grid Areas Control Report,Create Scheduled Job Template Imbalance Settlement Metering Grid Areas Control Report
+Create Scheduled Job Template Imbalance Settlement Metering Points Control Report,Create Scheduled Job Template Imbalance Settlement Metering Points Control Report
+Create Scheduled Job Template Invoicing Control Report,Create Scheduled Job Template Invoicing Control Report
+Create Scheduled Job Template Master Data for Energy Community Ownership report,Create Scheduled Job Template Master Data for Energy Community Ownership report
+Create Scheduled Job Template Metering Point Adresses Control Report,Create Scheduled Job Template Metering Point Adresses Control Report
+Create Scheduled Job Template Metering Point Control Report,Create Scheduled Job Template Metering Point Control Report
+Create Scheduled Job Template Metering Point Devices  Control Report,Create Scheduled Job Template Metering Point Devices  Control Report
+Create Scheduled Job Template Settlement Control Report,Create Scheduled Job Template Settlement Control Report
+Create Scheduled Job Template TS data per ACP report,Create Scheduled Job Template TS data per ACP report
+Create System User Identity,Create System User Identity
+CreateOrganisationUser,CreateOrganisationUser
+CUS.PRP.HST,Search Customer History
+Delete Organisation Address,Delete Organisation Address
+Delete Portal User Identity,Delete Portal User Identity
+DeleteOrganisationUser,DeleteOrganisationUser
+DH-1000,Get Accounting Point Data Request (DH-1000)
+DH-1001,Get Contract Data Request (DH-1001)
+DH-1002,Get Time Series Data
+DH-1003,Get Authorisation Data Request (DH-1003)
+DH-1005,Get Customer Data Request (DH-1005)
+DH-1006,Get Organisation Data Request (DH-1006)
+DH-111-1,Customer Information Update
+DH-112-1,Customer Information Update Request - DSO
+DH-121,New Accounting Point
+DH-122-1,Accounting Point Data Update
+DH-123,Accounting Point Deletion
+DH-124-1,Accounting Point Data Update Request
+DH-125-1,Metering Time Step Update
+DH-126,Create Accounting Point Relation Request
+DH-126-1,Create Accounting Point Relation Request
+DH-127,End Accounting Point Relation Request
+DH-127-1,End Accounting Point Relation Request
+DH-131-1,Accounting Point Identification Request
+DH-132-1,Accounting Point and Customer Information Request - Current Supplier
+DH-133-1,Accounting Point and Customer Information Request - New Supplier
+DH-134-1,Accounting Point and Customer Information Request - DSO
+DH-135-1,Accounting Point and Customer Information Request - 3rd Party
+DH-141,Create Energy Community Request
+DH-142,Update Energy Community Request
+DH-143,End Energy Community Request
+DH-211,Metering Data Report
+DH-22x,Metering Data Request
+DH-311-1,Notification of a New Agreement
+DH-311-11,Additional Sales Agreement Information Request
+DH-311-14,Confirm Sales Agreement Request
+DH-312-1,Grid Agreement Confirmation
+DH-321-1,Sales Agreement Information Update
+DH-322-1,Grid Agreement Information Update
+DH-331-1,Notification of Sales Agreement End
+DH-332-1,Notification of Customer Moving Out by New Supplier
+DH-333-1,Notification of Grid Agreement End
+DH-341-1,Notification of Sales Agreement Cancellation
+DH-342-1,Notification of Grid Agreement Cancellation
+DH-343-1,Notification of Refusal of Sales Agreement Restore by Former Supplier
+DH-344-1,Notification of Grid Agreement End in the Case of Cancellation
+DH-351-1,Cancellation of Sales Agreement End Request
+DH-352-1,Cancellation of Grid Agreement End Request
+DH-411-1,Supply Connection Request
+DH-412-1,Notification of Supply Connection
+DH-413-1,Notification of Connection Delay
+DH-414-1,Cancellation of Connection Request
+DH-421-1,Supply Disconnection Request
+DH-422-1,Notification of Supply Disconnection
+DH-423-1,Notification of Disonnection Delay
+DH-424-1,Cancellation of Disconnection Request
+DH-521,Imbalance Settlement Data Request - Supplier
+DH-522,Imbalance Settlement Data Request - DSO
+DH-711,Create Product Data - Supplier
+DH-712,Create Product Data - DSO
+DH-713,Update Product Price Info - Supplier
+DH-713-1,Update Product Price Info - Supplier
+DH-714,Update Product Price Info - DSO
+DH-714-1,Update Product Price Info - DSO
+DH-716,Update Product Time Series - DSO
+DH-718,Update Product Structural Data - DSO
+DH-721-1,Product Structural Data Request - Supplier
+DH-722-1,Product Structural Data Request - DSO
+DH-724-1,Product Time Series Data Request - Supplier
+DH-732-1,Invoice Row Data Report – DSO
+DH-742-1,Invoice Row Data Request - DSO
+DH-811,Notification of Customer Authorisation - Supplier
+DH-812,Notification of Customer Authorisation - 3rd Party
+DH-813,Notification of Customer Authorisation - DSO
+DH-820,New Customer Authorisation by Customer
+DH-921-1,Party Information Request - Supplier
+DH-922-1,Party Information Request - DSO
+ETS.LST.GUI,Retrieve Energy Time Series UI
+ETS.OBS.RTR,Get Observations
+ETS.SUI,Submit Meter Data UI
+EXP.CRE.REQ,New exchange point request
+EXP.UPD.DOT.REQ,Exchange Point Update - Direction of Transfer request
+EXP.UPD.REQ,Update exchange point request
+Get Average Consumption,Get Average Consumption
+IVR.LST,Invoice Row List
+IVR.LST.PRE,Pre Invoice Row List
+List Customer,List Customer
+List Energy Communities,List Energy Communities
+List Exchange Point,List Exchange Point
+List Grid Agreement,List Grid Agreement
+List Message Delegations,List Message Delegations
+List Metering Grid Area,List Metering Grid Area
+List Organisations,List Organisations
+List Party Authorisation,List Party Authorisation
+List Portal User Identities,List Portal User Identities
+List Product,List Product
+List Production Unit,List Production Unit
+List report runs,List Report Runs
+List Sales Agreement,List Sales Agreement
+List Sent Emails,List Sent Emails
+List System User Identities,List System User Identities
+ListBusinessMessages,ListBusinessMessages
+ListOrganisationUser,ListOrganisationUser
+MGA.UPD.IOS.REQ,Update imbalance open supplier request
+MGA.UPD.LSS.REQ,Update loss supplier request
+MGA.UPD.OBS.REQ,Update obligatory supplier request
+MSG.PRC,Process Message
+MSG.UNK,Description not found
+PAU.CRE.REQ,New party autohrisation request
+PAU.UPD.REQ,Update party authorisation request
+PCP.RTR,Product Component Retrieve
+PCP.RTR,Product Component Retrieve
+PeekMessage,PeekMessage
+PeekMessage,PeekMessage
+PRU,Production unit
+PRU,Production unit
+PRU.CRE.REQ,New production unit request
+PRU.CRE.REQ,New production unit request
+PRU.UPD.AGR.REQ,Update supplier agreement request
+PRU.UPD.INF.REQ,Update Production Unit Information (U2)
+PRU.UPD.INF.REQ,Update Production Unit Information (U2)
+PRU.UPD.MTS.REQ,Update production unit metering time step request
+PRU.UPD.MTS.REQ,Update production unit metering time step request
+PRU.UPD.REQ,Update production unit request
+PRU.UPD.REQ,Update production unit request
+Regenerate 2FA Key,Regenerate 2FA Key
+Regenerate 2FA Key,Regenerate 2FA Key
+Retrieve Accounting Point,Retrieve Accounting Point
+Retrieve Accounting Point,Retrieve Accounting Point
+Retrieve Accounting Point Data,Retrieve Accounting Point Data
+Retrieve Accounting Point Delete,Retrieve Accounting Point Delete
+Retrieve Accounting Point Delete,Retrieve Accounting Point Delete
+Retrieve AccountingPoints,Retrieve AccountingPoints
+Retrieve AccountingPoints,Retrieve AccountingPoints
+Retrieve Agreement,Retrieve Agreement
+Retrieve Agreement Mutations,Retrieve Agreement Mutations
+Retrieve Agreement Mutations,Retrieve Agreement Mutations
+Retrieve Agreements,Retrieve Agreements
+Retrieve Agreements,Retrieve Agreements
+Retrieve Authorisation Data,Retrieve Authorisation Data
+Retrieve Authorisation Mutations,Retrieve Authorisation Mutations
+Retrieve Authorisation Mutations,Retrieve Authorisation Mutations
+Retrieve Authorisations,Retrieve Authorisations
+Retrieve Balance Agreement,Retrieve Balance Agreement
+Retrieve Balance Agreements,Retrieve Balance Agreements
+Retrieve Balance Responsibilities,Retrieve Balance Responsibilities
+Retrieve Calendar Date,Retrieve Calendar Date
+Retrieve Calendar Day,Retrieve Calendar Day
+Retrieve Configuration Parameter,Retrieve Configuration Parameter
+Retrieve Configuration Parameters,Retrieve Configuration Parameters
+Retrieve Configuration Parameters,Retrieve Configuration Parameters
+Retrieve Contract Data,Retrieve Contract Data
+Retrieve Csutomer Authorisation Agreement History,Retrieve Csutomer Authorisation Agreement History
+Retrieve Csutomer Authorisation Agreement History,Retrieve Csutomer Authorisation Agreement History
+Retrieve Customer,Retrieve Customer
+Retrieve Customer,Retrieve Customer
+Retrieve Customer Information,Retrieve Customer Information
+Retrieve Customer Information,Retrieve Customer Information
+Retrieve Customer Mutations,Retrieve Customer Mutations
+Retrieve Customer Mutations,Retrieve Customer Mutations
+Retrieve Customers,Retrieve Customers
+Retrieve Customers,Retrieve Customers
+Retrieve Energy Community,Retrieve Energy Community
+Retrieve Energy Community,Retrieve Energy Community
+Retrieve Exchange Point,Retrieve Exchange Point
+Retrieve Exchange Point,Retrieve Exchange Point
+Retrieve Grid Agreement,Retrieve Grid Agreement
+Retrieve Grid Agreement,Retrieve Grid Agreement
+Retrieve Grid Agreement History,Retrieve Grid Agreement History
+Retrieve Grid Agreement History,Retrieve Grid Agreement History
+'Retrieve History','Retrieve History'
+'Retrieve History','Retrieve History'
+Retrieve LOT Acknowledgement,Retrieve LOT Acknowledgement
+Retrieve LOT view info,Retrieve LOT view info
+Retrieve LOT view info,Retrieve LOT view info
+Retrieve Market Balance Area,Retrieve Market Balance Area
+Retrieve Message Delegation,Retrieve Message Delegation
+Retrieve Message Delegation,Retrieve Message Delegation
+Retrieve Metering Grid Area,Retrieve Metering Grid Area
+Retrieve Metering Grid Area,Retrieve Metering Grid Area
+Retrieve Metering Point,Retrieve Metering Point
+Retrieve Metering Point,Retrieve Metering Point
+Retrieve Metering Point Authorisation,Retrieve Metering Point Authorisation
+Retrieve Metering Point Authorisation,Retrieve Metering Point Authorisation
+Retrieve Metering Point Authorisation EXP,Retrieve Metering Point Authorisation EXP
+Retrieve Metering Point Authorisation EXP,Retrieve Metering Point Authorisation EXP
+Retrieve Organisation,Retrieve Organisation
+Retrieve Organisation,Retrieve Organisation
+Retrieve Organisation Address,Retrieve Organisation Address
+Retrieve Organisation Address,Retrieve Organisation Address
+Retrieve Organisation Contact,Retrieve Organisation Contact
+Retrieve Organisation Contact,Retrieve Organisation Contact
+Retrieve Organisations,Retrieve Organisations
+Retrieve Organisations,Retrieve Organisations
+Retrieve Party Authorisation,Retrieve Party Authorisation
+Retrieve Party Authorisation,Retrieve Party Authorisation
+Retrieve Personal Info,Retrieve Personal Info
+Retrieve Personal Info,Retrieve Personal Info
+Retrieve Portal User Identity,Retrieve Portal User Identity
+Retrieve Portal User Identity,Retrieve Portal User Identity
+Retrieve Price Information,Retrieve Price Information
+Retrieve Price Information,Retrieve Price Information
+Retrieve Product,Retrieve Product
+Retrieve Product,Retrieve Product
+Retrieve Production Unit,Retrieve Production Unit
+Retrieve Production Unit,Retrieve Production Unit
+Retrieve ProductionUnit,Retrieve ProductionUnit
+Retrieve ProductionUnit,Retrieve ProductionUnit
+Retrieve Report Run,Retrieve Report Run
+Retrieve Report Run,Retrieve Report Run
+Retrieve Sales Agreement,Retrieve Sales Agreement
+Retrieve Sales Agreement,Retrieve Sales Agreement
+Retrieve Sales Agreement History,Retrieve Sales Agreement History
+Retrieve Sales Agreement History,Retrieve Sales Agreement History
+Retrieve Scheduled Job,Retrieve Scheduled Job
+Retrieve Scheduled Job Parameter,Retrieve Scheduled Job Parameter
+Retrieve Sent Email,Retrieve Sent Email
+Retrieve Sent Email,Retrieve Sent Email
+Retrieve System User Identity,Retrieve System User Identity
+Retrieve System User Identity,Retrieve System User Identity
+Retrieve Time Series,Retrieve Time Series
+Retrieve Time Series,Retrieve Time Series
+Retrieve User Role,Retrieve User Role
+RetrieveAuthorisationData,RetrieveAuthorisationData
+RetrieveAuthorisationData,RetrieveAuthorisationData
+RetrieveBusinessMessages,RetrieveBusinessMessages
+RetrieveBusinessMessages,RetrieveBusinessMessages
+RetrieveConfigurationParameter,RetrieveConfigurationParameter
+RetrieveConfigurationParameterOverride,RetrieveConfigurationParameterOverride
+RetrieveMessageDelegation,RetrieveMessageDelegation
+RetrieveOrganisationUser,RetrieveOrganisationUser
+RetrieveOrganisationUser,RetrieveOrganisationUser
+RetrieveTimeseries,RetrieveTimeseries
+RetrieveTimeseries,RetrieveTimeseries
+RetrieveTimeSeriesData,RetrieveTimeSeriesData
+RetrieveTimeSeriesData,RetrieveTimeSeriesData
+RetrieveTimeseriesLogDist,RetrieveTimeseriesLogDist
+RetrieveTimeseriesLogDist,RetrieveTimeseriesLogDist
+RetrieveTimeseriesLogImp,RetrieveTimeseriesLogImp
+RetrieveTimeseriesLogImp,RetrieveTimeseriesLogImp
+RetrieveTimeseriesRequests,RetrieveTimeseriesRequests
+RetrieveTimeseriesRequests,RetrieveTimeseriesRequests
+RetrieveTimeseriesRespons,RetrieveTimeseriesRespons
+RetrieveTimeseriesRespons,RetrieveTimeseriesRespons
+RetriveCHN,View Channel
+Search Accounting Point,Search Accounting Point
+Search Accounting Point,Search Accounting Point
+Search Bulk Processes,Search Bulk Processes
+Search Bulk Processing,Search Bulk Processing
+Search History,Search History
+Search Metered Data Forwarding Option,Search Metered Data Forwarding Option
+Search Metered Data Forwarding Option,Search Metered Data Forwarding Option
+Search Reconciliation Runs,Search Reconciliation Runs
+Search Settlement Data Forwarding Options,Search Settlement Data Forwarding Options
+Search Settlement Data Forwarding Options,Search Settlement Data Forwarding Options
+Search Settlement Global Parameters,Search Settlement Global Parameters
+Search Settlement Runs,Search Settlement Runs
+Search Settlement Runs,Search Settlement Runs
+SearchAuditLog,SearchAuditLog
+SearchAuditLogUnobfuscated,SearchAuditLogUnobfuscated
+SearchMessageDelegationTemplates,SearchMessageDelegationTemplates
+Settlement Data Forwarding options,Settlement Data Forwarding options
+Settlement Data Forwarding options,Settlement Data Forwarding options
+StepAccept,StepAccept
+StepReject,StepReject
+StepResend,StepResend
+STS.SUB,Submit Settlement Time Series data
+Submit Acknowledgement,Submit Acknowledgement
+Submit Organisation Address,Submit Organisation Address
+Submit Organisation Address,Submit Organisation Address
+Submit Portal User Identity,Submit Portal User Identity
+Submit Portal User Identity,Submit Portal User Identity
+Submit Scheduled Job,Submit Scheduled Job
+Submit Scheduled Job Parameter,Submit Scheduled Job Parameter
+Submit User Role,Submit User Role
+UnlockSettlementLock,UnlockSettlementLock
+Update Balance Agreement,Update Balance Agreement
+Update Calendar Day,Update Calendar Day
+Update Organisation,Update Organisation
+Update Organisation,Update Organisation
+Update Personal Info,Update Personal Info
+Update Personal Info,Update Personal Info
+UpdateForwardingRule,UpdateForwardingRule
+UpdateForwardingRule,UpdateForwardingRule
+UpdateOrganisationUser,UpdateOrganisationUser
+UpdateOrganisationUser,UpdateOrganisationUser
+UpdateVEEConfiguration,UpdateVEEConfiguration
+View Accounting Point,View Accounting Point
+View Accounting Point,View Accounting Point
+View Calendar Time Series,View Calendar Time Series
+View Calendar Time Series,View Calendar Time Series
+View Customer,View Customer
+View Customer,View Customer
+View Customer Authorisation,View Customer Authorisation
+View Customer Authorisation,View Customer Authorisation
+View Customer RBF,View Customer RBF
+View Customer RBF,View Customer RBF
+View Energy Community,View Energy Community
+View Energy Community,View Energy Community
+View Energy Community for Update,View Energy Community for Update
+View Energy Community for Update,View Energy Community for Update
+View Exchange Point,View Exchange Point
+View Exchange Point,View Exchange Point
+View Grid Agreement,View Grid Agreement
+View Grid Agreement,View Grid Agreement
+View Grid Agreement History,View Grid Agreement History
+View Grid Agreement History,View Grid Agreement History
+View Metering Grid Area,View Metering Grid Area
+View Metering Grid Area,View Metering Grid Area
+View Metering Point Authorisation,View Metering Point Authorisation
+View Metering Point Authorisation,View Metering Point Authorisation
+View Party Authorisation,View Party Authorisation
+View Party Authorisation,View Party Authorisation
+View Price Time Series,View Price Time Series
+View Price Time Series,View Price Time Series
+View Product,View Product
+View Product,View Product
+View Product Component,View Product Component
+View Product Component,View Product Component
+View Production Unit,View Production Unit
+View Production Unit,View Production Unit
+View Sales Agreement,View Sales Agreement
+View Sales Agreement,View Sales Agreement
+View Sales Agreement History,View Sales Agreement History
+View Sales Agreement History,View Sales Agreement History
+,Description not found
