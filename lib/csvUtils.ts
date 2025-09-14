@@ -65,7 +65,9 @@ export async function fetchCSVFile(filename: string): Promise<FetchResult<string
     console.log(`📥 Loading ${filename}`);
 
     try {
-      const response = await fetch(`/data/${filename}`);
+      // Use environment variable for base path, fallback to empty string
+      const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+      const response = await fetch(`${basePath}/data/${filename}`);
       if (!response.ok) {
         console.warn(`Failed to fetch ${filename}: ${response.statusText}`);
         return { success: false, error: 'NO_DATA' };

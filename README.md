@@ -41,9 +41,20 @@ pnpm build
 
 ## Deployment to GitHub Pages
 
+### Environment Configuration
+
+The application uses the `NEXT_PUBLIC_BASE_PATH` environment variable to handle subdirectory deployments (like GitHub Pages). 
+
+- For **development**: Leave empty or don't set (defaults to root `/`)
+- For **GitHub Pages**: Set to `/repository-name` (e.g., `/huballas-user-test`)
+- For **custom domain**: Leave empty
+
 ### Option 1: Manual Deployment
 
 ```bash
+# Set the base path for GitHub Pages deployment
+export NEXT_PUBLIC_BASE_PATH=/your-repository-name
+
 # Build and export static files
 pnpm build
 
@@ -53,71 +64,22 @@ pnpm build
 
 ### Option 2: GitHub Actions (Recommended)
 
-1. Create `.github/workflows/deploy.yml`:
+The GitHub Actions workflow is already configured to set the correct base path for GitHub Pages deployment. The environment variable is set in the workflow file:
 
 ```yaml
-name: Deploy to GitHub Pages
-
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
-          
-      - name: Install dependencies
-        run: pnpm install
-        
-      - name: Build
-        run: pnpm build
-        
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-        
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./out
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+- name: Build
+  run: pnpm build
+  env:
+    NEXT_PUBLIC_BASE_PATH: /huballas-user-test
 ```
 
-2. Enable GitHub Pages in your repository settings
-3. Select "GitHub Actions" as the source
-4. Push to main branch to trigger deployment
+To deploy:
+
+1. The workflow is already configured in `.github/workflows/deploy.yml`
+2. Update the `NEXT_PUBLIC_BASE_PATH` value in the workflow to match your repository name
+3. Enable GitHub Pages in your repository settings
+4. Select "GitHub Actions" as the source
+5. Push to main branch to trigger deployment
 
 ## Features
 
