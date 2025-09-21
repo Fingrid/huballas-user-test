@@ -26,43 +26,6 @@ type UsageStackingType = "channel" | "process_group" | "marketRoleCode";
 type ErrorStackingType = "errortype" | "type";
 type SectionType = "usage" | "errors" | "response_times";
 
-// Use DateRangeFilter from dataProcessing instead of local interface
-
-// Helper function to calculate date range based on available data or current date
-const calculateDateRange = (
-  option: DateRangeOption,
-  customRange?: DateRangeFilter,
-  availableDataRange?: DateRangeFilter
-): DateRangeFilter => {
-  // Use the last available data date as the end date, or fall back to current date
-  const endDate = availableDataRange ? availableDataRange.endDate : new Date().toISOString().split("T")[0];
-
-  if (option === "custom" && customRange) {
-    return customRange;
-  }
-
-  const daysMap = {
-    "30days": 30,
-    "60days": 60,
-    "90days": 90,
-    custom: 90, // fallback
-  };
-
-  const days = daysMap[option];
-  const endDateObj = new Date(endDate);
-  const startDateObj = new Date(endDateObj.getTime() - days * 24 * 60 * 60 * 1000);
-  
-  // Ensure we don't go before the earliest available data
-  const calculatedStartDate = availableDataRange && startDateObj < new Date(availableDataRange.startDate)
-    ? availableDataRange.startDate
-    : startDateObj.toISOString().split("T")[0];
-
-  return {
-    startDate: calculatedStartDate,
-    endDate,
-  };
-};
-
 interface StatisticsClientProps {}
 
 export default function StatisticsClient({}: StatisticsClientProps) {
@@ -79,8 +42,7 @@ export default function StatisticsClient({}: StatisticsClientProps) {
 
   // Use the new data access hooks first
   const usageData = useUsageData();
-  const dictionaryData = useDictionaryData();
-  const loadingState = useLoadingState();
+
   const { calculateDateRange: calculateRange } = useDateRangeCalculation();
   
   // Get available date range from usage data
@@ -352,12 +314,12 @@ export default function StatisticsClient({}: StatisticsClientProps) {
       />
 
       {/* Statistics Summary Boxes */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4">
         <StatisticsSummary />
       </div>
 
       {/* Page Extra Info */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-8">
         <div className="statistics__section">
           <h3 className="statistics__section-title">
             {t("statistics.pageExtraInfo.title")}

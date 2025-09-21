@@ -1,6 +1,10 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+// Import translation files directly
+import fiTranslations from '../../public/locales/fi.json';
+import enTranslations from '../../public/locales/en.json';
+
 // Supported locales
 export type Locale = 'fi' | 'en';
 
@@ -59,10 +63,10 @@ interface Translations {
 // Store interface
 interface LocalizationStore {
   locale: Locale;
-  translations: Translations | null;
+  translations: any;
   isLoading: boolean;
   error: string | null;
-  setLocale: (locale: Locale) => Promise<void>;
+  setLocale: (locale: Locale) => void;
   getTranslation: (key: string) => string;
   t: (key: string) => string; // Alias for getTranslation
 }
@@ -72,17 +76,15 @@ function getNestedValue(obj: any, path: string): string {
   return path.split('.').reduce((current, key) => current?.[key], obj) || path;
 }
 
-// Load translations from JSON file
-async function loadTranslations(locale: Locale): Promise<Translations | null> {
-  try {
-    const response = await fetch(`/locales/${locale}.json`);
-    if (!response.ok) {
-      throw new Error(`Failed to load translations for ${locale}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.warn(`Failed to load translations for ${locale}, using fallback:`, error);
-    return null;
+// Get translations for a specific locale
+function getTranslations(locale: Locale): any {
+  switch (locale) {
+    case 'fi':
+      return fiTranslations;
+    case 'en':
+      return enTranslations;
+    default:
+      return fiTranslations; // Fallback to Finnish
   }
 }
 
@@ -91,15 +93,13 @@ export const useLocalization = create<LocalizationStore>()(
   persist(
     (set, get) => ({
       locale: 'fi', // Default to Finnish
-      translations: null,
+      translations: getTranslations('fi'), // Initialize with Finnish translations
       isLoading: false,
       error: null,
 
-      setLocale: async (locale: Locale) => {
-        set({ isLoading: true, error: null });
-        
+      setLocale: (locale: Locale) => {
         try {
-          const translations = await loadTranslations(locale);
+          const translations = getTranslations(locale);
           set({ 
             locale, 
             translations, 
@@ -107,19 +107,17 @@ export const useLocalization = create<LocalizationStore>()(
             error: null 
           });
         } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+          console.error(`Failed to load translations for ${locale}:`, error);
           set({ 
-            isLoading: false, 
-            error: errorMessage,
-            translations: null 
+            error: `Failed to load translations for ${locale}`, 
+            isLoading: false 
           });
         }
       },
 
       getTranslation: (key: string) => {
         const { translations } = get();
-        const currentTranslations = translations || null;
-        return getNestedValue(currentTranslations, key) || key;
+        return getNestedValue(translations, key) || key;
       },
 
       t: (key: string) => get().getTranslation(key),

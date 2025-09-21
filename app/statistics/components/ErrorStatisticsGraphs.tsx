@@ -104,7 +104,7 @@ export default function ErrorStatisticsGraphs({ stackingType, activeDateRange, o
 
     chart.setOption({
       title: {
-        text: t('statistics.errorStatistics.chartTitle'),
+        text: t('statistics.errors.chartTitle'),
         left: 'center',
         textStyle: {
           color: 'var(--color-text)',
@@ -258,26 +258,26 @@ export default function ErrorStatisticsGraphs({ stackingType, activeDateRange, o
           />
         </div>
         
-        <h2 className="text-xl font-semibold text-[var(--color-text)] mb-2">{t('statistics.errorStatistics.title')}</h2>
-        <p className="text-[var(--color-text-muted)] mb-6">{t('statistics.errorStatistics.description')}</p>
+        <h2 className="text-xl font-semibold text-[var(--color-text)] mb-2">{t('statistics.errors.title')}</h2>
+        <p className="text-[var(--color-text-muted)] mb-6">{t('statistics.errors.description')}</p>
         
         {/* Summary Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           <div className="text-center">
             <div className="text-2xl font-bold text-[var(--color-text)]">{summaryStats.totalErrors.toLocaleString('fi-FI')}</div>
-            <div className="text-sm text-[var(--color-text-muted)]">{t('statistics.errorStatistics.totalErrors')}</div>
+            <div className="text-sm text-[var(--color-text-muted)]">{t('statistics.errors.totalErrors')}</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-[var(--color-text)]">{summaryStats.uniqueErrorTypes}</div>
-            <div className="text-sm text-[var(--color-text-muted)]">{t('statistics.errorStatistics.uniqueTypes')}</div>
+            <div className="text-sm text-[var(--color-text-muted)]">{t('statistics.errors.uniqueTypes')}</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-[var(--color-text)]">{summaryStats.avgDailyErrors}</div>
-            <div className="text-sm text-[var(--color-text-muted)]">{t('statistics.errorStatistics.avgDaily')}</div>
+            <div className="text-sm text-[var(--color-text-muted)]">{t('statistics.errors.avgDaily')}</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-[var(--color-text)]">{summaryStats.peakDailyErrors}</div>
-            <div className="text-sm text-[var(--color-text-muted)]">{t('statistics.errorStatistics.peakDaily')}</div>
+            <div className="text-sm text-[var(--color-text-muted)]">{t('statistics.errors.peakDaily')}</div>
           </div>
         </div>
 
