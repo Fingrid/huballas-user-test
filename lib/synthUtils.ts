@@ -55,8 +55,25 @@ export function synthesizeResponseTimes(usageData: UsageDataRecord[]): ResponseT
     else if (channel === 'FILE_UPLOAD') baseMean = 2000;
     
     // Add some variability
-    const meanResponseTime = baseMean + (Math.random() * 100 - 50);
-    const stdDeviation = meanResponseTime * 0.3; // 30% std deviation
+    const meanResponseTime = baseMean + (Math.random() * 50 - 25); // Reduced variation
+    
+    // Generate more realistic standard deviations (5-12% of mean, capped at reasonable values)
+    const stdDevPercentage = 0.05 + Math.random() * 0.07; // 5-12% std deviation
+    let stdDeviation = meanResponseTime * stdDevPercentage;
+    
+    // Cap standard deviation to realistic values based on channel
+    if (channel === 'REST_API' || channel === 'SOAP_API') {
+      stdDeviation = Math.min(stdDeviation, 40 + Math.random() * 40); // 40-80ms max
+    } else if (channel === 'EDI') {
+      stdDeviation = Math.min(stdDeviation, 60 + Math.random() * 60); // 60-120ms max
+    } else if (channel === 'FILE_UPLOAD') {
+      stdDeviation = Math.min(stdDeviation, 100 + Math.random() * 80); // 100-180ms max
+    }
+    
+    // Occasionally add spikes for realism (8% chance of higher std dev)
+    if (Math.random() < 0.08) {
+      stdDeviation *= 1.8; // Increase std dev for occasional spikes
+    }
     
     return {
       timestamp: dayjs(dateString).toDate(),

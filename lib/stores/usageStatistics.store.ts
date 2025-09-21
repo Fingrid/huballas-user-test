@@ -2,7 +2,6 @@ import { StateCreator } from "zustand";
 import dayjs from "dayjs";
 import type { UsageDataRecord, DataFetchConfig, LoadingState } from "../types";
 import { fetchUsageStatistics } from "../csvUtils";
-import { synthesizeUsageData } from "../synthUtils";
 
 export interface UsageStats {
     date: string;

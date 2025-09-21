@@ -4,6 +4,13 @@ import { useEffect, useState, useMemo, useRef } from "react";
 import { useLocalization } from "@/lib/stores/localization.store";
 import { usePerformanceMeasurement } from "@/lib/performance/monitoring";
 import { cn } from "@/lib/cn";
+import { 
+  useUsageData, 
+  useDictionaryData, 
+  useLoadingState, 
+  useDateRangeCalculation 
+} from "@/lib/hooks/useDataAccess";
+import type { DateRangeFilter } from "@/lib/dataProcessing";
 import {
   StatisticsSummary,
   UsageStatisticsGraphs,
@@ -12,24 +19,21 @@ import {
   StackingControls,
   StickyChartControls,
 } from "./components";
-import { useUsageStore, useDictionaryStore, useErrorStore, useResponseTimeStore } from "@/lib/stores";
+
 import type { DateRangeOption } from "./components/DateRangeFilter";
 
 type UsageStackingType = "channel" | "process_group" | "marketRoleCode";
 type ErrorStackingType = "errortype" | "type";
 type SectionType = "usage" | "errors" | "response_times";
 
-interface DateRange {
-  startDate: string;
-  endDate: string;
-}
+// Use DateRangeFilter from dataProcessing instead of local interface
 
 // Helper function to calculate date range based on available data or current date
 const calculateDateRange = (
   option: DateRangeOption,
-  customRange?: DateRange,
-  availableDataRange?: DateRange
-): DateRange => {
+  customRange?: DateRangeFilter,
+  availableDataRange?: DateRangeFilter
+): DateRangeFilter => {
   // Use the last available data date as the end date, or fall back to current date
   const endDate = availableDataRange ? availableDataRange.endDate : new Date().toISOString().split("T")[0];
 
@@ -73,6 +77,15 @@ export default function StatisticsClient({}: StatisticsClientProps) {
   // Ref to track current active section for intersection observer
   const activeSectionRef = useRef<SectionType>("usage");
 
+  // Use the new data access hooks first
+  const usageData = useUsageData();
+  const dictionaryData = useDictionaryData();
+  const loadingState = useLoadingState();
+  const { calculateDateRange: calculateRange } = useDateRangeCalculation();
+  
+  // Get available date range from usage data
+  const availableDataRange = usageData.availableDateRange;
+
   // Chart controls state
   const [activeSection, setActiveSection] = useState<SectionType>("usage");
   const [usageStackingType, setUsageStackingType] =
@@ -80,8 +93,8 @@ export default function StatisticsClient({}: StatisticsClientProps) {
   const [errorStackingType, setErrorStackingType] =
     useState<ErrorStackingType>("errortype");
   const [selectedRange, setSelectedRange] = useState<DateRangeOption>("90days");
-  const [customDateRange, setCustomDateRange] = useState<DateRange>(() =>
-    calculateDateRange("90days", undefined, undefined) // Will be updated when availableDataRange is calculated
+  const [customDateRange, setCustomDateRange] = useState<DateRangeFilter>(() =>
+    calculateRange("90days", undefined, undefined) // Will be updated when availableDataRange is calculated
   );
 
   // Update the ref whenever activeSection changes
@@ -89,79 +102,36 @@ export default function StatisticsClient({}: StatisticsClientProps) {
     activeSectionRef.current = activeSection;
   }, [activeSection]);
 
-  const usageStore = useUsageStore();
-  const errorStore = useErrorStore();
-  const responseTimeStore = useResponseTimeStore();
-  const dictionaryStore = useDictionaryStore();
-
-  // Calculate available data range from all stores
-  const availableDataRange = useMemo((): DateRange | undefined => {
-    try {
-      const allDates: string[] = [];
-      
-      // Get dates from usage data
-      if (usageStore._rawdata) {
-        Object.values(usageStore._rawdata).flat().forEach(record => {
-          if (record && 'event_timestamp' in record && record.event_timestamp) {
-            allDates.push(new Date(record.event_timestamp).toISOString().split('T')[0]);
-          }
-        });
-      }
-      
-      // Get dates from error data
-      if (errorStore._rawdata) {
-        Object.values(errorStore._rawdata).flat().forEach(record => {
-          if (record && 'event_timestamp' in record && record.event_timestamp) {
-            allDates.push(new Date(record.event_timestamp).toISOString().split('T')[0]);
-          }
-        });
-      }
-      
-      // Get dates from response time data
-      if (responseTimeStore._rawdata) {
-        Object.values(responseTimeStore._rawdata).flat().forEach(record => {
-          if (record && 'timestamp' in record && record.timestamp) {
-            allDates.push(new Date(record.timestamp).toISOString().split('T')[0]);
-          }
-        });
-      }
-      
-      if (allDates.length === 0) {
-        return undefined;
-      }
-      
-      // Remove duplicates and sort
-      const uniqueDates = Array.from(new Set(allDates)).sort();
-      
-      return {
-        startDate: uniqueDates[0],
-        endDate: uniqueDates[uniqueDates.length - 1]
-      };
-    } catch (error) {
-      console.warn('Error calculating available data range:', error);
-      return undefined;
-    }
-  }, [usageStore._rawdata, errorStore._rawdata, responseTimeStore._rawdata]);
 
   // Update custom date range when available data range changes
   useEffect(() => {
     if (availableDataRange) {
-      const newDateRange = calculateDateRange(selectedRange, selectedRange === "custom" ? customDateRange : undefined, availableDataRange);
+      const newDateRange = calculateRange(selectedRange, selectedRange === "custom" ? customDateRange : undefined, availableDataRange || undefined);
       setCustomDateRange(newDateRange);
     }
-  }, [availableDataRange]); // Don't include selectedRange and customDateRange to avoid infinite loop
+  }, [availableDataRange, calculateRange]); // Don't include selectedRange and customDateRange to avoid infinite loop
 
   // Intersection Observer for automatic section switching
   useEffect(() => {
-    const observerOptions = {
+    // Check if IntersectionObserver is supported
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+      console.warn('IntersectionObserver not supported');
+      return;
+    }
+
+    const observerOptions: IntersectionObserverInit = {
       root: null,
-      rootMargin: '-120px 0px -60% 0px', // Account for sticky header and require section to be well into view
-      threshold: 0.3 // Require more of the section to be visible before switching
+      // Simplified rootMargin for better Edge compatibility
+      rootMargin: '-100px 0px -50% 0px',
+      threshold: [0.1, 0.3, 0.5] // Multiple thresholds for better accuracy
     };
 
     let pendingUpdate: NodeJS.Timeout | null = null;
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      // Debug logging for Edge compatibility
+      console.log('IntersectionObserver callback triggered with', entries.length, 'entries');
+      
       // Clear any pending updates
       if (pendingUpdate) {
         clearTimeout(pendingUpdate);
@@ -169,42 +139,132 @@ export default function StatisticsClient({}: StatisticsClientProps) {
 
       // Find the section that is most visible
       const visibleSections = entries
-        .filter(entry => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio); // Sort by most visible
+        .filter(entry => {
+          const isVisible = entry.isIntersecting && entry.intersectionRatio > 0.1;
+          console.log(`Section ${entry.target.getAttribute('data-section')}: intersecting=${entry.isIntersecting}, ratio=${entry.intersectionRatio}`);
+          return isVisible;
+        })
+        .sort((a, b) => {
+          // Sort by intersection ratio first, then by position on page
+          if (Math.abs(b.intersectionRatio - a.intersectionRatio) > 0.1) {
+            return b.intersectionRatio - a.intersectionRatio;
+          }
+          // If ratios are similar, prefer the one higher on the page when scrolling down
+          return a.boundingClientRect.top - b.boundingClientRect.top;
+        });
+
+      console.log('Visible sections:', visibleSections.map(s => s.target.getAttribute('data-section')));
 
       if (visibleSections.length > 0) {
         const mostVisibleSection = visibleSections[0];
         const sectionId = mostVisibleSection.target.getAttribute('data-section') as SectionType;
         
+        console.log(`Most visible section: ${sectionId}, current: ${activeSectionRef.current}`);
+        
         if (sectionId && sectionId !== activeSectionRef.current) {
           // Debounce the update to prevent rapid flickering
           pendingUpdate = setTimeout(() => {
+            console.log(`Updating active section to: ${sectionId}`);
             setActiveSection(sectionId);
-          }, 100);
+          }, 150); // Slightly longer debounce for Edge
         }
       }
     };
 
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    let observer: IntersectionObserver;
+    
+    try {
+      observer = new IntersectionObserver(observerCallback, observerOptions);
+    } catch (error) {
+      console.warn('Failed to create IntersectionObserver:', error);
+      return;
+    }
 
-    // Observe all section elements
-    if (usageRef.current) {
-      observer.observe(usageRef.current);
-    }
-    if (errorRef.current) {
-      observer.observe(errorRef.current);
-    }
-    if (responseTimeRef.current) {
-      observer.observe(responseTimeRef.current);
-    }
+    // Observe all section elements with error handling
+    const elementsToObserve = [
+      { ref: usageRef, name: 'usage' },
+      { ref: errorRef, name: 'errors' },
+      { ref: responseTimeRef, name: 'response_times' }
+    ];
+
+    elementsToObserve.forEach(({ ref, name }) => {
+      if (ref.current) {
+        try {
+          observer.observe(ref.current);
+        } catch (error) {
+          console.warn(`Failed to observe ${name} section:`, error);
+        }
+      }
+    });
 
     return () => {
       if (pendingUpdate) {
         clearTimeout(pendingUpdate);
       }
-      observer.disconnect();
+      if (observer) {
+        try {
+          observer.disconnect();
+        } catch (error) {
+          console.warn('Failed to disconnect observer:', error);
+        }
+      }
     };
   }, []); // Remove activeSection from dependencies to prevent observer recreation
+
+  // Fallback scroll-based section detection for better browser compatibility
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    let ticking = false;
+    
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          // Only run fallback if IntersectionObserver might not be working properly
+          const sections = [
+            { ref: usageRef, id: 'usage' as SectionType },
+            { ref: errorRef, id: 'errors' as SectionType },
+            { ref: responseTimeRef, id: 'response_times' as SectionType }
+          ];
+
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          const windowHeight = window.innerHeight;
+          const headerOffset = 120; // Account for sticky header
+
+          let currentSection: SectionType = 'usage';
+          
+          for (const section of sections) {
+            if (section.ref.current) {
+              const rect = section.ref.current.getBoundingClientRect();
+              const elementTop = rect.top + scrollTop;
+              
+              // Check if this section is in the main view area
+              if (scrollTop + headerOffset >= elementTop - windowHeight * 0.3) {
+                currentSection = section.id;
+              }
+            }
+          }
+
+          if (currentSection !== activeSectionRef.current) {
+            setActiveSection(currentSection);
+          }
+          
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    // Add scroll listener as fallback
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Initial check
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   // Function to scroll to selected section (manual navigation)
   const scrollToSection = (section: SectionType) => {
@@ -240,21 +300,21 @@ export default function StatisticsClient({}: StatisticsClientProps) {
 
   // Calculate the actual date range to filter by
   const activeDateRange = useMemo(() => {
-    return calculateDateRange(
+    return calculateRange(
       selectedRange,
       selectedRange === "custom" ? customDateRange : undefined,
-      availableDataRange
+      availableDataRange || undefined
     );
-  }, [selectedRange, customDateRange, availableDataRange]);
+  }, [selectedRange, customDateRange, availableDataRange, calculateRange]);
 
   const handleRangeChange = (range: DateRangeOption) => {
     setSelectedRange(range);
     if (range !== "custom") {
-      setCustomDateRange(calculateDateRange(range, undefined, availableDataRange));
+      setCustomDateRange(calculateRange(range, undefined, availableDataRange || undefined));
     }
   };
 
-  const handleDateRangeChange = (dateRange: DateRange) => {
+  const handleDateRangeChange = (dateRange: DateRangeFilter) => {
     setCustomDateRange(dateRange);
   };
 
@@ -266,29 +326,17 @@ export default function StatisticsClient({}: StatisticsClientProps) {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header Section */}
+      {/* Header Section with Gradient */}
       <div className="page-header-gradient border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold text-[var(--color-text)] mb-2">
+          <div className="statistics__page-header">
+            <h1 className="statistics__page-title">
               {t("statistics.pageTitle")}
             </h1>
-            <p className="text-lg text-[var(--color-text-muted)] max-w-3xl">
+            <p className="statistics__page-description">
               {t("statistics.pageDescription")}
             </p>
           </div>
-        </div>
-      </div>
-
-      {/* Statistics Summary Boxes */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <StatisticsSummary />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-[var(--color-background-level-1)] border border-[var(--color-separator)] p-6 shadow-fingrid rounded-[var(--border-radius-default)]">
-          <h3>{t("statistics.pageExtraInfo.title")}</h3>
-          <p>{t("statistics.pageExtraInfo.content")}</p>
         </div>
       </div>
 
@@ -303,7 +351,22 @@ export default function StatisticsClient({}: StatisticsClientProps) {
         availableDataRange={availableDataRange}
       />
 
+      {/* Statistics Summary Boxes */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <StatisticsSummary />
+      </div>
 
+      {/* Page Extra Info */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="statistics__section">
+          <h3 className="statistics__section-title">
+            {t("statistics.pageExtraInfo.title")}
+          </h3>
+          <p className="statistics__section-description">
+            {t("statistics.pageExtraInfo.content")}
+          </p>
+        </div>
+      </div>
 
       {/* Usage Statistics Section */}
       <div
@@ -311,17 +374,19 @@ export default function StatisticsClient({}: StatisticsClientProps) {
         data-section="usage"
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8"
       >
-        <div className="mb-4">
-          <h2>{t("statistics.summaryTotalEvents")}</h2>
-          <p className="mb-2">
-            {t("statistics.summaryTotalEventsDescription")}
+        <div className="statistics__section">
+          <h2 className="statistics__section-title">
+            {t("statistics.usage.dailyEventsTitle")}
+          </h2>
+          <p className="statistics__section-description">
+            {t("statistics.usage.description")}
           </p>
+          <UsageStatisticsGraphs
+            stackingType={usageStackingType}
+            activeDateRange={activeDateRange}
+            onStackingChange={setUsageStackingType}
+          />
         </div>
-        <UsageStatisticsGraphs
-          stackingType={usageStackingType}
-          activeDateRange={activeDateRange}
-          onStackingChange={setUsageStackingType}
-        />
       </div>
 
       {/* Error Statistics Section */}
@@ -330,36 +395,36 @@ export default function StatisticsClient({}: StatisticsClientProps) {
         data-section="errors"
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8"
       >
-        <div className="mb-4">
-          <h2 className="text-2xl font-bold text-[var(--color-text)] mb-2">
-            {t("statistics.sections.errors")}
+        <div className="statistics__section">
+          <h2 className="statistics__section-title">
+            {t("statistics.errors.title")}
           </h2>
-          <p className="text-[var(--color-text-muted)]">
-            {t("statistics.errorDescription")}
+          <p className="statistics__section-description">
+            {t("statistics.errors.description")}
           </p>
+          <ErrorStatisticsGraphs
+            stackingType={errorStackingType}
+            activeDateRange={activeDateRange}
+            onStackingChange={setErrorStackingType}
+          />
         </div>
-        <ErrorStatisticsGraphs
-          stackingType={errorStackingType}
-          activeDateRange={activeDateRange}
-          onStackingChange={setErrorStackingType}
-        />
       </div>
 
-      {/* ResponseTime Statistics Graph Section: Confidence chart with breakdown tables */}
+      {/* ResponseTime Statistics Graph Section */}
       <div 
         ref={responseTimeRef}
         data-section="response_times"
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8"
       >
-        <div className="mb-4">
-          <h2 className="text-2xl font-bold text-[var(--color-text)] mb-2">
-            {t("monthlyReports.responseTimes")}
+        <div className="statistics__section">
+          <h2 className="statistics__section-title">
+            {t("statistics.responseTime.title")}
           </h2>
-          <p className="text-[var(--color-text-muted)]">
-            Vasteaikojen kehitys ja tilastot valitulta aikaväliltä. Luottamusvälit näyttävät vaihtelun keskihajonnan mukaan.
+          <p className="statistics__section-description">
+            {t("statistics.responseTime.noDataForRange")}
           </p>
+          <ResponseTimeStatisticsGraphs activeDateRange={activeDateRange} />
         </div>
-        <ResponseTimeStatisticsGraphs activeDateRange={activeDateRange} />
       </div>
     </div>
   );

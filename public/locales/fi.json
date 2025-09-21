@@ -54,11 +54,20 @@
     "pageDescription": "Datahub yhdistää tiedot Suomen 3,9 miljoonan sähkönkäyttöpisteen kulutuksesta samaan järjestelmään.",
     "chartsAndFilters": "Kaaviot ja suodattimet",
     "breakdownTitle": "Tilastojen erittely",
-    "summaryAnnualEvents": "Vuositapahtumat + trendi",
-    "summaryErrors": "Virheet",
-    "summaryResponseTimes": "Vasteajat",
-    "summaryTotalEvents": "Tapahtumamäärät",
-    "summaryTotalEventsDescription": "Ketä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiäKetä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiäKetä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiä",
+    "average": "Keskiarvo",
+    "median": "Mediaani",
+    "standardDeviation": "Keskihajonta",
+    "noDataMessage": "Ei dataa näytettäväksi valitulle ajanjaksolle",
+    "loading": "Ladataan...",
+    "summary": {
+      "annualEvents": "Vuositapahtumat + trendi",
+      "errors": "Virheet",
+      "responseTimes": "Vasteajat",
+      "totalEvents": "Tapahtumamäärät",
+      "totalEventsDescription": "Ketä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiäKetä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiäKetä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiä",
+      "totalErrors": "Virheitä yhteensä",
+      "avgResponseTime": "Keskimääräinen vasteaika"
+    },
     "pageExtraInfo": {
       "title": "Lisätietoja tilastoista",
       "content": "Ketä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiäKetä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiäKetä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiä"
@@ -84,6 +93,11 @@
       "errorTypes": "Virhetyypit",
       "systemTypes": "Järjestelmätyypit"
     },
+    "filters": {
+      "channels": "Suodata kanavien mukaan",
+      "selectAll": "Valitse kaikki",
+      "deselectAll": "Poista valinnat"
+    },
     "controls": {
       "section": "Valitse osio:",
       "statistics": "Tilasto:",
@@ -93,21 +107,52 @@
       "usage": "Käyttötilastot",
       "errors": "Virhetilastot"
     },
-    "usageDescription": "Tässä osiossa näytetään käyttötilastot valitulta aikaväliltä. Voit tarkastella tapahtumien jakautumista eri kanavien, prosessiryhmien ja markkinaroolien mukaan.",
-    "errorDescription": "Tässä osiossa näytetään virhetilastot valitulta aikaväliltä. Voit tarkastella virheiden jakautumista erityyppisten virheiden tai järjestelmätyyppien mukaan.",
-    "errorStatistics": {
-      "title": "Virhetilastot",
+    "usage": {
+      "description": "Tässä osiossa näytetään käyttötilastot valitulta aikaväliltä. Voit tarkastella tapahtumien jakautumista eri kanavien, prosessiryhmien ja markkinaroolien mukaan.",
+      "dailyEventsTitle": "Tapahtumat päivittäin",
+      "totalEventsTitle": "Tapahtumat yhteensä",
+      "uniqueChannels": "Kanavia",
+      "uniqueProcessGroups": "Prosessiryhmiä",
+      "uniqueMarketRoles": "Markkinarooleja"
+    },
+    "errors": {
       "description": "Tässä osiossa näytetään virhetilastot valitulta aikaväliltä. Voit tarkastella virheiden jakautumista erityyppisten virheiden tai järjestelmätyyppien mukaan.",
+      "title": "Virhetilastot",
       "chartTitle": "Virheet päivittäin",
       "totalErrors": "Virheitä yhteensä",
       "uniqueTypes": "Erilaisia virhetyyppejä",
       "avgDaily": "Keskimäärin päivässä",
       "peakDaily": "Enimmillään päivässä"
     },
+    "responseTime": {
+      "title": "Vasteajat",
+      "chartTitle": "Vasteajat päivittäin",
+      "channelBreakdown": "Vasteajat kanavittain",
+      "averageResponseTime": "Keskimääräinen vasteaika",
+      "medianResponseTime": "Mediaani vasteaika",
+      "standardDeviation": "Keskihajonta",
+      "noDataForRange": "Ei vasteaikatietoja valitulta aikaväliltä"
+    },
     "breakdown": {
-      "marketRoles": "Market Roles",
-      "processGroups": "Process Groups",
-      "channels": "Channels"
+      "marketRoles": "Markkinaroolit",
+      "processGroups": "Prosessiryhmät",
+      "channels": "Kanavat",
+      "errorTypes": "Virhetyypit",
+      "systemTypes": "Järjestelmätyypit",
+      "headers": {
+        "channel": "Kanava",
+        "average": "Keskim. (ms)",
+        "median": "Mediaani (ms)",
+        "stdDev": "Keskihaj. (ms)",
+        "events": "Tapahtumat",
+        "count": "Lukumäärä",
+        "errorType": "Virhetyyppi",
+        "systemType": "Järjestelmätyyppi"
+      }
+    },
+    "stacking": {
+      "none": "Ei pinottuna",
+      "stacked": "Pinottu"
     }
   }
 }

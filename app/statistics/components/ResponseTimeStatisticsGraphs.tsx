@@ -1,11 +1,11 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import dayjs from 'dayjs';
-import { useResponseTimeStore } from '@/lib/stores';
+import { useResponseTimeStore, useDictionaryStore } from '@/lib/stores';
 import { useLocalization } from '@/lib/stores/localization.store';
 import { useECharts } from '@/hooks/useECharts';
-import type { ResponseTimeRecord } from '@/lib/types';
+import { GroupingSelector, ResponseTimeBreakdownTable } from './index';
 
 interface DateRange {
   startDate: string;
@@ -16,140 +16,56 @@ interface ResponseTimeStatisticsGraphsProps {
   activeDateRange: DateRange;
 }
 
-interface DailyResponseTimeStats {
-  date: string;
-  average: number;
-  median: number;
-  min: number;
-  max: number;
-  standardDeviation: number;
-  count: number;
-}
-
 export default function ResponseTimeStatisticsGraphs({ 
   activeDateRange 
 }: ResponseTimeStatisticsGraphsProps) {
   const { t } = useLocalization();
   const responseTimeStore = useResponseTimeStore();
+  const dictionaryStore = useDictionaryStore();
 
-  // Prepare response time data for the selected date range
-  const responseTimeDataArray = useMemo(() => {
-    const responseTimeData = responseTimeStore._rawdata || {};
-    
-    // Combine all available data
-    const allData: ResponseTimeRecord[] = Object.values(responseTimeData)
-      .flat()
-      .filter((record): record is ResponseTimeRecord => record !== undefined && record !== null);
+  // Single channel selection state - default to REST_API
+  const [selectedChannel, setSelectedChannel] = useState<string>('REST_API');
+  
+  // Get available channels from the store
+  const availableChannels = useMemo(() => {
+    return responseTimeStore.getAvailableChannels();
+  }, [responseTimeStore]);
 
-    // Filter by date range
-    const filteredData = allData.filter(record => {
-      const recordDate = new Date(record.timestamp).toISOString().split('T')[0];
-      return recordDate >= activeDateRange.startDate && recordDate <= activeDateRange.endDate;
-    });
-    
-    return filteredData;
-  }, [responseTimeStore._rawdata, activeDateRange]);
+  // Channel options for GroupingSelector
+  const channelOptions = useMemo(() => {
+    return availableChannels.map(channel => ({
+      value: channel,
+      label: dictionaryStore.getChannelDescription(channel)
+    }));
+  }, [availableChannels, dictionaryStore]);
 
-  // Process data for daily statistics
-  const dailyStats = useMemo((): DailyResponseTimeStats[] => {
-    if (!responseTimeDataArray.length) return [];
-
-    // Group by date
-    const groupedByDate: { [date: string]: ResponseTimeRecord[] } = {};
-    
-    responseTimeDataArray.forEach(record => {
-      const date = new Date(record.timestamp).toISOString().split('T')[0];
-      if (!groupedByDate[date]) {
-        groupedByDate[date] = [];
-      }
-      groupedByDate[date].push(record);
-    });
-
-    // Calculate daily statistics
-    const dailyStatsArray = Object.entries(groupedByDate)
-      .map(([date, records]) => {
-        // Extract all response times (weighted by event count)
-        const allResponseTimes: number[] = [];
-        records.forEach(record => {
-          // Add each response time for the number of events
-          for (let i = 0; i < record.event_count; i++) {
-            allResponseTimes.push(record.mean_response_time_ms);
-          }
-        });
-
-        if (allResponseTimes.length === 0) {
-          return null;
-        }
-
-        // Sort for median calculation
-        allResponseTimes.sort((a, b) => a - b);
-
-        // Calculate statistics
-        const average = allResponseTimes.reduce((sum, time) => sum + time, 0) / allResponseTimes.length;
-        const median = allResponseTimes.length % 2 === 0
-          ? (allResponseTimes[Math.floor(allResponseTimes.length / 2) - 1] + allResponseTimes[Math.floor(allResponseTimes.length / 2)]) / 2
-          : allResponseTimes[Math.floor(allResponseTimes.length / 2)];
-        const min = Math.min(...allResponseTimes);
-        const max = Math.max(...allResponseTimes);
-        
-        // Calculate standard deviation
-        const variance = allResponseTimes.reduce((sum, time) => sum + Math.pow(time - average, 2), 0) / allResponseTimes.length;
-        const standardDeviation = Math.sqrt(variance);
-
-        return {
-          date,
-          average,
-          median,
-          min,
-          max,
-          standardDeviation,
-          count: allResponseTimes.length
-        };
-      })
-      .filter(stat => stat !== null)
-      .sort((a, b) => a!.date.localeCompare(b!.date)) as DailyResponseTimeStats[];
-
-    return dailyStatsArray;
-  }, [responseTimeDataArray]);
-
-  // Process chart data
-  const chartData = useMemo(() => {
-    if (!dailyStats.length) return null;
-
-    const avgStdDev = dailyStats.reduce((sum, stat) => sum + stat.standardDeviation, 0) / dailyStats.length;
-    const stdDevThreshold = avgStdDev * 1.1; // 10% above average std dev
-
-    return {
-      dates: dailyStats.map(stat => dayjs(stat.date).format('MMM DD')),
-      averageData: dailyStats.map(stat => Math.round(stat.average)),
-      medianData: dailyStats.map(stat => Math.round(stat.median)),
-      maxData: dailyStats.map(stat => Math.round(stat.max)),
-      minData: dailyStats.map(stat => Math.round(stat.min)),
-      upperStdData: dailyStats.map(stat => Math.round(stat.average + stat.standardDeviation)),
-      lowerStdData: dailyStats.map(stat => Math.round(Math.max(0, stat.average - stat.standardDeviation))),
-      stdDevData: dailyStats.map(stat => stat.standardDeviation),
-      avgStdDev,
-      stdDevThreshold,
-      dailyStats
-    };
-  }, [dailyStats]);
+  // Get processed data from the store for the selected date range and single channel
+  const processedData = useMemo(() => {
+    return responseTimeStore.getProcessedDataForRange(
+      activeDateRange.startDate, 
+      activeDateRange.endDate,
+      [selectedChannel] // Pass single channel as array
+    );
+  }, [responseTimeStore, activeDateRange, selectedChannel]);
 
   const chartRef = useECharts((chart) => {
-    if (!chartData) return;
+    if (!processedData) return;
 
     const {
-      dates,
-      averageData,
-      medianData,
-      maxData,
-      minData,
-      upperStdData,
-      lowerStdData,
-      stdDevData,
-      avgStdDev,
-      stdDevThreshold,
-      dailyStats
-    } = chartData;
+      dailyStats,
+      chartData: {
+        dates,
+        averageData,
+        medianData,
+        maxData,
+        minData,
+        upperStdData,
+        lowerStdData,
+        stdDevData,
+        avgStdDev,
+        stdDevThreshold
+      }
+    } = processedData;
 
     const option = {
       title: {
@@ -215,7 +131,7 @@ export default function ResponseTimeStatisticsGraphs({
       },
       xAxis: {
         type: 'category',
-        data: dates,
+        data: dates.map(date => dayjs(date).format('MMM DD')),
         axisLabel: {
           color: 'var(--color-textted)',
           rotate: 45,
@@ -342,28 +258,10 @@ export default function ResponseTimeStatisticsGraphs({
 
     chart.setOption(option);
   }, {
-    dependencies: [chartData]
+    dependencies: [processedData]
   });
 
-  // Calculate summary statistics
-  const summaryStats = useMemo(() => {
-    if (!dailyStats.length) return null;
-
-    const totalDataPoints = dailyStats.reduce((sum, stat) => sum + stat.count, 0);
-    const avgResponseTime = dailyStats.reduce((sum, stat) => sum + stat.average, 0) / dailyStats.length;
-    const maxResponseTime = Math.max(...dailyStats.map(stat => stat.max));
-    const minResponseTime = Math.min(...dailyStats.map(stat => stat.min));
-
-    return {
-      totalDataPoints,
-      avgResponseTime: Math.round(avgResponseTime),
-      maxResponseTime: Math.round(maxResponseTime),
-      minResponseTime: Math.round(minResponseTime),
-      totalDays: dailyStats.length
-    };
-  }, [dailyStats]);
-
-  if (!responseTimeDataArray.length) {
+  if (!processedData) {
     return (
       <div className="bg-[var(--color-background-level-1)] border border-[var(--color-separator)] p-6 shadow-fingrid rounded-[var(--border-radius-default)] h-64 flex items-center justify-center">
         <p className="text-[var(--color-text-muted)]">Ei vasteaikatietoja valitulta aikaväliltä</p>
@@ -371,28 +269,29 @@ export default function ResponseTimeStatisticsGraphs({
     );
   }
 
+  const { channelBreakdown } = processedData;
+
   return (
     <div className="space-y-6">
       {/* Chart */}
-      <div className="bg-[var(--color-background-level-1)] border border-[var(--color-separator)] p-6 shadow-fingrid rounded-[var(--border-radius-default)]">
+      <div className="bg-[var(--color-background-level-1)] border border-[var(--color-separator)] p-6 shadow-fingrid rounded-[var(--border-radius-default)] relative">
+        {/* Channel Selector in top right corner */}
+        <div className="absolute top-4 right-4 z-10">
+          <GroupingSelector
+            value={selectedChannel}
+            onChange={setSelectedChannel}
+            options={channelOptions}
+            label={t('statistics.filters.channels')}
+          />
+        </div>
+        
         <div className="h-96">
           <div ref={chartRef} className="w-full h-full" />
         </div>
       </div>
 
-      {/* Summary Statistics */}
-      {summaryStats && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-[var(--color-background-level-1)] border border-[var(--color-separator)] p-4 shadow-fingrid rounded-[var(--border-radius-default)]">
-            <h4 className="text-sm font-semibold text-[var(--color-text)] mb-2">Keskimääräinen vasteaika</h4>
-            <p className="text-2xl font-bold text-[var(--color-primary)]">{summaryStats.avgResponseTime} ms</p>
-          </div>
-          <div className="bg-[var(--color-background-level-1)] border border-[var(--color-separator)] p-4 shadow-fingrid rounded-[var(--border-radius-default)]">
-            <h4 className="text-sm font-semibold text-[var(--color-text)] mb-2">Analysoitavia päiviä</h4>
-            <p className="text-2xl font-bold text-[var(--color-text)]">{summaryStats.totalDays}</p>
-          </div>
-        </div>
-      )}
+      {/* Channel Breakdown Table */}
+      <ResponseTimeBreakdownTable channelBreakdown={channelBreakdown} />
     </div>
   );
 }

@@ -8,3 +8,4 @@ export { default as DateRangeFilter } from './DateRangeFilter';
 export { default as BreakdownTables } from './BreakdownTables';
 export { default as StickyChartControls } from './StickyChartControls';
 export { default as GroupingSelector } from './GroupingSelector';
+export { default as ResponseTimeBreakdownTable } from './ResponseTimeBreakdownTable';

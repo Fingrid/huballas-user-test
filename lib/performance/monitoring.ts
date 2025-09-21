@@ -24,6 +24,11 @@ export class PerformanceMonitor {
   }
 
   private initializeObservers(): void {
+    // Only initialize observers in browser environment
+    if (typeof window === 'undefined') {
+      return; // Skip initialization during SSR
+    }
+
     // Observe navigation timing
     if ('PerformanceObserver' in window) {
       try {
@@ -185,6 +190,10 @@ export const useMemoryMonitoring = (interval: number = 5000) => {
 // Bundle size monitoring
 export const bundleAnalytics = {
   measureBundleSize: async (moduleName: string): Promise<number> => {
+    if (typeof window === 'undefined') {
+      return 0; // Skip during SSR
+    }
+    
     if ('navigator' in window && 'connection' in navigator) {
       const connection = (navigator as any).connection;
       console.log(`Bundle ${moduleName} - Connection type: ${connection.effectiveType}`);
@@ -205,6 +214,11 @@ export const bundleAnalytics = {
 export const criticalRenderingPath = {
   measureLCP: (): Promise<number> => {
     return new Promise((resolve) => {
+      if (typeof window === 'undefined') {
+        resolve(0); // Return 0 during SSR
+        return;
+      }
+      
       if ('PerformanceObserver' in window) {
         const observer = new PerformanceObserver((list) => {
           const entries = list.getEntries();
@@ -222,6 +236,11 @@ export const criticalRenderingPath = {
 
   measureFID: (): Promise<number> => {
     return new Promise((resolve) => {
+      if (typeof window === 'undefined') {
+        resolve(0); // Return 0 during SSR
+        return;
+      }
+      
       if ('PerformanceObserver' in window) {
         const observer = new PerformanceObserver((list) => {
           const entries = list.getEntries();
@@ -241,6 +260,11 @@ export const criticalRenderingPath = {
   measureCLS: (): Promise<number> => {
     return new Promise((resolve) => {
       let clsValue = 0;
+      
+      if (typeof window === 'undefined') {
+        resolve(0); // Return 0 during SSR
+        return;
+      }
       
       if ('PerformanceObserver' in window) {
         const observer = new PerformanceObserver((list) => {

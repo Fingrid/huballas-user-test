@@ -2,7 +2,6 @@ import { StateCreator } from "zustand";
 import dayjs from "dayjs";
 import type { ResponseTimeRecord, DataFetchConfig } from "../types";
 import { fetchResponseTimes } from "../csvUtils";
-import { synthesizeResponseTimes } from "../synthUtils";
 
 export interface ConfidenceStats {
     date: string;
@@ -11,11 +10,30 @@ export interface ConfidenceStats {
     min: number;
     max: number;
     standardDeviation: number;
-    count: number;
+    count: number; // Total events, not just record count
+}
+
+export interface SummaryStatistics {
+    totalDataPoints: number;
+    avgResponseTime: number;
+    avgStdDev: number;
+    medianResponseTime: number;
+    maxUpperStd: number;
+    minLowerStd: number;
+    totalDays: number;
+}
+
+export interface ChannelBreakdownData {
+    channel: string;
+    avgResponseTime: number;
+    medianResponseTime: number;
+    stdDeviation: number;
+    eventCount: number;
 }
 
 export interface RefinedMonthlyData {
     dailyResponseTimeStats: ConfidenceStats[];
+    summaryStatistics: SummaryStatistics;
     datasetStatistics: any;
     responseTimeStatistics: {
         averageResponseTimes: any;
@@ -54,6 +72,24 @@ export interface ResponseTimeStatisticsStore {
     lastUpdate: Date | null;
     fetchResponseTimeData: (month: string, config?: DataFetchConfig) => Promise<void>;
     processMonthlyData: (month: string) => void;
+    getAvailableChannels: () => string[];
+    getProcessedDataForRange: (startDate: string, endDate: string, selectedChannels?: string[]) => {
+        dailyStats: ConfidenceStats[];
+        summaryStats: SummaryStatistics;
+        channelBreakdown: ChannelBreakdownData[];
+        chartData: {
+            dates: string[];
+            averageData: number[];
+            medianData: number[];
+            maxData: number[];
+            minData: number[];
+            upperStdData: number[];
+            lowerStdData: number[];
+            stdDevData: number[];
+            avgStdDev: number;
+            stdDevThreshold: number;
+        };
+    } | null;
 }
 
 export const createMonthlyReportsStore: StateCreator<
@@ -128,11 +164,29 @@ export const createMonthlyReportsStore: StateCreator<
                         }
 
                         // Add daily variation and some trend
-                        const dailyVariation = (Math.random() - 0.5) * 100;
+                        const dailyVariation = (Math.random() - 0.5) * 50; // Reduced variation
                         const weekendFactor = date.getDay() === 0 || date.getDay() === 6 ? 0.7 : 1.0;
                         const meanResponseTime =
                             Math.max(50, baseMean + dailyVariation) * weekendFactor;
-                        const stdDeviation = meanResponseTime * (0.2 + Math.random() * 0.2); // 20-40% std deviation
+                        
+                        // Generate more realistic standard deviations (5-15% of mean, capped at reasonable values)
+                        const stdDevPercentage = 0.05 + Math.random() * 0.10; // 5-15% std deviation
+                        let stdDeviation = meanResponseTime * stdDevPercentage;
+                        
+                        // Cap standard deviation to realistic values based on channel
+                        if (channel === "REST_API" || channel === "SOAP_API") {
+                            stdDeviation = Math.min(stdDeviation, 50 + Math.random() * 50); // 50-100ms max
+                        } else if (channel === "EDI") {
+                            stdDeviation = Math.min(stdDeviation, 80 + Math.random() * 70); // 80-150ms max
+                        } else if (channel === "FILE_UPLOAD") {
+                            stdDeviation = Math.min(stdDeviation, 150 + Math.random() * 100); // 150-250ms max
+                        }
+                        
+                        // Occasionally add spikes for realism (10% chance of higher std dev)
+                        if (Math.random() < 0.1) {
+                            stdDeviation *= 2; // Double the std dev for occasional spikes
+                        }
+                        
                         const eventCount = Math.floor((50 + Math.random() * 200) * weekendFactor);
 
                         responseTimeData.push({
@@ -209,28 +263,48 @@ export const createMonthlyReportsStore: StateCreator<
             dailyGroups[dateKey].push(record);
         });
 
-        // Calculate daily confidence stats
+        // Calculate daily confidence stats using proper weighted statistics
         const dailyResponseTimeStats: ConfidenceStats[] = Object.entries(dailyGroups)
             .map(([date, records]) => {
-                const responseTimes = records.map((r) => r.mean_response_time_ms);
-                const sortedTimes = [...responseTimes].sort((a, b) => a - b);
+                if (records.length === 0) {
+                    return null;
+                }
 
-                const sum = responseTimes.reduce((acc, time) => acc + time, 0);
-                const average = sum / responseTimes.length;
-                const median =
-                    sortedTimes.length % 2 === 0
-                        ? (sortedTimes[sortedTimes.length / 2 - 1] +
-                              sortedTimes[sortedTimes.length / 2]) /
-                          2
-                        : sortedTimes[Math.floor(sortedTimes.length / 2)];
-                const min = Math.min(...responseTimes);
-                const max = Math.max(...responseTimes);
+                // Calculate weighted statistics using the store's std_deviation_ms values
+                const totalEvents = records.reduce((sum, record) => sum + record.event_count, 0);
+                
+                // Weighted average of response times
+                const weightedSum = records.reduce((sum, record) => 
+                    sum + (record.mean_response_time_ms * record.event_count), 0);
+                const average = weightedSum / totalEvents;
 
-                // Calculate standard deviation
-                const squareDiffs = responseTimes.map((time) => Math.pow(time - average, 2));
-                const avgSquareDiff =
-                    squareDiffs.reduce((acc, diff) => acc + diff, 0) / squareDiffs.length;
-                const standardDeviation = Math.sqrt(avgSquareDiff);
+                // For median, create array of all individual response times
+                const allResponseTimes: number[] = [];
+                records.forEach(record => {
+                    for (let i = 0; i < record.event_count; i++) {
+                        allResponseTimes.push(record.mean_response_time_ms);
+                    }
+                });
+                allResponseTimes.sort((a, b) => a - b);
+                
+                const median = allResponseTimes.length % 2 === 0
+                    ? (allResponseTimes[Math.floor(allResponseTimes.length / 2) - 1] + allResponseTimes[Math.floor(allResponseTimes.length / 2)]) / 2
+                    : allResponseTimes[Math.floor(allResponseTimes.length / 2)];
+
+                // Min and max from the means
+                const means = records.map(r => r.mean_response_time_ms);
+                const min = Math.min(...means);
+                const max = Math.max(...means);
+                
+                // Combined standard deviation using the store's std_deviation_ms values
+                let combinedVariance = 0;
+                records.forEach(record => {
+                    const weight = record.event_count / totalEvents;
+                    const meanDiff = record.mean_response_time_ms - average;
+                    // Combine both internal variance and variance due to different means
+                    combinedVariance += weight * (Math.pow(record.std_deviation_ms, 2) + Math.pow(meanDiff, 2));
+                });
+                const standardDeviation = Math.sqrt(combinedVariance);
 
                 return {
                     date,
@@ -239,10 +313,11 @@ export const createMonthlyReportsStore: StateCreator<
                     min,
                     max,
                     standardDeviation,
-                    count: records.length,
+                    count: totalEvents // Total events, not just record count
                 };
             })
-            .sort((a, b) => a.date.localeCompare(b.date));
+            .filter(stat => stat !== null)
+            .sort((a, b) => a!.date.localeCompare(b!.date)) as ConfidenceStats[];
 
         // Prepare chart arrays
         const dates = dailyResponseTimeStats.map((stat) => stat.date);
@@ -257,6 +332,17 @@ export const createMonthlyReportsStore: StateCreator<
 
         const upperStdData = averageData.map((avg, i) => avg + stdDevData[i]);
         const lowerStdData = averageData.map((avg, i) => Math.max(0, avg - stdDevData[i]));
+
+        // Calculate summary statistics
+        const summaryStatistics: SummaryStatistics = {
+            totalDataPoints: dailyResponseTimeStats.reduce((sum, stat) => sum + stat.count, 0),
+            avgResponseTime: averageData.reduce((sum, val) => sum + val, 0) / averageData.length,
+            avgStdDev: avgStdDev,
+            medianResponseTime: medianData.reduce((sum, val) => sum + val, 0) / medianData.length,
+            maxUpperStd: Math.max(...upperStdData),
+            minLowerStd: Math.min(...lowerStdData),
+            totalDays: dailyResponseTimeStats.length
+        };
 
         // Calculate overall statistics
         const totalRecords = rawData.length;
@@ -293,6 +379,7 @@ export const createMonthlyReportsStore: StateCreator<
         // Create refined monthly data
         const refinedData: RefinedMonthlyData = {
             dailyResponseTimeStats,
+            summaryStatistics,
             datasetStatistics: {
                 overallAverage,
                 totalChannels: Object.keys(channelGroups).length,
@@ -344,6 +431,208 @@ export const createMonthlyReportsStore: StateCreator<
         }));
 
         console.log(`Successfully processed ${totalRecords} records for ${month}`);
+    },
+
+    getProcessedDataForRange: (startDate: string, endDate: string, selectedChannels?: string[]) => {
+        const state = get();
+        
+        if (!state._rawdata) return null;
+
+        // Collect all data within the date range from all months
+        const allData: ResponseTimeRecord[] = [];
+        
+        Object.values(state._rawdata).forEach(monthData => {
+            if (monthData) {
+                const filteredData = monthData.filter(record => {
+                    const recordDate = record.timestamp.toISOString().split('T')[0];
+                    const isInDateRange = recordDate >= startDate && recordDate <= endDate;
+                    
+                    // If selectedChannels is provided, filter by channels
+                    const isInSelectedChannels = !selectedChannels || selectedChannels.length === 0 || selectedChannels.includes(record.channel);
+                    
+                    return isInDateRange && isInSelectedChannels;
+                });
+                allData.push(...filteredData);
+            }
+        });
+
+        if (allData.length === 0) return null;
+
+        // Group by date
+        const groupedByDate: { [date: string]: ResponseTimeRecord[] } = {};
+        
+        allData.forEach(record => {
+            const date = record.timestamp.toISOString().split('T')[0];
+            if (!groupedByDate[date]) {
+                groupedByDate[date] = [];
+            }
+            groupedByDate[date].push(record);
+        });
+
+        // Calculate daily statistics (same logic as processMonthlyData)
+        const dailyStats: ConfidenceStats[] = Object.entries(groupedByDate)
+            .map(([date, records]) => {
+                if (records.length === 0) return null;
+
+                const totalEvents = records.reduce((sum, record) => sum + record.event_count, 0);
+                
+                const weightedSum = records.reduce((sum, record) => 
+                    sum + (record.mean_response_time_ms * record.event_count), 0);
+                const average = weightedSum / totalEvents;
+
+                const allResponseTimes: number[] = [];
+                records.forEach(record => {
+                    for (let i = 0; i < record.event_count; i++) {
+                        allResponseTimes.push(record.mean_response_time_ms);
+                    }
+                });
+                allResponseTimes.sort((a, b) => a - b);
+                
+                const median = allResponseTimes.length % 2 === 0
+                    ? (allResponseTimes[Math.floor(allResponseTimes.length / 2) - 1] + allResponseTimes[Math.floor(allResponseTimes.length / 2)]) / 2
+                    : allResponseTimes[Math.floor(allResponseTimes.length / 2)];
+
+                const means = records.map(r => r.mean_response_time_ms);
+                const min = Math.min(...means);
+                const max = Math.max(...means);
+                
+                let combinedVariance = 0;
+                records.forEach(record => {
+                    const weight = record.event_count / totalEvents;
+                    const meanDiff = record.mean_response_time_ms - average;
+                    combinedVariance += weight * (Math.pow(record.std_deviation_ms, 2) + Math.pow(meanDiff, 2));
+                });
+                const standardDeviation = Math.sqrt(combinedVariance);
+
+                return {
+                    date,
+                    average,
+                    median,
+                    min,
+                    max,
+                    standardDeviation,
+                    count: totalEvents
+                };
+            })
+            .filter(stat => stat !== null)
+            .sort((a, b) => a!.date.localeCompare(b!.date)) as ConfidenceStats[];
+
+        // Calculate summary statistics
+        const summaryStats: SummaryStatistics = {
+            totalDataPoints: dailyStats.reduce((sum, stat) => sum + stat.count, 0),
+            avgResponseTime: dailyStats.reduce((sum, stat) => sum + stat.average, 0) / dailyStats.length,
+            avgStdDev: dailyStats.reduce((sum, stat) => sum + stat.standardDeviation, 0) / dailyStats.length,
+            medianResponseTime: dailyStats.reduce((sum, stat) => sum + stat.median, 0) / dailyStats.length,
+            maxUpperStd: Math.max(...dailyStats.map(stat => stat.average + stat.standardDeviation)),
+            minLowerStd: Math.min(...dailyStats.map(stat => Math.max(0, stat.average - stat.standardDeviation))),
+            totalDays: dailyStats.length
+        };
+
+        // Calculate channel breakdown data for ALL channels (not filtered by selection)
+        const allChannelData: ResponseTimeRecord[] = [];
+        
+        Object.values(state._rawdata).forEach(monthData => {
+            if (monthData) {
+                const filteredData = monthData.filter(record => {
+                    const recordDate = record.timestamp.toISOString().split('T')[0];
+                    return recordDate >= startDate && recordDate <= endDate;
+                    // Note: No channel filtering here - we want all channels for breakdown
+                });
+                allChannelData.push(...filteredData);
+            }
+        });
+        
+        const channelGroups: { [channel: string]: ResponseTimeRecord[] } = {};
+        allChannelData.forEach(record => {
+            if (!channelGroups[record.channel]) {
+                channelGroups[record.channel] = [];
+            }
+            channelGroups[record.channel].push(record);
+        });
+
+        const channelBreakdown: ChannelBreakdownData[] = Object.entries(channelGroups)
+            .map(([channel, records]) => {
+                const totalEvents = records.reduce((sum, record) => sum + record.event_count, 0);
+                
+                // Weighted average
+                const weightedSum = records.reduce((sum, record) => 
+                    sum + (record.mean_response_time_ms * record.event_count), 0);
+                const avgResponseTime = weightedSum / totalEvents;
+
+                // Median calculation
+                const allResponseTimes: number[] = [];
+                records.forEach(record => {
+                    for (let i = 0; i < record.event_count; i++) {
+                        allResponseTimes.push(record.mean_response_time_ms);
+                    }
+                });
+                allResponseTimes.sort((a, b) => a - b);
+                
+                const medianResponseTime = allResponseTimes.length % 2 === 0
+                    ? (allResponseTimes[Math.floor(allResponseTimes.length / 2) - 1] + allResponseTimes[Math.floor(allResponseTimes.length / 2)]) / 2
+                    : allResponseTimes[Math.floor(allResponseTimes.length / 2)];
+
+                // Combined standard deviation
+                let combinedVariance = 0;
+                records.forEach(record => {
+                    const weight = record.event_count / totalEvents;
+                    const meanDiff = record.mean_response_time_ms - avgResponseTime;
+                    combinedVariance += weight * (Math.pow(record.std_deviation_ms, 2) + Math.pow(meanDiff, 2));
+                });
+                const stdDeviation = Math.sqrt(combinedVariance);
+
+                return {
+                    channel,
+                    avgResponseTime,
+                    medianResponseTime,
+                    stdDeviation,
+                    eventCount: totalEvents
+                };
+            })
+            .sort((a, b) => a.channel.localeCompare(b.channel));
+
+        // Calculate chart data
+        const avgStdDev = summaryStats.avgStdDev;
+        const stdDevThreshold = avgStdDev * 1.1;
+
+        const chartData = {
+            dates: dailyStats.map(stat => stat.date),
+            averageData: dailyStats.map(stat => Math.round(stat.average)),
+            medianData: dailyStats.map(stat => Math.round(stat.median)),
+            maxData: dailyStats.map(stat => Math.round(stat.max)),
+            minData: dailyStats.map(stat => Math.round(stat.min)),
+            upperStdData: dailyStats.map(stat => Math.round(stat.average + stat.standardDeviation)),
+            lowerStdData: dailyStats.map(stat => Math.round(Math.max(0, stat.average - stat.standardDeviation))),
+            stdDevData: dailyStats.map(stat => stat.standardDeviation),
+            avgStdDev,
+            stdDevThreshold
+        };
+
+        return {
+            dailyStats,
+            summaryStats,
+            channelBreakdown,
+            chartData
+        };
+    },
+
+    getAvailableChannels: () => {
+        const state = get();
+        
+        if (!state._rawdata) return [];
+
+        // Collect all unique channels from raw data
+        const channels = new Set<string>();
+        
+        Object.values(state._rawdata).forEach(monthData => {
+            if (monthData) {
+                monthData.forEach(record => {
+                    channels.add(record.channel);
+                });
+            }
+        });
+
+        return Array.from(channels).sort();
     },
 
     lastUpdate: null,

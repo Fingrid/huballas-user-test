@@ -208,7 +208,7 @@ export type {
     EventDescription,
 } from "../types";
 
-export type { ConfidenceStats, RefinedMonthlyData } from "./responseTimeStatistics.store";
+export type { ConfidenceStats, RefinedMonthlyData, SummaryStatistics, ChannelBreakdownData } from "./responseTimeStatistics.store";
 
 export type { UsageStats, RefinedUsageData } from "./usageStatistics.store";
 

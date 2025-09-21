@@ -159,80 +159,76 @@ export default function StatisticsSummary({}: StatisticsSummaryProps) {
   const isLoading = usageStore.loading || errorStore.loading || responseStore.loading;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="statistics__summary">
       {/* Annual Events Box */}
-      <div className="bg-[var(--color-background-level-1)] border border-[var(--color-separator)] p-6 shadow-fingrid rounded-[var(--border-radius-default)]">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-medium text-[var(--color-text-muted)]">{t('statistics.summaryAnnualEvents')}</h3>
-          {stats.eventsGrowth !== 0 && (
-            <div className={`flex items-center text-sm ${
-              stats.eventsGrowth > 0 ? 'text-green-600' : 'text-red-600'
-            }`}>
-              <span className="mr-1">
-                {stats.eventsGrowth > 0 ? '↗' : '↘'}
-              </span>
-              {Math.abs(stats.eventsGrowth).toFixed(1)}%
-            </div>
-          )}
+      <div className="statistics__summary-card">
+        <div className="statistics__summary-card-title">
+          {t('statistics.summary.annualEvents')}
         </div>
         
         {isLoading ? (
-          <div className="animate-pulse">
-            <div className="h-8 bg-[var(--color-background-level-3)] rounded mb-2"></div>
-            <div className="h-4 bg-[var(--color-background-level-3)] rounded w-24"></div>
+          <div className="statistics__loading">
+            {t('statistics.loading')}
           </div>
         ) : (
           <>
-            <div className="text-3xl font-bold text-[var(--color-text)] mb-2">
+            <div className="statistics__summary-card-value">
               {stats.totalEvents.toLocaleString('fi-FI')}
+              {stats.eventsGrowth !== 0 && (
+                <span className={`ml-2 text-sm ${
+                  stats.eventsGrowth > 0 ? 'text-green-600' : 'text-red-600'
+                }`}>
+                  {stats.eventsGrowth > 0 ? '↗' : '↘'}
+                  {Math.abs(stats.eventsGrowth).toFixed(1)}%
+                </span>
+              )}
             </div>
-            <div className="text-sm text-[var(--color-text-subtle)]">
-              {t('statistics.summaryTotalEvents')}
+            <div className="statistics__summary-card-description">
+              {t('statistics.summary.totalEvents')}
             </div>
           </>
         )}
       </div>
 
       {/* Error Count Box */}
-      <div className="bg-[var(--color-background-level-1)] border border-[var(--color-separator)] p-6 shadow-fingrid rounded-[var(--border-radius-default)]">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-medium text-[var(--color-text-muted)]">{t('statistics.summaryErrors')}</h3>
+      <div className="statistics__summary-card">
+        <div className="statistics__summary-card-title">
+          {t('statistics.summary.errors')}
         </div>
         
         {isLoading ? (
-          <div className="animate-pulse">
-            <div className="h-8 bg-[var(--color-background-level-3)] rounded mb-2"></div>
-            <div className="h-4 bg-[var(--color-background-level-3)] rounded w-24"></div>
+          <div className="statistics__loading">
+            {t('statistics.loading')}
           </div>
         ) : (
           <>
-            <div className="text-3xl font-bold text-[var(--color-text)] mb-2">
+            <div className="statistics__summary-card-value">
               {stats.totalErrors.toLocaleString('fi-FI')}
             </div>
-            <div className="text-sm text-[var(--color-text-subtle)]">
-              {t('statistics.summaryTotalErrors')}
+            <div className="statistics__summary-card-description">
+              {t('statistics.summary.totalErrors')}
             </div>
           </>
         )}
       </div>
 
       {/* Response Times Graph Box */}
-      <div className="bg-[var(--color-background-level-1)] border border-[var(--color-separator)] p-6 shadow-fingrid rounded-[var(--border-radius-default)]">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-medium text-[var(--color-text-muted)]">{t('statistics.summaryResponseTimes')}</h3>
+      <div className="statistics__summary-card">
+        <div className="statistics__summary-card-title">
+          {t('statistics.summary.responseTimes')}
         </div>
         
         {isLoading ? (
-          <div className="animate-pulse">
-            <div className="h-20 bg-[var(--color-background-level-3)] rounded mb-2"></div>
+          <div className="statistics__loading">
+            {t('statistics.loading')}
           </div>
         ) : (
           <>
-            <div className="h-20 mb-2">
+            <div className="statistics__chart" style={{ height: '80px', marginBottom: '0.5rem' }}>
               <div ref={responseChartRef} className="w-full h-full" />
             </div>
-            <div className="text-sm text-[var(--color-text-subtle)]">
-              {t('statistics.average')}: {stats.avgResponseTime.toFixed(0)}ms
+            <div className="statistics__summary-card-description">
+              {t('statistics.summary.avgResponseTime')}: {stats.avgResponseTime.toFixed(0)}ms
             </div>
           </>
         )}

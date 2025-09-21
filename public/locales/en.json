@@ -54,9 +54,28 @@
     "pageDescription": "Year to date - Datahub connects data from Finland's 3.9 million electricity consumption points to the same system.",
     "chartsAndFilters": "Charts and Filters",
     "breakdownTitle": "Statistics Breakdown",
-    "summaryAnnualEvents": "Annual events + trend",
-    "summaryErrors": "Errors",
-    "summaryResponseTimes": "Response times",
+    "average": "Average",
+    "median": "Median",
+    "standardDeviation": "Standard Deviation",
+    "noDataMessage": "No data available for the selected time range",
+    "loading": "Loading...",
+    "summary": {
+      "annualEvents": "Annual events + trend",
+      "errors": "Errors",
+      "responseTimes": "Response times",
+      "totalEvents": "Total events",
+      "totalEventsDescription": "Comprehensive overview of all events processed through the system",
+      "totalErrors": "Total errors",
+      "avgResponseTime": "Average response time"
+    },
+    "pageExtraInfo": {
+      "title": "Additional Statistics Information",
+      "content": "Detailed explanations and context about the statistics displayed in this section."
+    },
+    "dailyEvents": {
+      "title": "Daily Events",
+      "description": "This section shows daily events for the selected time period. You can examine event distribution across different channels, process groups, and market roles."
+    },
     "dateRange": {
       "label": "Time range:",
       "last30Days": "Last 30 days",
@@ -70,12 +89,70 @@
       "label": "Group by:",
       "channels": "Channels",
       "processGroups": "Process groups",
-      "marketRoles": "Market roles"
+      "marketRoles": "Market roles",
+      "errorTypes": "Error types",
+      "systemTypes": "System types"
+    },
+    "filters": {
+      "channels": "Filter by Channels",
+      "selectAll": "Select All",
+      "deselectAll": "Deselect All"
+    },
+    "controls": {
+      "section": "Select section:",
+      "statistics": "Statistics:",
+      "grouping": "Grouping:"
+    },
+    "sections": {
+      "usage": "Usage Statistics",
+      "errors": "Error Statistics"
+    },
+    "usage": {
+      "description": "This section shows usage statistics for the selected time period. You can examine event distribution across different channels, process groups, and market roles.",
+      "dailyEventsTitle": "Daily Events",
+      "totalEventsTitle": "Total Events",
+      "uniqueChannels": "Channels",
+      "uniqueProcessGroups": "Process Groups",
+      "uniqueMarketRoles": "Market Roles"
+    },
+    "errors": {
+      "description": "This section shows error statistics for the selected time period. You can examine error distribution across different error types and system types.",
+      "title": "Error Statistics",
+      "chartTitle": "Errors per Day",
+      "totalErrors": "Total Errors",
+      "uniqueTypes": "Unique Error Types",
+      "avgDaily": "Average Daily",
+      "peakDaily": "Peak Daily"
+    },
+    "responseTime": {
+      "title": "Response Times",
+      "chartTitle": "Response Times per Day",
+      "channelBreakdown": "Response Time by Channel",
+      "averageResponseTime": "Average Response Time",
+      "medianResponseTime": "Median Response Time",
+      "standardDeviation": "Standard Deviation",
+      "noDataForRange": "No response time data available for the selected time range"
     },
     "breakdown": {
       "marketRoles": "Market Roles",
       "processGroups": "Process Groups",
-      "channels": "Channels"
+      "channels": "Channels",
+      "errorTypes": "Error Types",
+      "systemTypes": "System Types",
+      "headers": {
+        "channel": "Channel",
+        "average": "Avg (ms)",
+        "median": "Median (ms)",
+        "stdDev": "Std Dev (ms)",
+        "events": "Events",
+        "count": "Count",
+        "errorType": "Error Type",
+        "systemType": "System Type"
+      }
+    },
+    "stacking": {
+      "none": "None",
+      "stacked": "Stacked"
     }
   }
 }

@@ -99,3 +99,57 @@ To use your own data:
 3. Rebuild the application with `pnpm build`
 
 The application is designed to be resilient - if any data files are missing, it will generate realistic synthetic data for demonstration purposes.
+
+## Quick Edit Guide
+
+### 🌐 Translations
+**Location**: `/public/locales/fi.json` and `/public/locales/en.json`
+
+```json
+{
+  "statistics": {
+    "pageTitle": "Your Finnish Title",
+    "summary": {
+      "totalEvents": "Your translation"
+    }
+  }
+}
+```
+- Use nested structure: `statistics.component.property`
+- Copy same structure to both language files
+- Finnish translations in `fi.json`, English in `en.json`
+
+### 🎨 Styling
+**Location**: `/app/globals.css`
+
+**Design System Colors:**
+```css
+:root {
+  --color-text: #3e5660;           /* Main text */
+  --color-primary-action: #d5121e; /* Buttons/links */
+  --color-background-level-1: #fff; /* Cards */
+  --color-separator: #d5dde3;      /* Borders */
+}
+```
+
+**Component Styles:**
+```css
+.statistics__summary-card {
+  padding: 1.5rem;         /* Card spacing */
+  border-radius: 0.5rem;   /* Rounded corners */
+  background: var(--color-background-level-1);
+}
+```
+
+### 📊 Data
+**Location**: `/public/data/`
+
+**CSV Files:**
+- `data_usage_statistics.csv` - Usage events
+- `data_error_statistics.csv` - Error events  
+- `data_response_times.csv` - Response time data
+- `dict_channel_descriptions.csv` - Channel names
+- `dict_event_descriptions.csv` - Event descriptions
+- `dict_marketrolecode_descriptions.csv` - Market role names
+
+**Format**: Keep CSV headers unchanged, modify data rows only. The application will automatically detect and use updated data.

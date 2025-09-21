@@ -3,9 +3,11 @@
 import { useState } from 'react';
 import { cn } from '@/lib/cn';
 import { useLocalization } from '@/lib/stores/localization.store';
+import type { DateRangeFilter as DateRangeFilterType } from '@/lib/dataProcessing';
 
 export type DateRangeOption = '30days' | '60days' | '90days' | 'custom';
 
+// Keep local DateRange interface for backward compatibility
 interface DateRange {
   startDate: string;
   endDate: string;
@@ -13,10 +15,10 @@ interface DateRange {
 
 interface DateRangeFilterProps {
   selectedRange: DateRangeOption;
-  dateRange: DateRange;
+  dateRange: DateRangeFilterType;
   onRangeChange: (range: DateRangeOption) => void;
-  onDateRangeChange: (dateRange: DateRange) => void;
-  availableDataRange?: DateRange; // Optional: the actual date range where data is available
+  onDateRangeChange: (dateRange: DateRangeFilterType) => void;
+  availableDataRange?: DateRangeFilterType | null; // Allow null values
 }
 
 export default function DateRangeFilter({ 
