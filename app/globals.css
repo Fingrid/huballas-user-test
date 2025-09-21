@@ -26,10 +26,16 @@
   --color-border-lighter: #f3f4f6;
   --color-text-muted: #6b7280;
   --color-text-subtle: #999;
-  --color-success: #10b981;
+  --color-text-inverse: #ffffff;
+  --color-success: #F4FCE9;
   --color-warning: #f59e0b;
-  --color-error: #ef4444;
+  --color-error: #FFEBE5;
   --color-info: #4f46e5;
+  
+  /* Updated design system shadows and gradients */
+  --box-shadow-default: 0 4px 4px 0 rgba(0, 0, 0, 0.10);
+  --gradient-page-header: linear-gradient(180deg, rgba(255, 255, 255, 0.50) 0.64%, rgba(212, 238, 238, 0.50) 61.54%);
+  --border-radius-default: 0.5rem;
   
   /* Dark mode vars */
   --color-dark-text: #ffffff;
@@ -123,11 +129,12 @@ h4 {
   background-color: var(--color-background-level-1);
   border: 1px solid var(--color-separator);
   padding: 1.5rem;
+  border-radius: var(--border-radius-default);
   transition: box-shadow 0.2s ease;
 }
 
 .data-card:hover {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--box-shadow-default);
 }
 
 /* Chart container */
@@ -135,6 +142,7 @@ h4 {
   background-color: var(--color-background-level-1);
   border: 1px solid var(--color-separator);
   padding: 1.5rem;
+  border-radius: var(--border-radius-default);
 }
 
 /* Button styles */
@@ -287,6 +295,31 @@ h4 {
 .nav-active {
   color: var(--color-primary-action);
   border-bottom: 2px solid var(--color-primary-action);
+}
+
+/* Page header with gradient background */
+.page-header-gradient {
+  background: var(--gradient-page-header);
+}
+
+/* Custom shadow classes using design system */
+.shadow-fingrid {
+  box-shadow: var(--box-shadow-default);
+}
+
+/* Border radius utility */
+.rounded-fingrid {
+  border-radius: var(--border-radius-default);
+}
+
+/* Form label styles */
+.form-label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 400;
+  line-height: 1rem;
+  color: var(--color-text);
+  margin-bottom: 0.125rem;
 }
 
 /* Link styles */

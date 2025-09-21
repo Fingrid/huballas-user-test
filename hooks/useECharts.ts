@@ -11,7 +11,7 @@ import {
 } from 'echarts/components';
 import { BarChart, LineChart } from 'echarts/charts';
 import { CanvasRenderer } from 'echarts/renderers';
-import { useEChartsTheme } from './useEChartsTheme';
+import echartsTheme from '../app/echarts.theme.json';
 
 // Register ECharts components
 echarts.use([
@@ -27,6 +27,8 @@ echarts.use([
   CanvasRenderer,
 ]);
 
+echarts.registerTheme('huballas', echartsTheme);
+
 interface UseEChartsOptions {
   dependencies?: DependencyList;
 }
@@ -40,9 +42,6 @@ export function useECharts(
 ) {
   const chartRef = useRef<HTMLDivElement>(null);
   const chartInstanceRef = useRef<echarts.ECharts | null>(null);
-  
-  // Register theme
-  useEChartsTheme();
 
   useEffect(() => {
     if (!chartRef.current) return;

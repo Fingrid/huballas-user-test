@@ -1,0 +1,113 @@
+{
+  "navigation": {
+    "annualStatistics": "Vuositilastot",
+    "statistics": "Tilastot",
+    "monthlyReports": "Kuukausiraportit"
+  },
+  "common": {
+    "loading": "Ladataan...",
+    "error": "Virhe",
+    "retry": "Yritä uudelleen",
+    "year": "Vuosi",
+    "month": "Kuukausi",
+    "componentPlaceholder": "Komponentin paikkamerkki",
+    "noDataAvailable": "Ei dataa saatavilla",
+    "loadingData": "Ladataan dataa...",
+    "info": "Tiedote",
+    "warning": "Varoitus",
+    "criticalError": "Kriittinen virhe"
+  },
+  "annualStatistics": {
+    "pageTitle": "annualStatistics.pageTitle",
+    "pageDescription": "annualStatistics.pageDescription",
+    "usageTrends": "annualStatistics.usageTrends",
+    "monthlyComparison": "annualStatistics.monthlyComparison",
+    "marketRoleDistribution": "annualStatistics.marketRoleDistribution",
+    "channelAnalysis": "annualStatistics.channelAnalysis",
+    "processGroupBreakdown": "annualStatistics.processGroupBreakdown",
+    "detailedBreakdown": "annualStatistics.detailedBreakdown",
+    "peakUsageAnalysis": "annualStatistics.peakUsageAnalysis",
+    "yearOverYearGrowth": "annualStatistics.yearOverYearGrowth",
+    "performanceMetrics": "annualStatistics.performanceMetrics",
+    "errorLoadingData": "annualStatistics.errorLoadingData",
+    "noUsageData": "annualStatistics.noUsageData"
+  },
+  "monthlyReports": {
+    "title": "Kuukausiraportit",
+    "loadingMonthlyReports": "Ladataan kuukausiraportteja...",
+    "errorLoadingReports": "Virhe raporttien latauksessa",
+    "selectMonth": "Valitse kuukausi",
+    "selectYear": "Valitse vuosi",
+    "events": "Tapahtumat",
+    "responseTimes": "Vasteajat",
+    "errors": "Virheet",
+    "systemErrors": "Järjestelmävirheet",
+    "validationErrors": "Validointivirheet"
+  },
+  "charts": {
+    "noDataMessage": "Ei dataa näytettäväksi valitulle ajanjaksolle",
+    "loadingChart": "Ladataan kaaviota...",
+    "errorLoadingChart": "Virhe kaavion latauksessa"
+  },
+  "statistics": {
+    "pageTitle": "Tilastoja",
+    "pageDescription": "Datahub yhdistää tiedot Suomen 3,9 miljoonan sähkönkäyttöpisteen kulutuksesta samaan järjestelmään.",
+    "chartsAndFilters": "Kaaviot ja suodattimet",
+    "breakdownTitle": "Tilastojen erittely",
+    "summaryAnnualEvents": "Vuositapahtumat + trendi",
+    "summaryErrors": "Virheet",
+    "summaryResponseTimes": "Vasteajat",
+    "summaryTotalEvents": "Tapahtumamäärät",
+    "summaryTotalEventsDescription": "Ketä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiäKetä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiäKetä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiä",
+    "pageExtraInfo": {
+      "title": "Lisätietoja tilastoista",
+      "content": "Ketä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiäKetä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiäKetä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiä"
+    },
+    "dailyEvents": {
+      "title": "Tapahtumat päivittäin",
+      "description": "Tässä osiossa näytetään päivittäiset tapahtumat valitulta aikaväliltä. Voit tarkastella tapahtumien jakautumista eri kanavien, prosessiryhmien ja markkinaroolien mukaan."
+    },
+    "dateRange": {
+      "label": "Aikaväli:",
+      "last30Days": "Viimeiset 30 päivää",
+      "last60Days": "Viimeiset 60 päivää",
+      "last90Days": "Viimeiset 90 päivää",
+      "customRange": "Mukautettu aikaväli",
+      "startDate": "Alkupäivä:",
+      "endDate": "Loppupäivä:"
+    },
+    "grouping": {
+      "label": "Ryhmitä mukaan:",
+      "channels": "Kanavat",
+      "processGroups": "Prosessiryhmät",
+      "marketRoles": "Markkinaroolit",
+      "errorTypes": "Virhetyypit",
+      "systemTypes": "Järjestelmätyypit"
+    },
+    "controls": {
+      "section": "Valitse osio:",
+      "statistics": "Tilasto:",
+      "grouping": "Ryhmittely:"
+    },
+    "sections": {
+      "usage": "Käyttötilastot",
+      "errors": "Virhetilastot"
+    },
+    "usageDescription": "Tässä osiossa näytetään käyttötilastot valitulta aikaväliltä. Voit tarkastella tapahtumien jakautumista eri kanavien, prosessiryhmien ja markkinaroolien mukaan.",
+    "errorDescription": "Tässä osiossa näytetään virhetilastot valitulta aikaväliltä. Voit tarkastella virheiden jakautumista erityyppisten virheiden tai järjestelmätyyppien mukaan.",
+    "errorStatistics": {
+      "title": "Virhetilastot",
+      "description": "Tässä osiossa näytetään virhetilastot valitulta aikaväliltä. Voit tarkastella virheiden jakautumista erityyppisten virheiden tai järjestelmätyyppien mukaan.",
+      "chartTitle": "Virheet päivittäin",
+      "totalErrors": "Virheitä yhteensä",
+      "uniqueTypes": "Erilaisia virhetyyppejä",
+      "avgDaily": "Keskimäärin päivässä",
+      "peakDaily": "Enimmillään päivässä"
+    },
+    "breakdown": {
+      "marketRoles": "Market Roles",
+      "processGroups": "Process Groups",
+      "channels": "Channels"
+    }
+  }
+}

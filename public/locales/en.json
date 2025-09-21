@@ -1,0 +1,81 @@
+{
+  "navigation": {
+    "annualStatistics": "Annual Statistics",
+    "statistics": "Statistics",
+    "monthlyReports": "Monthly Reports"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "year": "Year",
+    "month": "Month",
+    "componentPlaceholder": "Component placeholder",
+    "noDataAvailable": "No data available",
+    "loadingData": "Loading data...",
+    "info": "Information",
+    "warning": "Warning",
+    "criticalError": "Critical Error"
+  },
+  "annualStatistics": {
+    "pageTitle": "annualStatistics.pageTitle",
+    "pageDescription": "annualStatistics.pageDescription",
+    "usageTrends": "annualStatistics.usageTrends",
+    "monthlyComparison": "annualStatistics.monthlyComparison",
+    "marketRoleDistribution": "annualStatistics.marketRoleDistribution",
+    "channelAnalysis": "annualStatistics.channelAnalysis",
+    "processGroupBreakdown": "annualStatistics.processGroupBreakdown",
+    "detailedBreakdown": "annualStatistics.detailedBreakdown",
+    "peakUsageAnalysis": "annualStatistics.peakUsageAnalysis",
+    "yearOverYearGrowth": "annualStatistics.yearOverYearGrowth",
+    "performanceMetrics": "annualStatistics.performanceMetrics",
+    "errorLoadingData": "annualStatistics.errorLoadingData",
+    "noUsageData": "annualStatistics.noUsageData"
+  },
+  "monthlyReports": {
+    "title": "Monthly Reports",
+    "loadingMonthlyReports": "Loading monthly reports...",
+    "errorLoadingReports": "Error loading reports",
+    "selectMonth": "Select month",
+    "selectYear": "Select year",
+    "events": "Events",
+    "responseTimes": "Response Times",
+    "errors": "Errors",
+    "systemErrors": "System Errors",
+    "validationErrors": "Validation Errors"
+  },
+  "charts": {
+    "noDataMessage": "No data to display for the selected period",
+    "loadingChart": "Loading chart...",
+    "errorLoadingChart": "Error loading chart"
+  },
+  "statistics": {
+    "pageTitle": "Statistics",
+    "pageDescription": "Year to date - Datahub connects data from Finland's 3.9 million electricity consumption points to the same system.",
+    "chartsAndFilters": "Charts and Filters",
+    "breakdownTitle": "Statistics Breakdown",
+    "summaryAnnualEvents": "Annual events + trend",
+    "summaryErrors": "Errors",
+    "summaryResponseTimes": "Response times",
+    "dateRange": {
+      "label": "Time range:",
+      "last30Days": "Last 30 days",
+      "last60Days": "Last 60 days",
+      "last90Days": "Last 90 days",
+      "customRange": "Custom time range",
+      "startDate": "Start date:",
+      "endDate": "End date:"
+    },
+    "grouping": {
+      "label": "Group by:",
+      "channels": "Channels",
+      "processGroups": "Process groups",
+      "marketRoles": "Market roles"
+    },
+    "breakdown": {
+      "marketRoles": "Market Roles",
+      "processGroups": "Process Groups",
+      "channels": "Channels"
+    }
+  }
+}

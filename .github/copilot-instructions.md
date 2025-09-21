@@ -12,10 +12,15 @@ This is a static site used for user testing the visualization of electricity mar
 - Hosting: GitHub Pages
 
 ## Design Guidelines
-- Use Tailwind CSS for styling components.
-- Ensure responsive design for different screen sizes.
-- Maintain a consistent color scheme throughout the application.
-- Use Echarts for all graph visualizations.
-- Keep the user interface intuitive and user-friendly.
-- No rounded borders on any elements.
-- Use Fingrid Design System Colors defined at globals.css, do not change the color values.
+- MUST use Echarts for all graph visualizations.
+- MUST use Fingrid Design System Colors defined at globals.css, MUST not change the color values of the design system.
+- SHOULD ensure responsive design for different screen sizes.
+- SHOULD keep the user interface intuitive and user-friendly.
+- SHOULD maintain a consistent color scheme throughout the application.
+
+## Tailwind Guidelines
+- MUST use Tailwind CSS for styling components.
+- MUST use Tailwind CSS utility classes for styling.
+- MUST follow the existing Tailwind CSS conventions used in the project.
+- MUST avoid custom CSS unless absolutely necessary.
+- SHOULD prefer separating styles into objects for better readability and maintainability.

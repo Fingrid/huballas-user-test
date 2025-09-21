@@ -1,7 +1,9 @@
 import './globals.css'
 import Navigation from '../components/Navigation'
+import LanguageSelector from '../components/LanguageSelector'
 import { labGrotesqueWeb } from './_fonts/fonts'
 import { cn } from '../lib/cn'
+import { LoadingProvider } from '../lib/contexts/LoadingContext'
 
 // Style objects for consistent styling
 const styles = {
@@ -38,12 +40,15 @@ export default function RootLayout({
                   </div>
                   <Navigation />
                 </div>
+                <LanguageSelector />
               </div>
             </div>
           </header>
 
           <main className={styles.main}>
-            {children}
+            <LoadingProvider>
+              {children}
+            </LoadingProvider>
           </main>
 
           <footer className={styles.footer}>

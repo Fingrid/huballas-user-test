@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { cn } from '../lib/cn';
+import { useTranslation } from '../lib/stores/localization.store';
 
 // Style objects for consistent styling
 const styles = {
@@ -14,10 +15,11 @@ const styles = {
 
 export default function Navigation() {
   const pathname = usePathname();
+  const { t } = useTranslation();
 
   const navItems = [
-    { href: '/', label: 'Annual Statistics' },
-    { href: '/monthly-reports', label: 'Monthly Reports' },
+    { href: '/', label: t('navigation.statistics') },
+    /*{ href: '/monthly-reports', label: t('navigation.monthlyReports') },*/
   ];
 
   const isActive = (href: string) => {

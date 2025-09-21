@@ -1,5 +1,5 @@
-import AnnualStatisticsClient from "./annual-statistics/AnnualStatisticsClient";
+import AppClient from "./AppClient";
 
 export default function Page() {
-  return <AnnualStatisticsClient />;
+  return <AppClient />;
 }

@@ -1,11 +1,6 @@
 import Papa from 'papaparse';
 import dayjs from 'dayjs';
-import type { ResponseTimeRecord, ErrorRecord, ChannelDescription, MarketRoleDescription, EventDescription, UsageDataRecord } from './stores';
-
-// Result type for fetch operations
-export type FetchResult<T> = 
-  | { success: true; data: T }
-  | { success: false; error: 'NO_DATA' };
+import type { ResponseTimeRecord, ErrorRecord, ChannelDescription, MarketRoleDescription, EventDescription, UsageDataRecord, FetchResult } from './types';
 
 const dataSets = {
   usageStatistics: 'data_usage_statistics.csv',
