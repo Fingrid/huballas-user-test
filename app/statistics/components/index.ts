@@ -1,4 +1,5 @@
 export { default as StatisticsSummary } from './StatisticsSummary';
+export { default as StatisticsHeader } from './StatisticsHeader';
 export { default as UsageStatisticsGraphs } from './UsageStatisticsGraphs';
 export { default as ErrorStatisticsGraphs } from './ErrorStatisticsGraphs';
 export { default as ResponseTimeStatisticsGraphs } from './ResponseTimeStatisticsGraphs';

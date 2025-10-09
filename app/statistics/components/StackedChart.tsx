@@ -39,7 +39,7 @@ interface StackedChartProps {
 const styles = {
   container:
     "bg-[var(--color-background-level-1)] border border-[var(--color-separator)] p-6 shadow-fingrid rounded-[var(--border-radius-default)] mb-8",
-  chartDiv: "w-full h-[600px]",
+  chartDiv: "w-full h-96",
 };
 
 export default function StackedChart({
@@ -92,7 +92,10 @@ export default function StackedChart({
       }))
       .sort((a, b) => a.date.localeCompare(b.date));
 
-    const chart = echarts.init(chartRef.current, "huballas");
+    // Initialize chart with container height
+    const chart = echarts.init(chartRef.current, "huballas", {
+      height: chartRef.current.clientHeight,
+    });
 
     // Get all unique stack keys
     const allStackKeys = new Set<string>();

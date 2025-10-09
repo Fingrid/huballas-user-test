@@ -2,7 +2,26 @@
   "navigation": {
     "annualStatistics": "Vuositilastot",
     "statistics": "Tilastot",
-    "monthlyReports": "Kuukausiraportit"
+    "monthlyReports": "Kuukausiraportit",
+    "dataHub": "DataHub",
+    "timePoint": "Ajankohtaista",
+    "allData": "Kaikki data",
+    "documents": "Dokumentaatio",
+    "login": "Kirjaudu",
+    "upperNav": {
+      "alerts": "Häiriötiedotteet",
+      "services": "Datahubin palvelut",
+      "login": "Kirjaudu"
+    },
+    "lowerNav": {
+      "news": "Ajankohtaista",
+      "development": "Kehitys",
+      "documentation": "Dokumentaatio",
+      "version": "Datahubin versio",
+      "join": "Liity Datahubiin",
+      "contact": "Yhteydenotot ja ilmoitukset"
+    },
+    "moreInfo": "Lisätietoja datasta"
   },
   "common": {
     "loading": "Ladataan...",
@@ -10,6 +29,7 @@
     "retry": "Yritä uudelleen",
     "year": "Vuosi",
     "month": "Kuukausi",
+    "days": "päivää",
     "componentPlaceholder": "Komponentin paikkamerkki",
     "noDataAvailable": "Ei dataa saatavilla",
     "loadingData": "Ladataan dataa...",
@@ -50,7 +70,7 @@
     "errorLoadingChart": "Virhe kaavion latauksessa"
   },
   "statistics": {
-    "pageTitle": "Tilastoja",
+    "pageTitle": "Datahubin tietojärjestelmän tila",
     "pageDescription": "Datahub yhdistää tiedot Suomen 3,9 miljoonan sähkönkäyttöpisteen kulutuksesta samaan järjestelmään.",
     "chartsAndFilters": "Kaaviot ja suodattimet",
     "breakdownTitle": "Tilastojen erittely",
@@ -73,7 +93,7 @@
       "content": "Ketä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiäKetä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiäKetä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiä"
     },
     "dailyEvents": {
-      "title": "Tapahtumat päivittäin",
+      "title": "Tapahtumamäärät",
       "description": "Tässä osiossa näytetään päivittäiset tapahtumat valitulta aikaväliltä. Voit tarkastella tapahtumien jakautumista eri kanavien, prosessiryhmien ja markkinaroolien mukaan."
     },
     "dateRange": {
@@ -101,7 +121,11 @@
     "controls": {
       "section": "Valitse osio:",
       "statistics": "Tilasto:",
-      "grouping": "Ryhmittely:"
+      "grouping": "Ryhmittely:",
+      "quickSelect": "Pikavalinnat",
+      "startDate": "Alkaa",
+      "endDate": "Päättyy",
+      "custom": "Mukautettu"
     },
     "sections": {
       "usage": "Käyttötilastot",
@@ -117,10 +141,19 @@
     },
     "errors": {
       "description": "Tässä osiossa näytetään virhetilastot valitulta aikaväliltä. Voit tarkastella virheiden jakautumista erityyppisten virheiden tai järjestelmätyyppien mukaan.",
-      "title": "Virhetilastot",
+      "title": "Virhemäärät",
       "chartTitle": "Virheet päivittäin",
       "totalErrors": "Virheitä yhteensä",
       "uniqueTypes": "Erilaisia virhetyyppejä",
+      "avgDaily": "Keskimäärin päivässä",
+      "peakDaily": "Enimmillään päivässä"
+    },
+    "validationErrors": {
+      "description": "Tässä osiossa näytetään validointivirhetilastot valitulta aikaväliltä.",
+      "title": "Validointivirheet",
+      "chartTitle": "Validointivirheet päivittäin",
+      "totalErrors": "Validointivirheitä yhteensä",
+      "uniqueTypes": "Erilaisia validointivirhetyyppejä",
       "avgDaily": "Keskimäärin päivässä",
       "peakDaily": "Enimmillään päivässä"
     },

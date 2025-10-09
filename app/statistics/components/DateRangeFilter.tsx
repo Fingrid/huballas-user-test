@@ -112,7 +112,7 @@ export default function DateRangeFilter({
           id="date-range-select"
           value={selectedRange}
           onChange={(e) => handleRangeChange(e.target.value as DateRangeOption)}
-          className="px-2 py-1.5 text-xs border border-[var(--color-separator)] bg-[var(--color-background-level-1)] text-[var(--color-text)] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded-[var(--border-radius-default)]"
+          className="px-2 py-1.5 text-xs border border-[var(--color-separator)] bg-[var(--color-background-level-1)] text-[var(--color-text)] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded-none"
         >
           {rangeOptions.map((option) => (
             <option key={option.value} value={option.value}>
@@ -134,7 +134,7 @@ export default function DateRangeFilter({
           min={availableDataRange?.startDate}
           max={availableDataRange?.endDate}
           onChange={(e) => handleDateChange('startDate', e.target.value)}
-          className="px-2 py-1.5 text-xs border border-[var(--color-separator)] bg-[var(--color-background-level-1)] text-[var(--color-text)] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded-[var(--border-radius-default)]"
+          className="px-2 py-1.5 text-xs border border-[var(--color-separator)] bg-[var(--color-background-level-1)] text-[var(--color-text)] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded-none"
         />
       </div>
 
@@ -150,7 +150,7 @@ export default function DateRangeFilter({
           min={availableDataRange?.startDate}
           max={availableDataRange?.endDate}
           onChange={(e) => handleDateChange('endDate', e.target.value)}
-          className="px-2 py-1.5 text-xs border border-[var(--color-separator)] bg-[var(--color-background-level-1)] text-[var(--color-text)] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded-[var(--border-radius-default)]"
+          className="px-2 py-1.5 text-xs border border-[var(--color-separator)] bg-[var(--color-background-level-1)] text-[var(--color-text)] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded-none"
         />
       </div>
     </div>

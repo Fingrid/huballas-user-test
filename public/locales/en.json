@@ -2,7 +2,26 @@
   "navigation": {
     "annualStatistics": "Annual Statistics",
     "statistics": "Statistics",
-    "monthlyReports": "Monthly Reports"
+    "monthlyReports": "Monthly Reports",
+    "dataHub": "Data on Hub",
+    "timePoint": "Time Point",
+    "allData": "All Data",
+    "documents": "Documents",
+    "login": "Login",
+    "upperNav": {
+      "alerts": "Service Alerts",
+      "services": "Datahub Services",
+      "login": "Login"
+    },
+    "lowerNav": {
+      "news": "News",
+      "development": "Development",
+      "documentation": "Documentation",
+      "version": "Datahub Version",
+      "join": "Join Datahub",
+      "contact": "Contact and Notifications"
+    },
+    "moreInfo": "More information about the data"
   },
   "common": {
     "loading": "Loading...",
@@ -10,6 +29,7 @@
     "retry": "Retry",
     "year": "Year",
     "month": "Month",
+    "days": "days",
     "componentPlaceholder": "Component placeholder",
     "noDataAvailable": "No data available",
     "loadingData": "Loading data...",
@@ -101,7 +121,11 @@
     "controls": {
       "section": "Select section:",
       "statistics": "Statistics:",
-      "grouping": "Grouping:"
+      "grouping": "Grouping:",
+      "quickSelect": "Quick Select",
+      "startDate": "Start",
+      "endDate": "End",
+      "custom": "Custom"
     },
     "sections": {
       "usage": "Usage Statistics",
@@ -117,10 +141,19 @@
     },
     "errors": {
       "description": "This section shows error statistics for the selected time period. You can examine error distribution across different error types and system types.",
-      "title": "Error Statistics",
+      "title": "Error Count",
       "chartTitle": "Errors per Day",
       "totalErrors": "Total Errors",
       "uniqueTypes": "Unique Error Types",
+      "avgDaily": "Average Daily",
+      "peakDaily": "Peak Daily"
+    },
+    "validationErrors": {
+      "description": "This section shows validation error statistics for the selected time period.",
+      "title": "Validation Errors",
+      "chartTitle": "Validation Errors per Day",
+      "totalErrors": "Total Validation Errors",
+      "uniqueTypes": "Unique Validation Error Types",
       "avgDaily": "Average Daily",
       "peakDaily": "Peak Daily"
     },
