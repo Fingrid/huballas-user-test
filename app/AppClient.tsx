@@ -10,9 +10,8 @@ import ErrorBoundary from '../lib/components/ErrorBoundary';
 
 // Style objects for consistent styling
 const styles = {
-  loadingContainer: 'flex justify-center items-center h-64 text-lg text-gray-600',
-  errorContainer: 'p-8',
-  mainContainer: 'min-h-screen'
+  loadingContainer: 'app-loading-container',
+  mainContainer: 'app-main-container'
 };
 
 // Loading component for Suspense fallback

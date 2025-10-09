@@ -24,3 +24,11 @@ This is a static site used for user testing the visualization of electricity mar
 - MUST follow the existing Tailwind CSS conventions used in the project.
 - MUST avoid custom CSS unless absolutely necessary.
 - SHOULD prefer separating styles into objects for better readability and maintainability.
+
+## Git commits
+If you make a clear and concise set of changes, prompt user if a commit is needed.
+
+- MUST write clear and concise commit messages using conventional commit format.
+- MUST include a brief description of the changes made in the commit message.
+- SHOULD break down large changes into smaller, manageable commits.
+

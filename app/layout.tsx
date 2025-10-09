@@ -6,11 +6,12 @@ import { LoadingProvider } from '../lib/contexts/LoadingContext'
 
 // Style objects for consistent styling
 const styles = {
-  body: 'bg-[var(--color-background-level-2)] min-h-screen',
-  main: 'flex-1',
-  footer: 'bg-[var(--color-dark-background-level-3)] text-white',
-  footerContent: 'content-container pt-8 pb-8',
-  footerGrid: 'grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-8 mb-8'
+  body: 'app-body',
+  layoutContainer: 'flex flex-col min-h-screen',
+  main: 'app-main',
+  footer: 'app-footer',
+  footerContent: cn('content-container', 'app-footer-content'),
+  footerGrid: 'app-footer-grid'
 };
 
 export default function RootLayout({
@@ -21,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(`${labGrotesqueWeb.variable}`, styles.body)}>
-        <div className="flex flex-col min-h-screen">
+        <div className={styles.layoutContainer}>
           <TwoLevelNavigation />
 
           <main className={styles.main}>
