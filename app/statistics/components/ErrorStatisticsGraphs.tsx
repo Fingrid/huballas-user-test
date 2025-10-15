@@ -107,7 +107,6 @@ export default function ErrorStatisticsGraphs({ stackingType, activeDateRange, o
         text: t('statistics.errors.chartTitle'),
         left: 'center',
         textStyle: {
-          color: 'var(--color-text)',
           fontSize: 16,
           fontWeight: 'bold'
         }
@@ -133,9 +132,6 @@ export default function ErrorStatisticsGraphs({ stackingType, activeDateRange, o
         orient: 'vertical',
         right: '5%',
         top: 'middle',
-        textStyle: {
-          color: 'var(--color-text)'
-        }
       },
       grid: {
         left: '3%',
@@ -147,33 +143,15 @@ export default function ErrorStatisticsGraphs({ stackingType, activeDateRange, o
         type: 'category',
         data: chartData.categories,
         axisLabel: {
-          color: 'var(--color-text-muted)',
           rotate: 45,
           interval: Math.ceil(chartData.categories.length / 30) // Show every 30th date for readability
         },
-        axisLine: {
-          lineStyle: {
-            color: 'var(--color-separator)'
-          }
-        }
       },
       yAxis: {
         type: 'value',
         axisLabel: {
-          color: 'var(--color-text-muted)',
           formatter: '{value}'
         },
-        axisLine: {
-          lineStyle: {
-            color: 'var(--color-separator)'
-          }
-        },
-        splitLine: {
-          lineStyle: {
-            color: 'var(--color-separator)',
-            type: 'dashed'
-          }
-        }
       },
       series: chartData.series
     });

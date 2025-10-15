@@ -49,6 +49,12 @@ export function useECharts(
     // Initialize or get existing chart instance
     if (!chartInstanceRef.current) {
       chartInstanceRef.current = echarts.init(chartRef.current, 'huballas');
+      chartInstanceRef.current.setOption({
+        legend: { 
+          borderRadius: 0,
+          icon: 'rect'
+        },
+      });
     }
 
     // Render the chart

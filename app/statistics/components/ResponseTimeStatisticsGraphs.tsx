@@ -148,23 +148,6 @@ export default function ResponseTimeStatisticsGraphs({
         name: 'vasteaika (ms)',
         nameLocation: 'middle',
         nameGap: 40,
-        nameTextStyle: {
-          color: 'var(--color-text)'
-        },
-        axisLabel: {
-          color: 'var(--color-text)'
-        },
-        axisLine: {
-          lineStyle: {
-            color: 'black'
-          }
-        },
-        splitLine: {
-          lineStyle: {
-            color: 'black',
-            type: 'solid'
-          }
-        }
       },
       series: [
         // Outer confidence band (min/max variance) - Lower bound

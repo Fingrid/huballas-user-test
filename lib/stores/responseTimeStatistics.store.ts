@@ -278,23 +278,29 @@ export const createMonthlyReportsStore: StateCreator<
                     sum + (record.mean_response_time_ms * record.event_count), 0);
                 const average = weightedSum / totalEvents;
 
-                // For median, create array of all individual response times
-                const allResponseTimes: number[] = [];
-                records.forEach(record => {
-                    for (let i = 0; i < record.event_count; i++) {
-                        allResponseTimes.push(record.mean_response_time_ms);
-                    }
-                });
-                allResponseTimes.sort((a, b) => a - b);
+                // For median, use weighted median of the means (simpler and more accurate than expanding all events)
+                const sortedRecords = [...records].sort((a, b) => a.mean_response_time_ms - b.mean_response_time_ms);
+                let cumulativeCount = 0;
+                let median = average; // fallback to average
                 
-                const median = allResponseTimes.length % 2 === 0
-                    ? (allResponseTimes[Math.floor(allResponseTimes.length / 2) - 1] + allResponseTimes[Math.floor(allResponseTimes.length / 2)]) / 2
-                    : allResponseTimes[Math.floor(allResponseTimes.length / 2)];
+                for (const record of sortedRecords) {
+                    cumulativeCount += record.event_count;
+                    if (cumulativeCount >= totalEvents / 2) {
+                        median = record.mean_response_time_ms;
+                        break;
+                    }
+                }
 
-                // Min and max from the means
-                const means = records.map(r => r.mean_response_time_ms);
-                const min = Math.min(...means);
-                const max = Math.max(...means);
+                // Min and max should consider the actual distribution (mean ± std_deviation)
+                // Calculate the likely min/max based on each channel's distribution
+                const distributionBounds = records.map(r => ({
+                    lower: Math.max(0, r.mean_response_time_ms - r.std_deviation_ms),
+                    upper: r.mean_response_time_ms + r.std_deviation_ms,
+                    mean: r.mean_response_time_ms
+                }));
+                
+                const min = Math.min(...distributionBounds.map(b => b.lower));
+                const max = Math.max(...distributionBounds.map(b => b.upper));
                 
                 // Combined standard deviation using the store's std_deviation_ms values
                 let combinedVariance = 0;
@@ -480,21 +486,28 @@ export const createMonthlyReportsStore: StateCreator<
                     sum + (record.mean_response_time_ms * record.event_count), 0);
                 const average = weightedSum / totalEvents;
 
-                const allResponseTimes: number[] = [];
-                records.forEach(record => {
-                    for (let i = 0; i < record.event_count; i++) {
-                        allResponseTimes.push(record.mean_response_time_ms);
-                    }
-                });
-                allResponseTimes.sort((a, b) => a - b);
+                // For median, use weighted median of the means (simpler and more accurate than expanding all events)
+                const sortedRecords = [...records].sort((a, b) => a.mean_response_time_ms - b.mean_response_time_ms);
+                let cumulativeCount = 0;
+                let median = average; // fallback to average
                 
-                const median = allResponseTimes.length % 2 === 0
-                    ? (allResponseTimes[Math.floor(allResponseTimes.length / 2) - 1] + allResponseTimes[Math.floor(allResponseTimes.length / 2)]) / 2
-                    : allResponseTimes[Math.floor(allResponseTimes.length / 2)];
+                for (const record of sortedRecords) {
+                    cumulativeCount += record.event_count;
+                    if (cumulativeCount >= totalEvents / 2) {
+                        median = record.mean_response_time_ms;
+                        break;
+                    }
+                }
 
-                const means = records.map(r => r.mean_response_time_ms);
-                const min = Math.min(...means);
-                const max = Math.max(...means);
+                // Min and max should consider the actual distribution (mean ± std_deviation)
+                const distributionBounds = records.map(r => ({
+                    lower: Math.max(0, r.mean_response_time_ms - r.std_deviation_ms),
+                    upper: r.mean_response_time_ms + r.std_deviation_ms,
+                    mean: r.mean_response_time_ms
+                }));
+                
+                const min = Math.min(...distributionBounds.map(b => b.lower));
+                const max = Math.max(...distributionBounds.map(b => b.upper));
                 
                 let combinedVariance = 0;
                 records.forEach(record => {
@@ -559,18 +572,18 @@ export const createMonthlyReportsStore: StateCreator<
                     sum + (record.mean_response_time_ms * record.event_count), 0);
                 const avgResponseTime = weightedSum / totalEvents;
 
-                // Median calculation
-                const allResponseTimes: number[] = [];
-                records.forEach(record => {
-                    for (let i = 0; i < record.event_count; i++) {
-                        allResponseTimes.push(record.mean_response_time_ms);
-                    }
-                });
-                allResponseTimes.sort((a, b) => a - b);
+                // Median calculation using weighted median
+                const sortedRecords = [...records].sort((a, b) => a.mean_response_time_ms - b.mean_response_time_ms);
+                let cumulativeCount = 0;
+                let medianResponseTime = avgResponseTime; // fallback to average
                 
-                const medianResponseTime = allResponseTimes.length % 2 === 0
-                    ? (allResponseTimes[Math.floor(allResponseTimes.length / 2) - 1] + allResponseTimes[Math.floor(allResponseTimes.length / 2)]) / 2
-                    : allResponseTimes[Math.floor(allResponseTimes.length / 2)];
+                for (const record of sortedRecords) {
+                    cumulativeCount += record.event_count;
+                    if (cumulativeCount >= totalEvents / 2) {
+                        medianResponseTime = record.mean_response_time_ms;
+                        break;
+                    }
+                }
 
                 // Combined standard deviation
                 let combinedVariance = 0;
