@@ -2,6 +2,7 @@
   "navigation": {
     "annualStatistics": "Annual Statistics",
     "statistics": "Statistics",
+    "usage": "Usage",
     "monthlyReports": "Monthly Reports",
     "dataHub": "Data on Hub",
     "timePoint": "Time Point",
@@ -30,6 +31,7 @@
     "year": "Year",
     "month": "Month",
     "days": "days",
+    "all": "All",
     "componentPlaceholder": "Component placeholder",
     "noDataAvailable": "No data available",
     "loadingData": "Loading data...",
@@ -114,14 +116,23 @@
       "systemTypes": "System types"
     },
     "filters": {
-      "channels": "Filter by Channels",
+      "channels": "Channels",
       "selectAll": "Select All",
-      "deselectAll": "Deselect All"
+      "deselectAll": "Deselect All",
+      "showAll": "Show All",
+      "eventTypes": "Event Types",
+      "roles": "Roles",
+      "mainProcess": "Main Process",
+      "channel": "Channel",
+      "marketRole": "Market Role",
+      "clearFilters": "Clear Filters"
     },
     "controls": {
       "section": "Select section:",
       "statistics": "Statistics:",
       "grouping": "Grouping:",
+      "groupBy": "Group By",
+      "filters": "Filters",
       "quickSelect": "Quick Select",
       "startDate": "Start",
       "endDate": "End",

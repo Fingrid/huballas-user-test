@@ -17,7 +17,8 @@ export default function TwoLevelNavigation() {
   ];
 
   const lowerNavItems = [
-    { href: '/', label: t('navigation.lowerNav.news') },
+    { href: '/usage', label: t('navigation.usage') },
+    { href: '/statistics', label: t('navigation.statistics') },
     { href: '/development', label: t('navigation.lowerNav.development'), disabled: true },
     { href: '/documentation', label: t('navigation.lowerNav.documentation'), disabled: true },
     { href: '/version', label: t('navigation.lowerNav.version'), disabled: true },
@@ -26,14 +27,14 @@ export default function TwoLevelNavigation() {
   ];
 
   const isActive = (href: string) => {
-    if (href === '/') {
-      return pathname === '/' || pathname.startsWith('/statistics');
+    if (href === '/usage') {
+      return pathname === '/' || pathname === '/usage';
     }
     return pathname.startsWith(href);
   };
 
   return (
-    <div className="w-full max-w-[1440px] mx-auto px-10 py-4 border-b border-[var(--color-separator)] inline-flex flex-col justify-end items-start gap-6">
+    <div className="w-full max-w-[1440px] mx-auto py-4 border-b border-[var(--color-separator)] inline-flex flex-col justify-end items-start gap-6 px-10 lg:px-10 md:px-8 sm:px-4">
       {/* Upper Row: Logo (hidden) and Right-aligned items */}
       <div className="self-stretch inline-flex justify-between items-start">
         {/* Logo section - hidden as per concept */}

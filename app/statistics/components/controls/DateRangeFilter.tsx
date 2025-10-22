@@ -105,7 +105,7 @@ export default function DateRangeFilter({
     <div className="flex items-end gap-4">
       {/* Date Range Select */}
       <div className="space-y-1">
-        <label htmlFor="date-range-select" className="form-label">
+        <label htmlFor="date-range-select" className="control-label">
           Aikaväli:
         </label>
         <select
@@ -124,7 +124,7 @@ export default function DateRangeFilter({
 
       {/* Start Date */}
       <div className="space-y-1">
-        <label htmlFor="start-date" className="form-label">
+        <label htmlFor="start-date" className="control-label">
           Alkaa:
         </label>
         <input
@@ -140,7 +140,7 @@ export default function DateRangeFilter({
 
       {/* End Date */}
       <div className="space-y-1">
-        <label htmlFor="end-date" className="form-label">
+        <label htmlFor="end-date" className="control-label">
           Päättyy:
         </label>
         <input

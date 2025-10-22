@@ -152,7 +152,7 @@
     "iconStyle": { "borderColor": "#999" },
     "emphasis": { "iconStyle": { "borderColor": "#666" } }
   },
-  "legend": { "textStyle": { "color": "#3e5660" } },
+  "legend": { "textStyle": { "color": "#3e5660" }, "icon": "rect" },
   "tooltip": {
     "axisPointer": {
       "lineStyle": { "color": "#d5121e", "width": 1 },

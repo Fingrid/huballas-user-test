@@ -2,11 +2,12 @@
 
 import { useLocalization } from '@/lib/stores/localization.store';
 import { cn } from '@/lib/cn';
-import StickyChartControls from './StickyChartControls';
+import StickyChartControls from '../controls/StickyChartControls';
 import type { DateRangeFilter } from '@/lib/dataProcessing';
-import type { DateRangeOption } from './DateRangeFilter';
+import type { DateRangeOption } from '../controls/DateRangeFilter';
 
 type SectionType = 'usage' | 'errors' | 'response_times';
+type StackingType = 'all' | 'channel' | 'process_group' | 'marketRoleCode';
 
 interface StatisticsHeaderProps {
   activeSection: SectionType;
@@ -18,7 +19,22 @@ interface StatisticsHeaderProps {
   availableDataRange?: DateRangeFilter | null;
   headerRef?: React.RefObject<HTMLDivElement | null>;
   showStickyControls?: boolean;
+  alwaysShowStickyControls?: boolean; // Always show sticky controls, don't use intersection observer
+  hideInlineDateControls?: boolean; // Hide date controls in header
   className?: string;
+  
+  // Filter bar props (optional - only for usage page)
+  displayFilters?: boolean;
+  stackingType?: StackingType;
+  onStackingChange?: (type: StackingType) => void;
+  selectedProcess?: string;
+  selectedChannel?: string;
+  selectedRole?: string;
+  onProcessChange?: (value: string) => void;
+  onChannelChange?: (value: string) => void;
+  onRoleChange?: (value: string) => void;
+  onClearFilters?: () => void;
+  hasActiveFilters?: boolean;
 }
 
 export default function StatisticsHeader({
@@ -31,7 +47,20 @@ export default function StatisticsHeader({
   availableDataRange,
   headerRef,
   showStickyControls = false,
+  alwaysShowStickyControls = false,
+  hideInlineDateControls = false,
   className,
+  displayFilters = false,
+  stackingType,
+  onStackingChange,
+  selectedProcess,
+  selectedChannel,
+  selectedRole,
+  onProcessChange,
+  onChannelChange,
+  onRoleChange,
+  onClearFilters,
+  hasActiveFilters,
 }: StatisticsHeaderProps) {
   const { t } = useLocalization();
 
@@ -64,21 +93,23 @@ export default function StatisticsHeader({
             </h1>
           </div>
           
-          {/* Inline Date Controls */}
-          <div className={cn(styles.controlsContainer)}>
-            <StickyChartControls
-              activeSection={activeSection}
-              onSectionChange={onSectionChange}
-              selectedRange={selectedRange}
-              dateRange={dateRange}
-              onRangeChange={onRangeChange}
-              onDateRangeChange={onDateRangeChange}
-              availableDataRange={availableDataRange}
-              inlineMode={true}
-              displaySectionSelect={false}
-              displayDateSelect={true}
-            />
-          </div>
+          {/* Inline Date Controls - Hidden if hideInlineDateControls is true */}
+          {!hideInlineDateControls && (
+            <div className={cn(styles.controlsContainer)}>
+              <StickyChartControls
+                activeSection={activeSection}
+                onSectionChange={onSectionChange}
+                selectedRange={selectedRange}
+                dateRange={dateRange}
+                onRangeChange={onRangeChange}
+                onDateRangeChange={onDateRangeChange}
+                availableDataRange={availableDataRange}
+                inlineMode={true}
+                displaySectionSelect={false}
+                displayDateSelect={true}
+              />
+            </div>
+          )}
         </div>
       </div>
 
@@ -102,11 +133,36 @@ export default function StatisticsHeader({
         </div>
       </div>
 
-      {/* Sticky Controls Placeholder */}
-      {!showStickyControls ? (
-        <div className={cn('bg-emerald-50 border-b border-[var(--color-separator)]')}>
+      {/* Sticky Controls - Always show if alwaysShowStickyControls is true, otherwise based on showStickyControls */}
+      {alwaysShowStickyControls || showStickyControls ? (
+        /* Actual Sticky Controls */
+        <StickyChartControls
+          activeSection={activeSection}
+          onSectionChange={onSectionChange}
+          selectedRange={selectedRange}
+          dateRange={dateRange}
+          onRangeChange={onRangeChange}
+          onDateRangeChange={onDateRangeChange}
+          availableDataRange={availableDataRange}
+          inlineMode={false}
+          displaySectionSelect={!alwaysShowStickyControls} // Hide section select on usage page
+          displayDateSelect={true}
+          displayFilters={displayFilters}
+          stackingType={stackingType}
+          onStackingChange={onStackingChange}
+          selectedProcess={selectedProcess}
+          selectedChannel={selectedChannel}
+          selectedRole={selectedRole}
+          onProcessChange={onProcessChange}
+          onChannelChange={onChannelChange}
+          onRoleChange={onRoleChange}
+          onClearFilters={onClearFilters}
+          hasActiveFilters={hasActiveFilters}
+        />
+      ) : (
+        /* Invisible placeholder to maintain height */
+        <div className={cn('bg-[var(--color-background-level-4)] border-b border-[var(--color-separator)]')}>
           <div className={cn(styles.stickyContainer)}>
-            {/* Invisible placeholder to maintain height */}
             <div className={cn('flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 opacity-0 pointer-events-none py-2')}>
               <div className="sticky-controls-row-section">
                 <div className="space-y-1">
@@ -122,20 +178,6 @@ export default function StatisticsHeader({
             </div>
           </div>
         </div>
-      ) : (
-        /* Actual Sticky Controls */
-        <StickyChartControls
-          activeSection={activeSection}
-          onSectionChange={onSectionChange}
-          selectedRange={selectedRange}
-          dateRange={dateRange}
-          onRangeChange={onRangeChange}
-          onDateRangeChange={onDateRangeChange}
-          availableDataRange={availableDataRange}
-          inlineMode={false}
-          displaySectionSelect={true}
-          displayDateSelect={true}
-        />
       )}
     </>
   );

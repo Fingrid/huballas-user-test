@@ -1,5 +1,5 @@
-import AppClient from "./AppClient";
+import { redirect } from 'next/navigation';
 
 export default function Page() {
-  return <AppClient />;
+  redirect('/usage');
 }

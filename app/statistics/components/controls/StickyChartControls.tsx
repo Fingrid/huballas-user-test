@@ -3,9 +3,11 @@
 import { cn } from '@/lib/cn';
 import { useLocalization } from '@/lib/stores/localization.store';
 import DateRangeFilter, { type DateRangeOption } from './DateRangeFilter';
+import FilterBar from './FilterBar';
 import type { DateRangeFilter as DateRangeFilterType } from '@/lib/dataProcessing';
 
 type SectionType = 'usage' | 'errors' | 'response_times';
+type StackingType = 'all' | 'channel' | 'process_group' | 'marketRoleCode';
 
 interface StickyChartControlsProps {
   activeSection: SectionType;
@@ -18,6 +20,19 @@ interface StickyChartControlsProps {
   inlineMode?: boolean; // When true, renders in 2 rows for header
   displaySectionSelect?: boolean; // Control section selector visibility
   displayDateSelect?: boolean; // Control date selector visibility
+  
+  // Filter bar props (optional - only for usage page)
+  displayFilters?: boolean;
+  stackingType?: StackingType;
+  onStackingChange?: (type: StackingType) => void;
+  selectedProcess?: string;
+  selectedChannel?: string;
+  selectedRole?: string;
+  onProcessChange?: (value: string) => void;
+  onChannelChange?: (value: string) => void;
+  onRoleChange?: (value: string) => void;
+  onClearFilters?: () => void;
+  hasActiveFilters?: boolean;
 }
 
 export default function StickyChartControls({
@@ -31,13 +46,24 @@ export default function StickyChartControls({
   inlineMode = false,
   displaySectionSelect = true,
   displayDateSelect = true,
+  displayFilters = false,
+  stackingType,
+  onStackingChange,
+  selectedProcess,
+  selectedChannel,
+  selectedRole,
+  onProcessChange,
+  onChannelChange,
+  onRoleChange,
+  onClearFilters,
+  hasActiveFilters,
 }: StickyChartControlsProps) {
   const { t } = useLocalization();
 
   // Style objects matching concept design
   const styles = {
     inputGroup: "inline-flex flex-col justify-start items-start gap-1",
-    label: "self-stretch justify-center text-slate-600 text-base font-normal leading-none",
+    label: "control-label",
     select: "self-stretch px-4 py-2 bg-white outline-1 outline-offset-[-1px] outline-slate-500 inline-flex justify-start items-center gap-2 text-slate-600 text-base font-normal leading-normal",
     dateInput: "self-stretch px-4 py-2 bg-white outline-1 outline-offset-[-1px] outline-slate-500 text-slate-600 text-base font-normal leading-normal",
     dateSeparator: "justify-center text-slate-600 text-2xl font-normal leading-normal self-end pb-2",
@@ -162,25 +188,49 @@ export default function StickyChartControls({
   return (
     <div className="sticky top-0 z-50 bg-emerald-50 border-b border-[var(--color-separator)]">
       <div className="w-full max-w-[1440px] mx-auto px-10 lg:px-8 md:px-6 sm:px-4 py-4">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
-          {/* Section Toggle */}
-          {displaySectionSelect && (
-            <div className="sticky-controls-row-section">
-              <SectionSelector />
-            </div>
-          )}
+        <div className="flex flex-col gap-4">
+          {/* First row: Section Toggle and Date Range Filter */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+            {/* Section Toggle */}
+            {displaySectionSelect && (
+              <div className="sticky-controls-row-section">
+                <SectionSelector />
+              </div>
+            )}
 
-          {/* Date Range Filter */}
-          {displayDateSelect && (
-            <div className="sticky-controls-row-date overflow-x-auto w-full sm:w-auto">
-              <DateRangeFilter
-                selectedRange={selectedRange}
-                dateRange={dateRange}
-                onRangeChange={onRangeChange}
-                onDateRangeChange={onDateRangeChange}
-                availableDataRange={availableDataRange}
-              />
-            </div>
+            {/* Date Range Filter - Only show if not displaying filters (filters include date controls) */}
+            {displayDateSelect && !displayFilters && (
+              <div className="sticky-controls-row-date overflow-x-auto w-full sm:w-auto">
+                <DateRangeFilter
+                  selectedRange={selectedRange}
+                  dateRange={dateRange}
+                  onRangeChange={onRangeChange}
+                  onDateRangeChange={onDateRangeChange}
+                  availableDataRange={availableDataRange}
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Filter Bar (Usage page only) - includes date controls */}
+          {displayFilters && stackingType && onStackingChange && onClearFilters !== undefined && hasActiveFilters !== undefined && (
+            <FilterBar
+              stackingType={stackingType}
+              onStackingChange={onStackingChange}
+              selectedRange={selectedRange}
+              dateRange={dateRange}
+              onRangeChange={onRangeChange}
+              onDateRangeChange={onDateRangeChange}
+              availableDataRange={availableDataRange}
+              selectedProcess={selectedProcess}
+              selectedChannel={selectedChannel}
+              selectedRole={selectedRole}
+              onProcessChange={onProcessChange}
+              onChannelChange={onChannelChange}
+              onRoleChange={onRoleChange}
+              onClearFilters={onClearFilters}
+              hasActiveFilters={hasActiveFilters}
+            />
           )}
         </div>
       </div>

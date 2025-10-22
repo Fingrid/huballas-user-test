@@ -3,10 +3,21 @@ import { lazy } from 'react';
 
 // Lazy load components
 const StatisticsClient = lazy(() => import('../../app/statistics/StatisticsClient'));
+const UsageClient = lazy(() => import('../../app/usage/UsageClient'));
 
 // Data validators
 export const validateStatisticsData = (stores: StoreData): boolean => {
   // For statistics, we need usage data and dictionaries
+  const hasUsageData = stores.usage._rawdata && Object.keys(stores.usage._rawdata).length > 0;
+  const hasDictionaries = stores.dictionary.dictionaries !== null;
+  const noErrors = !stores.usage.error && !stores.dictionary.error;
+  const notLoading = !stores.usage.loading && !stores.dictionary.loading;
+  
+  return hasUsageData && hasDictionaries && noErrors && notLoading;
+};
+
+export const validateUsageData = (stores: StoreData): boolean => {
+  // For usage page, we only need usage data and dictionaries
   const hasUsageData = stores.usage._rawdata && Object.keys(stores.usage._rawdata).length > 0;
   const hasDictionaries = stores.dictionary.dictionaries !== null;
   const noErrors = !stores.usage.error && !stores.dictionary.error;
@@ -31,9 +42,23 @@ export const validateMonthlyReportsData = (stores: StoreData): boolean => {
 // Route configurations
 export const routeConfigs: RouteConfig[] = [
   {
-    path: '/',
-    component: StatisticsClient,
+    path: '/usage',
+    component: UsageClient,
     requiredStores: ['usage', 'dictionary'],
+    dataValidator: validateUsageData,
+    loadingMessage: 'Loading usage data...',
+  },
+  {
+    path: '/',
+    component: UsageClient,
+    requiredStores: ['usage', 'dictionary'],
+    dataValidator: validateUsageData,
+    loadingMessage: 'Loading usage data...',
+  },
+  {
+    path: '/statistics',
+    component: StatisticsClient,
+    requiredStores: ['usage', 'dictionary', 'error', 'responseTime'],
     dataValidator: validateStatisticsData,
     loadingMessage: 'Loading statistics data...',
   }

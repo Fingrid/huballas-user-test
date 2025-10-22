@@ -5,7 +5,8 @@ import dayjs from 'dayjs';
 import { useResponseTimeStore, useDictionaryStore } from '@/lib/stores';
 import { useLocalization } from '@/lib/stores/localization.store';
 import { useECharts } from '@/hooks/useECharts';
-import { GroupingSelector, ResponseTimeBreakdownTable } from './index';
+import GroupingSelector from '../controls/GroupingSelector';
+import ResponseTimeBreakdownTable from '../tables/ResponseTimeBreakdownTable';
 
 interface DateRange {
   startDate: string;
@@ -158,7 +159,8 @@ export default function ResponseTimeStatisticsGraphs({
           lineStyle: { opacity: 0, color: 'black' },
           symbol: 'none',
           stack: 'outerBounds',
-          showInLegend: false
+          showInLegend: false,
+          icon: 'rect'
         },
         // Outer confidence band (min/max variance) - Upper bound
         {
@@ -183,7 +185,8 @@ export default function ResponseTimeStatisticsGraphs({
           lineStyle: { opacity: 0 },
           symbol: 'none',
           stack: 'innerBounds',
-          showInLegend: false
+          showInLegend: false,
+          icon: 'rect'
         },
         // Inner confidence band (±1 std deviation) - Upper bound
         {

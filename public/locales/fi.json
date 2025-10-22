@@ -2,6 +2,7 @@
   "navigation": {
     "annualStatistics": "Vuositilastot",
     "statistics": "Tilastot",
+    "usage": "Käyttö",
     "monthlyReports": "Kuukausiraportit",
     "dataHub": "DataHub",
     "timePoint": "Ajankohtaista",
@@ -30,6 +31,7 @@
     "year": "Vuosi",
     "month": "Kuukausi",
     "days": "päivää",
+    "all": "Kaikki",
     "componentPlaceholder": "Komponentin paikkamerkki",
     "noDataAvailable": "Ei dataa saatavilla",
     "loadingData": "Ladataan dataa...",
@@ -114,14 +116,23 @@
       "systemTypes": "Järjestelmätyypit"
     },
     "filters": {
-      "channels": "Suodata kanavien mukaan",
+      "channels": "Kanavat",
       "selectAll": "Valitse kaikki",
-      "deselectAll": "Poista valinnat"
+      "deselectAll": "Poista valinnat",
+      "showAll": "Näytä kaikki",
+      "eventTypes": "Tapahtumatyypit",
+      "roles": "Roolit",
+      "mainProcess": "Pääprosessi",
+      "channel": "Kanava",
+      "marketRole": "Markkinarooli",
+      "clearFilters": "Tyhjennä suodattimet"
     },
     "controls": {
       "section": "Valitse osio:",
       "statistics": "Tilasto:",
       "grouping": "Ryhmittely:",
+      "groupBy": "Ryhmittele",
+      "filters": "Suodattimet",
       "quickSelect": "Pikavalinnat",
       "startDate": "Alkaa",
       "endDate": "Päättyy",

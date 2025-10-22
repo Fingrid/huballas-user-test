@@ -3,8 +3,8 @@
 import React from "react";
 import * as echarts from "echarts/core";
 import dayjs from "dayjs";
-import echartsTheme from "../../echarts.theme.json";
-import type { UsageDataRecord } from "../../../lib/types";
+import echartsTheme from "../../../echarts.theme.json";
+import type { UsageDataRecord } from "@/lib/types";
 import { useLocalization } from "@/lib/stores";
 import { useECharts } from "@/hooks/useECharts";
 

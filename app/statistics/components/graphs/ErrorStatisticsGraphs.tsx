@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import dayjs from 'dayjs';
-import GroupingSelector from './GroupingSelector';
+import GroupingSelector from '../controls/GroupingSelector';
 import { useErrorStore } from '@/lib/stores';
 import { useLocalization } from '@/lib/stores/localization.store';
 import { useECharts } from '@/hooks/useECharts';
@@ -132,6 +132,7 @@ export default function ErrorStatisticsGraphs({ stackingType, activeDateRange, o
         orient: 'vertical',
         right: '5%',
         top: 'middle',
+        icon: 'rect'
       },
       grid: {
         left: '3%',
