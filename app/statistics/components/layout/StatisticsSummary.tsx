@@ -273,9 +273,9 @@ export default function StatisticsSummary({ onSectionClick, className }: Statist
               <div className={cn(styles.value)}>
                 {stats.totalEvents.toLocaleString('fi-FI')}
               </div>
-              <div className={cn(styles.unit)}>
+              <h3 className={cn(styles.unit)}>
                 {t('statistics.summary.events.unit')}
-              </div>
+              </h3>
             </div>
             
             {/* Content */}
@@ -322,9 +322,9 @@ export default function StatisticsSummary({ onSectionClick, className }: Statist
               <div className={cn(styles.value)}>
                 1,3 %
               </div>
-              <div className={cn(styles.unit)}>
+              <h3 className={cn(styles.unit)}>
                 {t('statistics.summary.errorRate.unit')}
-              </div>
+              </h3>
             </div>
             
             {/* Content */}

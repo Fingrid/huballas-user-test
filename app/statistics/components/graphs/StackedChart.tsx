@@ -20,8 +20,8 @@ interface StackedChartProps {
 // Style objects for consistent styling
 const styles = {
   container:
-    "bg-[var(--color-background-level-1)] border border-[var(--color-separator)] p-6 shadow-fingrid rounded-[var(--border-radius-default)] mb-8",
-  chartDiv: "w-full h-96",
+    "chart-container bg-[var(--color-background-level-1)] border border-[var(--color-separator)] shadow-fingrid rounded-[var(--border-radius-default)] mb-8",
+  chartDiv: "w-full h-96 chart-container-content",
 };
 
 export default function StackedChart({
@@ -213,8 +213,10 @@ export default function StackedChart({
 
   return (
     <div className={styles.container}>
-      <h4>{t("statistics.dailyEvents.title")}</h4>
-      <p>{t("statistics.dailyEvents.description")}</p>
+      <div className="chart-container-header">
+        <h4>{t("statistics.usage.dailyEventsTitle")}</h4>
+        <p>{t("statistics.usage.description")}</p>
+      </div>
       <div ref={chartRef} className={styles.chartDiv} />
     </div>
   );

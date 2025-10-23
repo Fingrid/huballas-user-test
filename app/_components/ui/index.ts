@@ -6,6 +6,7 @@ export { default as Footer } from './Footer';
 export { default as LanguageSelector } from './LanguageSelector';
 export { default as LoginButton } from './LoginButton';
 export { default as Navigation } from './Navigation';
+export { default as Select } from './Select';
 export { default as TwoLevelNavigation } from './TwoLevelNavigation';
 export { StatisticsPanel } from './StatisticsPanel';
 export { LoadingDebugger } from './LoadingDebugger';

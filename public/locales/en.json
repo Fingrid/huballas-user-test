@@ -214,11 +214,26 @@
       "noDataForRange": "No response time data available for the selected time range"
     },
     "breakdown": {
-      "marketRoles": "Market Roles",
-      "processGroups": "Process Groups",
-      "channels": "Channels",
-      "errorTypes": "Error Types",
-      "systemTypes": "System Types",
+      "marketRoles": {
+        "title": "Market Role Breakdown",
+        "description": "This table provides a breakdown of statistics by market roles, including average response times and event counts."
+      },
+      "processGroups": {
+        "title": "Process Group Breakdown",
+        "description": "This table provides a breakdown of statistics by process groups, including average response times and event counts."
+      },
+      "channels": {
+        "title": "Channel Breakdown",
+        "description": "This table provides a breakdown of statistics by channels, including average response times and event counts."
+      },
+      "errorTypes": {
+        "title": "Error Type Breakdown",
+        "description": "This table provides a breakdown of statistics by error types, including average response times and event counts."
+      },
+      "systemTypes": {
+        "title": "System Type Breakdown",
+        "description": "This table provides a breakdown of statistics by system types, including average response times and event counts."
+      },
       "headers": {
         "channel": "Channel",
         "average": "Avg (ms)",
@@ -228,6 +243,15 @@
         "count": "Count",
         "errorType": "Error Type",
         "systemType": "System Type"
+      },
+      "columnHeaders": {
+        "item": "Role",
+        "total": "Total Events"
+      },
+      "sort": {
+        "sortBy": "Sort by",
+        "ascending": "Ascending",
+        "descending": "Descending"
       }
     },
     "stacking": {

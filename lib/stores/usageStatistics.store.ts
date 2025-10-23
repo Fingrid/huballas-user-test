@@ -65,9 +65,9 @@ export interface UsageStatisticsStore {
     
     // Filters
     filters: {
-        processGroup: string;
-        channel: string;
-        marketRole: string;
+        processGroup: string[];
+        channel: string[];
+        marketRole: string[];
     };
     
     fetchUsageData: (month: string, config?: DataFetchConfig) => Promise<void>;
@@ -76,7 +76,7 @@ export interface UsageStatisticsStore {
     processAnnualData: (year: string) => void;
     
     // Filter methods
-    setFilter: (filterType: 'processGroup' | 'channel' | 'marketRole', value: string) => void;
+    setFilter: (filterType: 'processGroup' | 'channel' | 'marketRole', value: string[]) => void;
     clearFilters: () => void;
     getFilteredData: () => UsageDataRecord[];
     
@@ -106,9 +106,9 @@ export const createUsageStatisticsStore: StateCreator<
     
     // Filter state
     filters: {
-        processGroup: 'all',
-        channel: 'all',
-        marketRole: 'all',
+        processGroup: [],
+        channel: [],
+        marketRole: [],
     },
 
     fetchUsageData: async (month: string, config: DataFetchConfig = { synthesize: 'on_missing_data' }) => {
@@ -772,7 +772,7 @@ export const createUsageStatisticsStore: StateCreator<
     },
 
     // Filter methods
-    setFilter: (filterType: 'processGroup' | 'channel' | 'marketRole', value: string) => {
+    setFilter: (filterType: 'processGroup' | 'channel' | 'marketRole', value: string[]) => {
         set((state) => ({
             filters: {
                 ...state.filters,
@@ -784,9 +784,9 @@ export const createUsageStatisticsStore: StateCreator<
     clearFilters: () => {
         set({
             filters: {
-                processGroup: 'all',
-                channel: 'all',
-                marketRole: 'all',
+                processGroup: [],
+                channel: [],
+                marketRole: [],
             },
         });
     },
@@ -805,15 +805,18 @@ export const createUsageStatisticsStore: StateCreator<
             }
         });
         
-        // Apply filters
+        // Apply filters with OR within categories, AND between categories
         return allRecords.filter((record: UsageDataRecord) => {
-            if (filters.processGroup !== 'all' && record.process_group !== filters.processGroup) {
+            // Process Group filter (OR within category)
+            if (filters.processGroup.length > 0 && !filters.processGroup.includes(record.process_group)) {
                 return false;
             }
-            if (filters.channel !== 'all' && record.channel !== filters.channel) {
+            // Channel filter (OR within category)
+            if (filters.channel.length > 0 && !filters.channel.includes(record.channel)) {
                 return false;
             }
-            if (filters.marketRole !== 'all' && record.marketRoleCode !== filters.marketRole) {
+            // Market Role filter (OR within category)
+            if (filters.marketRole.length > 0 && !filters.marketRole.includes(record.marketRoleCode)) {
                 return false;
             }
             return true;
@@ -838,10 +841,10 @@ export const createUsageStatisticsStore: StateCreator<
         // Apply only channel and marketRole filters (not processGroup)
         // This allows the dropdown to show available process groups for the current channel/role selection
         const filteredRecords = allRecords.filter((record: UsageDataRecord) => {
-            if (filters.channel !== 'all' && record.channel !== filters.channel) {
+            if (filters.channel.length > 0 && !filters.channel.includes(record.channel)) {
                 return false;
             }
-            if (filters.marketRole !== 'all' && record.marketRoleCode !== filters.marketRole) {
+            if (filters.marketRole.length > 0 && !filters.marketRole.includes(record.marketRoleCode)) {
                 return false;
             }
             return true;
@@ -874,10 +877,10 @@ export const createUsageStatisticsStore: StateCreator<
         // Apply only processGroup and marketRole filters (not channel)
         // This allows the dropdown to show available channels for the current process/role selection
         const filteredRecords = allRecords.filter((record: UsageDataRecord) => {
-            if (filters.processGroup !== 'all' && record.process_group !== filters.processGroup) {
+            if (filters.processGroup.length > 0 && !filters.processGroup.includes(record.process_group)) {
                 return false;
             }
-            if (filters.marketRole !== 'all' && record.marketRoleCode !== filters.marketRole) {
+            if (filters.marketRole.length > 0 && !filters.marketRole.includes(record.marketRoleCode)) {
                 return false;
             }
             return true;
@@ -910,10 +913,10 @@ export const createUsageStatisticsStore: StateCreator<
         // Apply only processGroup and channel filters (not marketRole)
         // This allows the dropdown to show available market roles for the current process/channel selection
         const filteredRecords = allRecords.filter((record: UsageDataRecord) => {
-            if (filters.processGroup !== 'all' && record.process_group !== filters.processGroup) {
+            if (filters.processGroup.length > 0 && !filters.processGroup.includes(record.process_group)) {
                 return false;
             }
-            if (filters.channel !== 'all' && record.channel !== filters.channel) {
+            if (filters.channel.length > 0 && !filters.channel.includes(record.channel)) {
                 return false;
             }
             return true;
@@ -946,10 +949,10 @@ export const createUsageStatisticsStore: StateCreator<
         
         // Apply only channel and marketRole filters (not processGroup)
         const filteredRecords = allRecords.filter((record: UsageDataRecord) => {
-            if (filters.channel !== 'all' && record.channel !== filters.channel) {
+            if (filters.channel.length > 0 && !filters.channel.includes(record.channel)) {
                 return false;
             }
-            if (filters.marketRole !== 'all' && record.marketRoleCode !== filters.marketRole) {
+            if (filters.marketRole.length > 0 && !filters.marketRole.includes(record.marketRoleCode)) {
                 return false;
             }
             return true;
@@ -1002,10 +1005,10 @@ export const createUsageStatisticsStore: StateCreator<
         
         // Apply only processGroup and marketRole filters (not channel)
         const filteredRecords = allRecords.filter((record: UsageDataRecord) => {
-            if (filters.processGroup !== 'all' && record.process_group !== filters.processGroup) {
+            if (filters.processGroup.length > 0 && !filters.processGroup.includes(record.process_group)) {
                 return false;
             }
-            if (filters.marketRole !== 'all' && record.marketRoleCode !== filters.marketRole) {
+            if (filters.marketRole.length > 0 && !filters.marketRole.includes(record.marketRoleCode)) {
                 return false;
             }
             return true;
@@ -1058,10 +1061,10 @@ export const createUsageStatisticsStore: StateCreator<
         
         // Apply only processGroup and channel filters (not marketRole)
         const filteredRecords = allRecords.filter((record: UsageDataRecord) => {
-            if (filters.processGroup !== 'all' && record.process_group !== filters.processGroup) {
+            if (filters.processGroup.length > 0 && !filters.processGroup.includes(record.process_group)) {
                 return false;
             }
-            if (filters.channel !== 'all' && record.channel !== filters.channel) {
+            if (filters.channel.length > 0 && !filters.channel.includes(record.channel)) {
                 return false;
             }
             return true;

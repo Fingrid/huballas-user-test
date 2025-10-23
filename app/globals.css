@@ -86,9 +86,9 @@
   --color-info: #4f46e5;
   
   /* Notification Colors */
-  --color-notification-info-bg: #E3F2FD;
-  --color-notification-info-border: #2196F3;
-  --color-notification-info-text: #1565C0;
+  --color-notification-info-bg: #E8F8FC;
+  --color-notification-info-border: #A3E3F5;
+  --color-notification-info-text: #0A4A5C;
   --color-notification-success-bg: #F4FCE9;
   --color-notification-success-border: #8BC34A;
   --color-notification-success-text: #558B2F;
@@ -161,8 +161,8 @@ h3 {
   color: var(--color-text);
   font-family: var(--font-family-primary);
   font-feature-settings: "liga" off, "clig" off;
-  font-style: normal;
   font-size: 1.5rem;
+  font-style: normal;
   font-weight: 400;
   line-height: 1.5rem;
 }
@@ -502,7 +502,8 @@ h4 {
 
 /* Control label - used in filter and chart controls */
 .control-label {
-  font-size: 0.65rem;
+  font-size: 1rem;
+  font-style: normal;
   font-weight: 400;
   line-height: 1rem;
   color: var(--color-text);
@@ -552,6 +553,10 @@ a:focus {
 .statistics__section {
   background: var(--color-background-level-1);
   padding: 2rem 0;
+}
+
+.statistics__section-header {
+  margin-bottom: 0.5rem;
 }
 
 .statistics__section-title {
@@ -646,6 +651,15 @@ a:focus {
 }
 
 /* Charts */
+.chart-container {
+  padding: 1rem 0 1.5rem 0;
+}
+.chart-container-header {
+  padding: 0 1.5rem 1rem 1.5rem;
+}
+.chart-container-content {
+  padding: 0 1.5rem 1rem 1.5rem;
+}
 .statistics__chart-container {
   margin-bottom: 2rem;
 }
@@ -722,6 +736,154 @@ a:focus {
 
 .statistics__breakdown-table tr:last-child td {
   border-bottom: none;
+}
+
+/* Breakdown table header label - primary emphasis */
+.breakdown-table-header-label {
+  font-family: var(--font-family-primary);
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1rem;
+}
+
+/* Breakdown Tables Component */
+.breakdown-tables-container {
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.breakdown-table-wrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.breakdown-table-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-radius: 0.5rem;
+  border: 1px solid #EFEFEF;
+  background: #FFF;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.10);
+  padding: 1.5rem;
+}
+
+.breakdown-table-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.breakdown-table-title {
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.breakdown-table-description {
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.breakdown-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.breakdown-table-scroll-container {
+  max-height: 320px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.breakdown-table-header-cell {
+  height: 3.5rem;
+  background-color: var(--color-background-level-4);
+  padding: 1rem;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.breakdown-table-header-cell:hover {
+  background-color: var(--color-background-level-3);
+}
+
+.breakdown-table-header-cell-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.breakdown-table-sort-icon {
+  display: inline-flex;
+  align-items: center;
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+}
+
+.breakdown-table-header-cell:hover .breakdown-table-sort-icon {
+  opacity: 0.7;
+}
+
+.breakdown-table-sort-icon--active {
+  opacity: 1;
+}
+
+.breakdown-table-body-row {
+  border-bottom: 1px solid var(--color-separator);
+}
+
+.breakdown-table-body-row:last-child {
+  border-bottom: none;
+}
+
+.breakdown-table-body-cell {
+  padding: 0.75rem 1rem;
+}
+
+.breakdown-table-item-name {
+  font-weight: 500;
+  color: var(--color-text);
+  font-size: 0.875rem;
+  margin-bottom: 0.125rem;
+}
+
+.breakdown-table-item-code {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.breakdown-table-process-group-name {
+  font-weight: 500;
+  color: var(--color-text);
+  font-size: 0.875rem;
+}
+
+.breakdown-table-count {
+  font-weight: 700;
+  color: var(--color-text);
+  font-size: 1rem;
+  text-align: right;
 }
 
 /* Loading and error states */
@@ -995,7 +1157,6 @@ button:focus-visible {
   max-width: 1440px;
   margin-left: 3.125rem;
   margin-right: 3.125rem;
-  padding-top: 1rem;
   padding-bottom: 1rem;
 }
 
@@ -1709,9 +1870,6 @@ button:focus-visible {
 
 .stats-summary-unit {
   color: var(--color-text);
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
 }
 
 .stats-summary-label {

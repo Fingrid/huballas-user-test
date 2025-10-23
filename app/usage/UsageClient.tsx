@@ -147,9 +147,12 @@ export default function UsageClient() {
         className="content-area pb-8"
       >
         <div className="statistics__section">
-          <h2 className="statistics__section-title">
-            {t("statistics.usage.dailyEventsTitle")}
-          </h2>
+          <div className="statistics__section-header">
+            <h2 className="statistics__section-title">
+              {t("statistics.dailyEvents.title")}
+            </h2>
+            <p>{t("statistics.dailyEvents.description")}</p>
+          </div>
 
           <UsageStatisticsGraphs
             stackingType={usageStackingType === 'all' ? 'channel' : usageStackingType}

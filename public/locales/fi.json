@@ -128,7 +128,7 @@
     },
     "dailyEvents": {
       "title": "Tapahtumamäärät",
-      "description": "Tässä osiossa näytetään päivittäiset tapahtumat valitulta aikaväliltä. Voit tarkastella tapahtumien jakautumista eri kanavien, prosessiryhmien ja markkinaroolien mukaan."
+      "description": "Ketä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiäKetä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiäKetä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiä"
     },
     "calloutBox": {
       "timelineTitle": "Näin käytät timeline - ominaisuutta",
@@ -214,11 +214,26 @@
       "noDataForRange": "Ei vasteaikatietoja valitulta aikaväliltä"
     },
     "breakdown": {
-      "marketRoles": "Markkinaroolit",
-      "processGroups": "Prosessiryhmät",
-      "channels": "Kanavat",
-      "errorTypes": "Virhetyypit",
-      "systemTypes": "Järjestelmätyypit",
+      "marketRoles": {
+        "title": "Markkinaroolit",
+        "description": "Tässä taulukossa näytetään tapahtumien jakautuminen markkinaroolien mukaan valitulta aikaväliltä."
+      },
+      "processGroups": {
+        "title": "Prosessiryhmät",
+        "description": "Tässä taulukossa näytetään tapahtumien jakautuminen prosessiryhmien mukaan valitulta aikaväliltä."
+      },
+      "channels": {
+        "title": "Kanavat",
+        "description": "Tässä taulukossa näytetään tapahtumien jakautuminen kanavien mukaan valitulta aikaväliltä."
+      },
+      "errorTypes": {
+        "title": "Virhetyypit",
+        "description": "Tässä taulukossa näytetään tapahtumien jakautuminen virhetyyppien mukaan valitulta aikaväliltä."
+      },
+      "systemTypes": {
+        "title": "Järjestelmätyypit",
+        "description": "Tässä taulukossa näytetään tapahtumien jakautuminen järjestelmätyyppien mukaan valitulta aikaväliltä."
+      },
       "headers": {
         "channel": "Kanava",
         "average": "Keskim. (ms)",
@@ -228,6 +243,15 @@
         "count": "Lukumäärä",
         "errorType": "Virhetyyppi",
         "systemType": "Järjestelmätyyppi"
+      },
+      "columnHeaders": {
+        "item": "Rooli",
+        "total": "Tapahtumia yhteensä"
+      },
+      "sort": {
+        "sortBy": "Järjestä",
+        "ascending": "Nouseva",
+        "descending": "Laskeva"
       }
     },
     "stacking": {

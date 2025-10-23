@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { useLocalization } from '@/lib/stores/localization.store';
-import { cn } from '@/lib/utils/cn';
-import CallToActionLink from '@/app/_components/ui/CallToActionLink';
-import Breadcrumb from '@/app/_components/ui/Breadcrumb';
-import StickyChartControls from '../controls/StickyChartControls';
-import type { DateRangeFilter } from '@/lib/utils/dataProcessing';
-import { DateRangeOption } from '@/lib/hooks/useDataAccess';
+import { useLocalization } from "@/lib/stores/localization.store";
+import { cn } from "@/lib/utils/cn";
+import CallToActionLink from "@/app/_components/ui/CallToActionLink";
+import Breadcrumb from "@/app/_components/ui/Breadcrumb";
+import StickyChartControls from "../controls/StickyChartControls";
+import type { DateRangeFilter } from "@/lib/utils/dataProcessing";
+import { DateRangeOption } from "@/lib/hooks/useDataAccess";
 
-type SectionType = 'usage' | 'errors' | 'response_times';
-type StackingType = 'all' | 'channel' | 'process_group' | 'marketRoleCode';
+type SectionType = "usage" | "errors" | "response_times";
+type StackingType = "all" | "channel" | "process_group" | "marketRoleCode";
 
 interface StatisticsHeaderProps {
   activeSection: SectionType;
@@ -24,7 +24,7 @@ interface StatisticsHeaderProps {
   alwaysShowStickyControls?: boolean; // Always show sticky controls, don't use intersection observer
   hideInlineDateControls?: boolean; // Hide date controls in header
   className?: string;
-  
+
   // Filter bar props (optional - only for usage page)
   displayFilters?: boolean;
   stackingType?: StackingType;
@@ -38,6 +38,21 @@ interface StatisticsHeaderProps {
   onClearFilters?: () => void;
   hasActiveFilters?: boolean;
 }
+
+// Style objects for better maintainability and customization
+const styles = {
+  headerGradient: "stats-header-gradient",
+  headerContainer: "stats-header-container",
+  titleContainer: "stats-header-title-container",
+  title: "stats-header-title",
+  controlsContainer: "stats-header-controls-container",
+  descriptionSection: "stats-description-section",
+  descriptionContainer: "stats-description-container",
+  descriptionContent: "stats-description-content",
+  description: "stats-description-text",
+  stickySection: "stats-sticky-section",
+  stickyContainer: "stats-sticky-container",
+};
 
 export default function StatisticsHeader({
   activeSection,
@@ -66,21 +81,6 @@ export default function StatisticsHeader({
 }: StatisticsHeaderProps) {
   const { t } = useLocalization();
 
-  // Style objects for better maintainability and customization
-  const styles = {
-    headerGradient: 'stats-header-gradient',
-    headerContainer: 'stats-header-container',
-    titleContainer: 'stats-header-title-container',
-    title: 'stats-header-title',
-    controlsContainer: 'stats-header-controls-container',
-    descriptionSection: 'stats-description-section',
-    descriptionContainer: 'stats-description-container',
-    descriptionContent: 'stats-description-content',
-    description: 'stats-description-text',
-    stickySection: 'stats-sticky-section',
-    stickyContainer: 'stats-sticky-container',
-  };
-
   return (
     <>
       {/* Header Section with Gradient */}
@@ -89,11 +89,9 @@ export default function StatisticsHeader({
           {/* Page Title */}
           <div className={cn(styles.titleContainer)}>
             <Breadcrumb currentPage={t("statistics.pageTitle")} />
-            <h1 className={cn(styles.title)}>
-              {t("statistics.pageTitle")}
-            </h1>
+            <h1 className={cn(styles.title)}>{t("statistics.pageTitle")}</h1>
           </div>
-          
+
           {/* Inline Date Controls - Hidden if hideInlineDateControls is true */}
           {!hideInlineDateControls && (
             <div className={cn(styles.controlsContainer)}>
@@ -156,14 +154,24 @@ export default function StatisticsHeader({
         />
       ) : (
         /* Invisible placeholder to maintain height */
-        <div className={cn('bg-[var(--color-background-level-4)] border-b border-[var(--color-separator)]')}>
+        <div
+          className={cn(
+            "bg-[var(--color-background-level-4)] border-b border-[var(--color-separator)]"
+          )}
+        >
           <div className={cn(styles.stickyContainer)}>
-            <div className={cn('flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 opacity-0 pointer-events-none py-2')}>
+            <div
+              className={cn(
+                "flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 opacity-0 pointer-events-none py-2"
+              )}
+            >
               <div className="sticky-controls-row-section">
                 <div className="space-y-1">
                   <label className="form-label">Placeholder</label>
                   <div className="flex outline-1 outline-offset-[-1px] outline-slate-500">
-                    <button className="px-3 py-1.5 text-xs font-medium">Placeholder</button>
+                    <button className="px-3 py-1.5 text-xs font-medium">
+                      Placeholder
+                    </button>
                   </div>
                 </div>
               </div>

@@ -7,6 +7,7 @@ import type { DateRangeFilter as DateRangeFilterType } from '@/lib/utils/dataPro
 import FieldGroup from './FieldGroup';
 import DateRangeFilter from './DateRangeFilter';
 import { DateRangeOption } from '@/lib/hooks/useDataAccess';
+import Select from '@/app/_components/ui/Select';
 
 type StackingType = 'all' | 'channel' | 'process_group' | 'marketRoleCode';
 
@@ -60,19 +61,23 @@ export default function FilterBar({
   const filters = usageStore.filters;
   
   // Handle filter changes - update both store and notify parent
-  const handleProcessChange = (value: string) => {
-    usageStore.setFilter('processGroup', value);
-    onProcessChange?.(value);
+  const handleProcessChange = (value: string | string[]) => {
+    const arrayValue = Array.isArray(value) ? value : [value];
+    usageStore.setFilter('processGroup', arrayValue);
+    // For backward compatibility with parent, send first value or 'all'
+    onProcessChange?.(arrayValue.length > 0 ? arrayValue[0] : 'all');
   };
   
-  const handleChannelChange = (value: string) => {
-    usageStore.setFilter('channel', value);
-    onChannelChange?.(value);
+  const handleChannelChange = (value: string | string[]) => {
+    const arrayValue = Array.isArray(value) ? value : [value];
+    usageStore.setFilter('channel', arrayValue);
+    onChannelChange?.(arrayValue.length > 0 ? arrayValue[0] : 'all');
   };
   
-  const handleRoleChange = (value: string) => {
-    usageStore.setFilter('marketRole', value);
-    onRoleChange?.(value);
+  const handleRoleChange = (value: string | string[]) => {
+    const arrayValue = Array.isArray(value) ? value : [value];
+    usageStore.setFilter('marketRole', arrayValue);
+    onRoleChange?.(arrayValue.length > 0 ? arrayValue[0] : 'all');
   };
   
   const handleClearFilters = () => {
@@ -81,7 +86,7 @@ export default function FilterBar({
   };
   
   // Check if there are active filters in the store
-  const hasStoreFilters = filters.processGroup !== 'all' || filters.channel !== 'all' || filters.marketRole !== 'all';
+  const hasStoreFilters = filters.processGroup.length > 0 || filters.channel.length > 0 || filters.marketRole.length > 0;
   
   // Get available options for filters with date range awareness
   // These return objects with { value, disabled } properties
@@ -105,28 +110,31 @@ export default function FilterBar({
     
     // Otherwise sort alphabetically
     return a.value.localeCompare(b.value);
-  });
+  }).map(option => ({
+    value: option.value,
+    label: option.value,
+    disabled: option.disabled
+  }));
   
   const channelOptions = usageStore.getChannelOptions(dateRange).sort((a, b) => {
     const descA = dictionaryStore.getChannelDescription(a.value);
     const descB = dictionaryStore.getChannelDescription(b.value);
     return descA.localeCompare(descB);
-  });
+  }).map(option => ({
+    value: option.value,
+    label: `${dictionaryStore.getChannelDescription(option.value)} (${option.value})`,
+    disabled: option.disabled
+  }));
   
   const marketRoleOptions = usageStore.getMarketRoleOptions(dateRange).sort((a, b) => {
     const nameA = dictionaryStore.getMarketRoleDescription(a.value);
     const nameB = dictionaryStore.getMarketRoleDescription(b.value);
     return nameA.localeCompare(nameB);
-  });
-
-  // Shared style objects matching StickyChartControls pattern
-  const styles = {
-    inputGroup: "inline-flex flex-col justify-start items-start gap-1",
-    label: "control-label",
-    select: "self-stretch px-4 py-2 bg-white outline-1 outline-offset-[-1px] outline-slate-500 inline-flex justify-start items-center gap-2 text-slate-600 text-base font-normal leading-normal",
-    dateInput: "self-stretch px-4 py-2 bg-white outline-1 outline-offset-[-1px] outline-slate-500 text-slate-600 text-base font-normal leading-normal",
-    dateSeparator: "justify-center text-slate-600 text-2xl font-normal leading-normal self-end pb-2",
-  };
+  }).map(option => ({
+    value: option.value,
+    label: `${dictionaryStore.getMarketRoleDescription(option.value)} (${option.value})`,
+    disabled: option.disabled
+  }));
 
   return (
     <div className="w-full flex flex-col gap-4">
@@ -202,67 +210,48 @@ export default function FilterBar({
       {/* Dropdown filters */}
       <div className="flex items-end gap-8 overflow-x-auto">
         {/* Process dropdown */}
-        <FieldGroup label={t('statistics.filters.mainProcess')} className="flex-1 min-w-[12rem]">
-          <select
+        <div className="flex-1 min-w-[12rem]">
+          <Select
+            label={t('statistics.filters.mainProcess')}
+            options={processGroupOptions}
             value={filters.processGroup}
-            onChange={(e) => handleProcessChange(e.target.value)}
-            className={cn(styles.select, "h-[34px] w-full")}
-          >
-            <option value="all">{t('common.all')}</option>
-            {processGroupOptions.map((option) => (
-              <option 
-                key={option.value} 
-                value={option.value}
-                disabled={option.disabled}
-                className={option.disabled ? "text-slate-400" : ""}
-              >
-                {option.value}
-              </option>
-            ))}
-          </select>
-        </FieldGroup>
+            onValueChange={handleProcessChange}
+            placeholder={t('common.all')}
+            wrapperClassName="w-full"
+            selectClassName="h-[34px] w-full"
+            selectionMode="multiple"
+          />
+        </div>
 
         {/* Channel dropdown */}
-        <FieldGroup label={t('statistics.filters.channel')} className="flex-1 min-w-[12rem]">
-          <select
+        <div className="flex-1 min-w-[12rem]">
+          <Select
+            label={t('statistics.filters.channel')}
+            options={channelOptions}
             value={filters.channel}
-            onChange={(e) => handleChannelChange(e.target.value)}
-            className={cn(styles.select, "h-[34px] w-full")}
-          >
-            <option value="all">{t('common.all')}</option>
-            {channelOptions.map((option) => (
-              <option 
-                key={option.value} 
-                value={option.value}
-                disabled={option.disabled}
-                className={option.disabled ? "text-slate-400" : ""}
-              >
-                {dictionaryStore.getChannelDescription(option.value)} ({option.value})
-              </option>
-            ))}
-          </select>
-        </FieldGroup>
+            onValueChange={handleChannelChange}
+            placeholder={t('common.all')}
+            wrapperClassName="w-full"
+            selectClassName="h-[34px] w-full"
+            selectionMode="multiple"
+            displayValuesInMultiSelect={true}
+          />
+        </div>
 
         {/* Role dropdown */}
-        <FieldGroup label={t('statistics.filters.marketRole')} className="flex-1 min-w-[12rem]">
-          <select
+        <div className="flex-1 min-w-[12rem]">
+          <Select
+            label={t('statistics.filters.marketRole')}
+            options={marketRoleOptions}
             value={filters.marketRole}
-            onChange={(e) => handleRoleChange(e.target.value)}
-            className={cn(styles.select, "h-[34px] w-full")}
-          >
-            <option value="all">{t('common.all')}</option>
-            {marketRoleOptions.map((option) => (
-              <option 
-                key={option.value} 
-                value={option.value}
-                disabled={option.disabled}
-                className={option.disabled ? "text-slate-400" : ""}
-              >
-                {dictionaryStore.getMarketRoleDescription(option.value)} ({option.value})
-              </option>
-            ))}
-          </select>
-        </FieldGroup>
+            onValueChange={handleRoleChange}
+            placeholder={t('common.all')}
+            wrapperClassName="w-full"
+            selectClassName="h-[34px] w-full"
+            selectionMode="multiple"
+            displayValuesInMultiSelect={true}
+          />
+        </div>
 
         {/* Clear filters button */}
         <button
