@@ -36,9 +36,10 @@ export class PerformanceMonitor {
           const entries = list.getEntries();
           entries.forEach((entry) => {
             if (entry.entryType === 'navigation') {
+              const navEntry = entry as PerformanceNavigationTiming;
               this.recordMetric({
                 loadTime: entry.duration,
-                renderTime: (entry as any).loadEventEnd - (entry as any).responseEnd,
+                renderTime: navEntry.loadEventEnd - navEntry.responseEnd,
                 interactionTime: 0,
                 timestamp: Date.now()
               });
@@ -163,17 +164,29 @@ export const usePerformanceMeasurement = (componentName: string) => {
   return { measureInteraction };
 };
 
+// Type for Chrome's non-standard memory API
+interface PerformanceMemory {
+  usedJSHeapSize: number;
+  totalJSHeapSize: number;
+  jsHeapSizeLimit: number;
+}
+
+interface PerformanceWithMemory extends Performance {
+  memory?: PerformanceMemory;
+}
+
 // Memory usage monitoring
 export const useMemoryMonitoring = (interval: number = 5000) => {
-  const [memoryInfo, setMemoryInfo] = useState<any>(null);
+  const [memoryInfo, setMemoryInfo] = useState<PerformanceMemory | null>(null);
 
   useEffect(() => {
     const checkMemory = () => {
-      if ('memory' in performance) {
+      const perf = performance as PerformanceWithMemory;
+      if (perf.memory) {
         setMemoryInfo({
-          usedJSHeapSize: (performance as any).memory.usedJSHeapSize,
-          totalJSHeapSize: (performance as any).memory.totalJSHeapSize,
-          jsHeapSizeLimit: (performance as any).memory.jsHeapSizeLimit
+          usedJSHeapSize: perf.memory.usedJSHeapSize,
+          totalJSHeapSize: perf.memory.totalJSHeapSize,
+          jsHeapSizeLimit: perf.memory.jsHeapSizeLimit
         });
       }
     };
@@ -194,9 +207,20 @@ export const bundleAnalytics = {
       return 0; // Skip during SSR
     }
     
-    if ('navigator' in window && 'connection' in navigator) {
-      const connection = (navigator as any).connection;
-      console.log(`Bundle ${moduleName} - Connection type: ${connection.effectiveType}`);
+    // Type for Network Information API (non-standard)
+    interface NetworkInformation {
+      effectiveType?: string;
+      downlink?: number;
+      rtt?: number;
+    }
+    
+    interface NavigatorWithConnection extends Navigator {
+      connection?: NetworkInformation;
+    }
+    
+    const nav = navigator as NavigatorWithConnection;
+    if (nav.connection) {
+      console.log(`Bundle ${moduleName} - Connection type: ${nav.connection.effectiveType}`);
     }
     
     // This would integrate with your build tools to get actual bundle sizes
@@ -244,8 +268,9 @@ export const criticalRenderingPath = {
       if ('PerformanceObserver' in window) {
         const observer = new PerformanceObserver((list) => {
           const entries = list.getEntries();
-          entries.forEach((entry: any) => {
-            resolve(entry.processingStart - entry.startTime);
+          entries.forEach((entry) => {
+            const fidEntry = entry as PerformanceEventTiming;
+            resolve(fidEntry.processingStart - fidEntry.startTime);
           });
           observer.disconnect();
         });
@@ -266,12 +291,19 @@ export const criticalRenderingPath = {
         return;
       }
       
+      // Type for Layout Shift entry
+      interface LayoutShiftEntry extends PerformanceEntry {
+        hadRecentInput: boolean;
+        value: number;
+      }
+      
       if ('PerformanceObserver' in window) {
         const observer = new PerformanceObserver((list) => {
           const entries = list.getEntries();
           entries.forEach((entry) => {
-            if (!(entry as any).hadRecentInput) {
-              clsValue += (entry as any).value;
+            const lsEntry = entry as LayoutShiftEntry;
+            if (!lsEntry.hadRecentInput) {
+              clsValue += lsEntry.value;
             }
           });
         });
@@ -360,14 +392,19 @@ export const performanceUtils = {
     Component: React.ComponentType<P>,
     componentName: string
   ) => {
-    return React.memo<P>((props: P) => {
-      const { measureInteraction } = usePerformanceMeasurement(componentName);
+    const MemoizedComponent = React.memo<P>((props: P) => {
+      usePerformanceMeasurement(componentName);
       
       return React.createElement(Component, props);
     });
+    
+    MemoizedComponent.displayName = `withPerformance(${componentName})`;
+    
+    return MemoizedComponent;
   },
 
   // Lazy load with performance tracking
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   createLazyComponent: <T extends React.ComponentType<any>>(
     importFunc: () => Promise<{ default: T }>,
     componentName: string

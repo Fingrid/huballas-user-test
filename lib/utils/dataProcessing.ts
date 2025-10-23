@@ -81,7 +81,8 @@ export function getDataDateRange(data: (UsageDataRecord | ErrorRecord)[]): DateR
   if (data.length === 0) return null;
 
   const dates = data.map(record => {
-    const date = 'event_timestamp' in record ? record.event_timestamp : (record as any).timestamp;
+    // Both types have event_timestamp
+    const date = record.event_timestamp;
     return typeof date === 'string' ? new Date(date) : date;
   }).sort((a, b) => a.getTime() - b.getTime());
 
@@ -115,8 +116,9 @@ export function calculateResponseTimeStats(data: ResponseTimeRecord[]): {
 }
 
 // Simple memoization utility
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createMemoizedFunction<T extends (...args: any[]) => any>(fn: T): T {
-  const cache = new Map();
+  const cache = new Map<string, ReturnType<T>>();
   
   return ((...args: Parameters<T>) => {
     const key = JSON.stringify(args);
@@ -130,7 +132,9 @@ export function createMemoizedFunction<T extends (...args: any[]) => any>(fn: T)
     // Keep cache size reasonable
     if (cache.size > 50) {
       const firstKey = cache.keys().next().value;
-      cache.delete(firstKey);
+      if (firstKey !== undefined) {
+        cache.delete(firstKey);
+      }
     }
     
     cache.set(key, result);

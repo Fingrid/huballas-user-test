@@ -145,7 +145,7 @@ export const buildAriaProps = (config: {
   controls?: string;
   owns?: string;
 }) => {
-  const props: Record<string, any> = {};
+  const props: Record<string, string | boolean | undefined> = {};
 
   if (config.label) props['aria-label'] = config.label;
   if (config.labelledBy) props['aria-labelledby'] = config.labelledBy;
@@ -226,7 +226,7 @@ export const loadingAnnouncements = {
 };
 
 // Chart accessibility utilities
-export const generateChartDescription = (data: any[], type: 'line' | 'bar' | 'pie'): string => {
+export const generateChartDescription = (data: unknown[], type: 'line' | 'bar' | 'pie'): string => {
   const dataLength = data.length;
   
   switch (type) {
@@ -241,14 +241,15 @@ export const generateChartDescription = (data: any[], type: 'line' | 'bar' | 'pi
   }
 };
 
-export const generateDataTableFromChart = (data: any[]): string => {
+export const generateDataTableFromChart = (data: unknown[]): string => {
   // Convert chart data to a screen reader friendly table description
   if (!data || data.length === 0) return 'No data available';
   
   const tableRows = data.map(item => {
     if (typeof item === 'object' && item !== null) {
-      const keys = Object.keys(item);
-      return keys.map(key => `${key}: ${item[key]}`).join(', ');
+      const record = item as Record<string, unknown>;
+      const keys = Object.keys(record);
+      return keys.map(key => `${key}: ${record[key]}`).join(', ');
     }
     return String(item);
   });

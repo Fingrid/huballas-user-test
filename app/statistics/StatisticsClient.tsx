@@ -52,9 +52,7 @@ export default function StatisticsClient(_props: StatisticsClientProps) {
   const [errorStackingType, setErrorStackingType] =
     useState<ErrorStackingType>("errortype");
   const [selectedRange, setSelectedRange] = useState<DateRangeOption>("90days");
-  const [customDateRange, setCustomDateRange] = useState<DateRangeFilter>(() =>
-    calculateRange("90days", undefined, undefined) // Will be updated when availableDataRange is calculated
-  );
+  const [userCustomDateRange, setUserCustomDateRange] = useState<DateRangeFilter | null>(null);
   
   // State to track if sticky controls should be visible
   const [showStickyControls, setShowStickyControls] = useState(false);
@@ -65,21 +63,17 @@ export default function StatisticsClient(_props: StatisticsClientProps) {
     activeSectionRef.current = activeSection;
   }, [activeSection]);
 
-  // Calculate custom date range based on available data range
-  // Using useMemo instead of useEffect to avoid setState in effect
-  const calculatedDateRange = useMemo(() => {
+  // Calculate date range based on selected option and available data
+  const customDateRange = useMemo(() => {
     if (availableDataRange) {
-      return calculateRange(selectedRange, selectedRange === "custom" ? customDateRange : undefined, availableDataRange || undefined);
+      return calculateRange(
+        selectedRange, 
+        selectedRange === "custom" ? userCustomDateRange || undefined : undefined, 
+        availableDataRange
+      );
     }
-    return customDateRange;
-  }, [availableDataRange, calculateRange, selectedRange, customDateRange]);
-
-  // Update custom date range when calculation changes
-  useEffect(() => {
-    if (calculatedDateRange !== customDateRange) {
-      setCustomDateRange(calculatedDateRange);
-    }
-  }, [calculatedDateRange]); // eslint-disable-line react-hooks/exhaustive-deps
+    return calculateRange(selectedRange, undefined, undefined);
+  }, [availableDataRange, calculateRange, selectedRange, userCustomDateRange]);
 
   // Observe header to show/hide sticky controls
   useEffect(() => {
@@ -301,13 +295,14 @@ export default function StatisticsClient(_props: StatisticsClientProps) {
 
   const handleRangeChange = (range: DateRangeOption) => {
     setSelectedRange(range);
-    if (range !== "custom") {
-      setCustomDateRange(calculateRange(range, undefined, availableDataRange || undefined));
+    if (range === "custom") {
+      // Reset user custom date range when switching to custom
+      setUserCustomDateRange(null);
     }
   };
 
   const handleDateRangeChange = (dateRange: DateRangeFilter) => {
-    setCustomDateRange(dateRange);
+    setUserCustomDateRange(dateRange);
   };
 
   useEffect(() => {

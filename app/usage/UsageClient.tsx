@@ -39,9 +39,7 @@ export default function UsageClient(_props: UsageClientProps) {
   // Chart controls state
   const [usageStackingType, setUsageStackingType] = useState<StackingType>("all");
   const [selectedRange, setSelectedRange] = useState<DateRangeOption>("30days");
-  const [customDateRange, setCustomDateRange] = useState<DateRangeFilter>(() =>
-    calculateRange("30days", undefined, undefined)
-  );
+  const [userCustomDateRange, setUserCustomDateRange] = useState<DateRangeFilter | null>(null);
   
   // Filter controls state
   const [selectedProcess, setSelectedProcess] = useState<string>('all');
@@ -51,36 +49,31 @@ export default function UsageClient(_props: UsageClientProps) {
   // Header ref
   const headerRef = useRef<HTMLDivElement>(null);
 
-  // Calculate custom date range based on available data range
-  // Using useMemo instead of useEffect to avoid setState in effect
-  const calculatedDateRange = useMemo(() => {
+  // Calculate date range based on selected option and available data
+  const customDateRange = useMemo(() => {
     if (availableDataRange) {
-      return calculateRange(selectedRange, selectedRange === "custom" ? customDateRange : undefined, availableDataRange || undefined);
+      return calculateRange(
+        selectedRange, 
+        selectedRange === "custom" ? userCustomDateRange || undefined : undefined, 
+        availableDataRange
+      );
     }
-    return customDateRange;
-  }, [availableDataRange, calculateRange, selectedRange, customDateRange]);
-
-  // Update custom date range when calculation changes
-  useEffect(() => {
-    if (calculatedDateRange !== customDateRange) {
-      setCustomDateRange(calculatedDateRange);
-    }
-  }, [calculatedDateRange]); // eslint-disable-line react-hooks/exhaustive-deps
+    return calculateRange(selectedRange, undefined, undefined);
+  }, [availableDataRange, calculateRange, selectedRange, userCustomDateRange]);
 
   const handleRangeChange = (range: DateRangeOption) => {
     measureInteraction("date-range-change");
     setSelectedRange(range);
     
-    // Auto-populate dates for preset ranges
-    if (range !== 'custom') {
-      const newDateRange = calculateRange(range, undefined, availableDataRange || undefined);
-      setCustomDateRange(newDateRange);
+    // Reset user custom date range when switching away from custom
+    if (range === 'custom') {
+      setUserCustomDateRange(null);
     }
   };
 
   const handleDateRangeChange = (dateRange: DateRangeFilter) => {
     measureInteraction("custom-date-change");
-    setCustomDateRange(dateRange);
+    setUserCustomDateRange(dateRange);
   };
 
   const handleUsageStackingChange = (type: StackingType) => {

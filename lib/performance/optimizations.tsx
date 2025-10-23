@@ -55,7 +55,8 @@ export const useChartDataComputation = (
       // Count breakdowns for each type
       ['channel', 'process_group', 'market_role_code'].forEach(field => {
         const breakdown = dayRecords.reduce((acc, record) => {
-          const key = record[field] || 'Unknown';
+          const value = record[field as keyof UsageDataRecord];
+          const key = String(value || 'Unknown');
           acc[key] = (acc[key] || 0) + 1;
           return acc;
         }, {} as Record<string, number>);
@@ -172,21 +173,21 @@ export const OptimizedWrapper = memo<OptimizedComponentProps>(({
 OptimizedWrapper.displayName = 'OptimizedWrapper';
 
 // Memoized list renderer for large datasets
-export interface VirtualizedListProps {
-  items: any[];
-  renderItem: (item: any, index: number) => React.ReactNode;
+export interface VirtualizedListProps<T = unknown> {
+  items: T[];
+  renderItem: (item: T, index: number) => React.ReactNode;
   itemHeight: number;
   containerHeight: number;
   className?: string;
 }
 
-export const VirtualizedList = memo<VirtualizedListProps>(({
+export const VirtualizedList = memo(function VirtualizedListComponent<T>({
   items,
   renderItem,
   itemHeight,
   containerHeight,
   className = ''
-}) => {
+}: VirtualizedListProps<T>) {
   const visibleItems = useMemo(() => {
     const visibleCount = Math.ceil(containerHeight / itemHeight);
     const buffer = 5; // Extra items for smooth scrolling
@@ -202,20 +203,32 @@ export const VirtualizedList = memo<VirtualizedListProps>(({
       ))}
     </div>
   );
-});
-
-VirtualizedList.displayName = 'VirtualizedList';
+}) as <T>(props: VirtualizedListProps<T>) => React.ReactElement;
 
 // Performance metrics hook
 export const usePerformanceMetrics = (componentName: string) => {
-  const startTime = useMemo(() => performance.now(), []);
+  const startTimeRef = React.useRef<number>(0);
+  const isInitialized = React.useRef(false);
+  
+  // Initialize start time in useEffect to avoid calling impure function during render
+  React.useEffect(() => {
+    if (!isInitialized.current) {
+      startTimeRef.current = performance.now();
+      isInitialized.current = true;
+    }
+  }, []);
   
   React.useEffect(() => {
-    const endTime = performance.now();
-    const renderTime = endTime - startTime;
-    
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`⚡ ${componentName} render time: ${renderTime.toFixed(2)}ms`);
+    if (isInitialized.current) {
+      const endTime = performance.now();
+      const renderTime = endTime - startTimeRef.current;
+      
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`⚡ ${componentName} render time: ${renderTime.toFixed(2)}ms`);
+      }
+      
+      // Reset for next render cycle
+      startTimeRef.current = performance.now();
     }
   });
 

@@ -52,11 +52,11 @@ export function createRetryableError(
 }
 
 // Error type guards
-export function isAppError(error: any): error is AppError {
-  return error && typeof error === 'object' && 'code' in error && 'message' in error;
+export function isAppError(error: unknown): error is AppError {
+  return Boolean(error && typeof error === 'object' && 'code' in error && 'message' in error);
 }
 
-export function isRetryableError(error: any): error is ErrorWithRetry {
+export function isRetryableError(error: unknown): error is ErrorWithRetry {
   return isAppError(error) && 'retryable' in error && error.retryable === true;
 }
 
