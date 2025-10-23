@@ -63,7 +63,7 @@ interface Translations {
 // Store interface
 interface LocalizationStore {
   locale: Locale;
-  translations: any;
+  translations: Record<string, unknown>;
   isLoading: boolean;
   error: string | null;
   setLocale: (locale: Locale) => void;
@@ -72,17 +72,17 @@ interface LocalizationStore {
 }
 
 // Helper function to get nested value from object using dot notation
-function getNestedValue(obj: any, path: string): string {
-  return path.split('.').reduce((current, key) => current?.[key], obj) || path;
+function getNestedValue(obj: Record<string, unknown>, path: string): string {
+  return path.split('.').reduce((current: unknown, key) => (current as Record<string, unknown>)?.[key], obj as unknown) as string || path;
 }
 
 // Get translations for a specific locale
-function getTranslations(locale: Locale): any {
+function getTranslations(locale: Locale): Record<string, unknown> {
   switch (locale) {
     case 'fi':
-      return fiTranslations;
+      return fiTranslations as Record<string, unknown>;
     case 'en':
-      return enTranslations;
+      return enTranslations as Record<string, unknown>;
     default:
       return fiTranslations; // Fallback to Finnish
   }

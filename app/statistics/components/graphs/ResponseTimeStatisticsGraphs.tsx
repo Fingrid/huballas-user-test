@@ -83,7 +83,7 @@ export default function ResponseTimeStatisticsGraphs({
         axisPointer: {
           type: 'cross'
         },
-        formatter: function(params: any) {
+        formatter: function(params: Array<{dataIndex: number}>) {
           if (params.length > 0) {
             const dataIndex = params[0].dataIndex;
             const stats = dailyStats[dataIndex];
@@ -213,13 +213,13 @@ export default function ResponseTimeStatisticsGraphs({
             width: 2
           },
           symbol: 'circle',
-          symbolSize: function(value: number, params: any) {
+          symbolSize: function(_value: number, params: {dataIndex: number}) {
             const dataIndex = params.dataIndex;
             const isHighVariability = stdDevData[dataIndex] > stdDevThreshold;
             return isHighVariability ? 8 : 0;
           },
           itemStyle: {
-            color: function(params: any) {
+            color: function(params: {dataIndex: number}) {
               const dataIndex = params.dataIndex;
               const isHighVariability = stdDevData[dataIndex] > stdDevThreshold;
               return isHighVariability ? '#EF4444' : 'transparent';

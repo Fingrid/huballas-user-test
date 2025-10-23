@@ -1,17 +1,17 @@
 // Enhanced type safety for store interactions
 
 // Discriminated union types for loading states
-export type LoadingState = 
+export type LoadingState<T = unknown> = 
   | { status: 'idle'; data: null; error: null }
   | { status: 'loading'; data: null; error: null }
-  | { status: 'success'; data: any; error: null }
+  | { status: 'success'; data: T; error: null }
   | { status: 'error'; data: null; error: string };
 
 // Discriminated union for page states
-export type PageState =
+export type PageState<T = unknown> =
   | { type: 'initializing'; message: string }
   | { type: 'loading'; message: string; progress?: number }
-  | { type: 'ready'; data: any }
+  | { type: 'ready'; data: T }
   | { type: 'error'; error: ErrorDetails; recoverable: boolean };
 
 // Enhanced error details
@@ -20,12 +20,12 @@ export interface ErrorDetails {
   message: string;
   stack?: string;
   timestamp: Date;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
 }
 
 // Strict store interfaces
 export interface StoreBase<T> {
-  readonly state: LoadingState;
+  readonly state: LoadingState<T>;
   readonly lastUpdate: Date | null;
   
   // Actions
@@ -70,7 +70,7 @@ export interface UsageDataRecord {
   process_group: string;
   market_role_code: string;
   event_id: string;
-  [key: string]: any;
+  [key: string]: string | number | boolean | undefined;
 }
 
 export interface DateRange {
@@ -160,58 +160,72 @@ export interface DataFetchConfig {
 }
 
 // Type guards
-export function isLoadingState(state: any): state is LoadingState {
-  return state && 
+export function isLoadingState(state: unknown): state is LoadingState {
+  return Boolean(state && 
     typeof state === 'object' && 
     'status' in state &&
-    ['idle', 'loading', 'success', 'error'].includes(state.status);
+    ['idle', 'loading', 'success', 'error'].includes((state as {status: string}).status));
 }
 
-export function isPageStateReady(state: PageState): state is Extract<PageState, { type: 'ready' }> {
+export function isPageStateReady<T>(state: PageState<T>): state is Extract<PageState<T>, { type: 'ready' }> {
   return state.type === 'ready';
 }
 
-export function isPageStateError(state: PageState): state is Extract<PageState, { type: 'error' }> {
+export function isPageStateError<T>(state: PageState<T>): state is Extract<PageState<T>, { type: 'error' }> {
   return state.type === 'error';
 }
 
-export function isPageStateLoading(state: PageState): state is Extract<PageState, { type: 'loading' }> {
+export function isPageStateLoading<T>(state: PageState<T>): state is Extract<PageState<T>, { type: 'loading' }> {
   return state.type === 'loading';
 }
 
-export function isUsageDataRecord(data: any): data is UsageDataRecord {
-  return data &&
+export function isUsageDataRecord(data: unknown): data is UsageDataRecord {
+  return Boolean(data &&
     typeof data === 'object' &&
+    'event_timestamp' in data &&
     typeof data.event_timestamp === 'string' &&
+    'channel' in data &&
     typeof data.channel === 'string' &&
+    'message_type' in data &&
     typeof data.message_type === 'string' &&
+    'process_group' in data &&
     typeof data.process_group === 'string' &&
+    'market_role_code' in data &&
     typeof data.market_role_code === 'string' &&
-    typeof data.event_id === 'string';
+    'event_id' in data &&
+    typeof data.event_id === 'string');
 }
 
-export function isValidDateRange(range: any): range is DateRange {
-  return range &&
+export function isValidDateRange(range: unknown): range is DateRange {
+  return Boolean(range &&
     typeof range === 'object' &&
+    'start' in range &&
     typeof range.start === 'string' &&
+    'end' in range &&
     typeof range.end === 'string' &&
-    new Date(range.start).getTime() <= new Date(range.end).getTime();
+    new Date(range.start).getTime() <= new Date(range.end).getTime());
 }
 
 // Data validation utilities
-export function validateUsageData(data: any): data is UsageData {
-  return data &&
+export function validateUsageData(data: unknown): data is UsageData {
+  return Boolean(data &&
     typeof data === 'object' &&
+    'records' in data &&
     Array.isArray(data.records) &&
     data.records.every(isUsageDataRecord) &&
+    'totalCount' in data &&
     typeof data.totalCount === 'number' &&
-    isValidDateRange(data.dateRange);
+    'dateRange' in data &&
+    isValidDateRange(data.dateRange));
 }
 
-export function validateDictionaryCollections(data: any): data is DictionaryCollections {
-  return data &&
+export function validateDictionaryCollections(data: unknown): data is DictionaryCollections {
+  return Boolean(data &&
     typeof data === 'object' &&
+    'channels' in data &&
     Array.isArray(data.channels) &&
+    'marketRoles' in data &&
     Array.isArray(data.marketRoles) &&
-    Array.isArray(data.events);
+    'events' in data &&
+    Array.isArray(data.events));
 }

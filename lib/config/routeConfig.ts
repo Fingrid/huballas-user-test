@@ -8,7 +8,7 @@ const UsageClient = lazy(() => import('../../app/usage/UsageClient'));
 // Data validators
 export const validateStatisticsData = (stores: StoreData): boolean => {
   // For statistics, we need usage data and dictionaries
-  const hasUsageData = stores.usage._rawdata && Object.keys(stores.usage._rawdata).length > 0;
+  const hasUsageData = Boolean(stores.usage._rawdata && Object.keys(stores.usage._rawdata).length > 0);
   const hasDictionaries = stores.dictionary.dictionaries !== null;
   const noErrors = !stores.usage.error && !stores.dictionary.error;
   const notLoading = !stores.usage.loading && !stores.dictionary.loading;
@@ -18,7 +18,7 @@ export const validateStatisticsData = (stores: StoreData): boolean => {
 
 export const validateUsageData = (stores: StoreData): boolean => {
   // For usage page, we only need usage data and dictionaries
-  const hasUsageData = stores.usage._rawdata && Object.keys(stores.usage._rawdata).length > 0;
+  const hasUsageData = Boolean(stores.usage._rawdata && Object.keys(stores.usage._rawdata).length > 0);
   const hasDictionaries = stores.dictionary.dictionaries !== null;
   const noErrors = !stores.usage.error && !stores.dictionary.error;
   const notLoading = !stores.usage.loading && !stores.dictionary.loading;
@@ -28,9 +28,9 @@ export const validateUsageData = (stores: StoreData): boolean => {
 
 export const validateMonthlyReportsData = (stores: StoreData): boolean => {
   // For monthly reports, we need at least one of usage, response time, or error data
-  const hasUsageData = stores.usage.monthlyData && Object.keys(stores.usage.monthlyData).length > 0;
-  const hasResponseData = stores.responseTime.monthlyData && Object.keys(stores.responseTime.monthlyData).length > 0;
-  const hasErrorData = stores.error.monthlyData && Object.keys(stores.error.monthlyData).length > 0;
+  const hasUsageData = Boolean(stores.usage.monthlyData && Object.keys(stores.usage.monthlyData).length > 0);
+  const hasResponseData = Boolean(stores.responseTime.monthlyData && Object.keys(stores.responseTime.monthlyData).length > 0);
+  const hasErrorData = Boolean(stores.error.monthlyData && Object.keys(stores.error.monthlyData).length > 0);
   
   const hasAnyData = hasUsageData || hasResponseData || hasErrorData;
   const hasNoErrors = !stores.usage.error && !stores.responseTime.error && !stores.error.error;

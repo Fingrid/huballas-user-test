@@ -1,4 +1,5 @@
 import { ComponentType } from 'react';
+import type { DictionaryCollections } from '../stores/dictionary.store';
 
 // Store types for configuration
 export type StoreType = 'dictionary' | 'usage' | 'responseTime' | 'error';
@@ -13,23 +14,23 @@ export interface LoadingState {
 // Store data interface for validation
 export interface StoreData {
   dictionary: {
-    dictionaries: any;
+    dictionaries: DictionaryCollections | null;
     loading: boolean;
     error: string | null;
   };
   usage: {
-    _rawdata: any;
-    monthlyData: any;
+    _rawdata: Record<string, unknown[]> | null;
+    monthlyData: Record<string, unknown> | null;
     loading: boolean;
     error: string | null;
   };
   responseTime: {
-    monthlyData: any;
+    monthlyData: Record<string, unknown> | null;
     loading: boolean;
     error: string | null;
   };
   error: {
-    monthlyData: any;
+    monthlyData: Record<string, unknown> | null;
     loading: boolean;
     error: string | null;
   };
@@ -44,13 +45,13 @@ export interface PageConfig {
   // Optional custom loading message
   loadingMessage?: string;
   // Optional data preparation function
-  prepareData?: (stores: StoreData) => any;
+  prepareData?: (stores: StoreData) => unknown;
 }
 
 // Route configuration
 export interface RouteConfig extends PageConfig {
   path: string;
-  component: ComponentType<any>;
+  component: ComponentType;
 }
 
 // App loading state
@@ -68,5 +69,5 @@ export interface ErrorState {
   message: string;
   recoverable: boolean;
   retryAction?: () => void;
-  details?: any;
+  details?: Record<string, unknown>;
 }

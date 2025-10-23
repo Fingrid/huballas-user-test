@@ -116,10 +116,10 @@ export default function ErrorStatisticsGraphs({ stackingType, activeDateRange, o
         axisPointer: {
           type: 'shadow'
         },
-        formatter: function(params: any) {
+        formatter: function(params: Array<{axisValue: string; marker: string; seriesName: string; value: number}>) {
           let result = `<strong>${params[0].axisValue}</strong><br/>`;
           let total = 0;
-          params.forEach((param: any) => {
+          params.forEach((param: {marker: string; seriesName: string; value: number}) => {
             result += `${param.marker} ${param.seriesName}: ${param.value}<br/>`;
             total += param.value;
           });

@@ -122,10 +122,10 @@ export default function StackedChart({
               color: "var(--color-text-subtle)",
             },
           },
-          formatter: function (params: any) {
+          formatter: function (params: Array<{axisValue: string; marker: string; seriesName: string; value: number}>) {
             let result = `<strong>${params[0].axisValue}</strong><br/>`;
             let total = 0;
-            params.forEach((param: any) => {
+            params.forEach((param: {marker: string; seriesName: string; value: number}) => {
               const seriesName = param.seriesName;
               let displayName = seriesName;
 

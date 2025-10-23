@@ -34,10 +34,10 @@ export interface ChannelBreakdownData {
 export interface RefinedMonthlyData {
     dailyResponseTimeStats: ConfidenceStats[];
     summaryStatistics: SummaryStatistics;
-    datasetStatistics: any;
+    datasetStatistics: Record<string, unknown>;
     responseTimeStatistics: {
-        averageResponseTimes: any;
-        standardDeviations: any;
+        averageResponseTimes: Record<string, number>;
+        standardDeviations: Record<string, number>;
     };
     totalDays: number;
     totalRecords: number;
