@@ -269,25 +269,25 @@ h4 {
 }
 
 .error-container.severity-info {
-  background-color: #dbeafe;
-  border: 1px solid #bfdbfe;
+  background-color: var(--color-notification-info-bg);
+  border: 1px solid var(--color-notification-info-border);
   color: var(--color-info);
 }
 
 .error-container.severity-warning {
-  background-color: #fef3c7;
-  border: 1px solid #fde68a;
-  color: #b45309;
+  background-color: var(--color-notification-warning-bg);
+  border: 1px solid var(--color-notification-warning-border);
+  color: var(--color-warning);
 }
 
 .error-container.severity-error {
-  background-color: #fee2e2;
-  border: 1px solid #fecaca;
+  background-color: var(--color-notification-error-bg);
+  border: 1px solid var(--color-notification-error-border);
   color: var(--color-error);
 }
 
 .error-container.severity-critical {
-  background-color: #fee2e2;
+  background-color: var(--color-notification-critical-bg);
   border: 2px solid var(--color-error);
   color: var(--color-error);
 }
@@ -334,7 +334,7 @@ h4 {
 }
 
 .btn-error-retry:hover {
-  background-color: #dc2626;
+  background-color: var(--color-error-hover);
 }
 
 .btn-error-secondary {
@@ -925,7 +925,7 @@ button:focus-visible {
   position: sticky;
   top: 0;
   z-index: 50;
-  background-color: rgb(236 253 245);
+  background-color: var(--color-background-level-4);
   border-bottom: 1px solid var(--color-separator);
   /* Break out of parent margins to span full width */
   margin-left: -3.125rem;
@@ -1116,7 +1116,7 @@ button:focus-visible {
   font-size: 1.5rem;
   font-weight: 400;
   line-height: 2rem;
-  color: #0a0a0a;
+  color: var(--color-text);
   transition: color 0.2s ease;
 }
 
@@ -1135,7 +1135,7 @@ button:focus-visible {
   font-size: 1.5rem;
   font-weight: 400;
   line-height: 2rem;
-  color: #0a0a0a;
+  color: var(--color-text);
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -1261,7 +1261,7 @@ button:focus-visible {
 }
 
 .app-footer {
-  background-color: #009A96; /* Fingrid teal-600 / primary color */
+  background-color: var(--color-primary);
   color: white;
   padding-left: 0;
   padding-right: 0;
@@ -1317,7 +1317,7 @@ button:focus-visible {
 }
 
 .filter-toggle-button:hover {
-  background-color: #E6F4F3;
+  background-color: var(--color-background-level-4);
 }
 
 .filter-toggle-icon {
@@ -1460,7 +1460,7 @@ button:focus-visible {
 
 .stats-description-section {
   width: 100%;
-  background-color: #ffffff;
+  background-color: var(--color-background-level-1);
 }
 
 .stats-description-container {
@@ -1543,7 +1543,7 @@ button:focus-visible {
 
 .stats-sticky-section {
   width: 100%;
-  background-color: rgba(212, 238, 238, 0.50);
+  background-color: var(--color-background-level-4);
 }
 
 .stats-sticky-container {
@@ -1681,8 +1681,8 @@ button:focus-visible {
 }
 
 .stats-summary-badge-success {
-  background-color: #E6F4F3;
-  outline-color: #009A96;
+  background-color: var(--color-background-level-4);
+  outline-color: var(--color-primary);
 }
 
 .stats-summary-badge-success span {
@@ -1693,12 +1693,12 @@ button:focus-visible {
 }
 
 .stats-summary-badge-error {
-  background-color: #FEF3F2;
-  outline-color: #D5121E;
+  background-color: var(--color-error);
+  outline-color: var(--color-primary-action);
 }
 
 .stats-summary-badge-error span {
-  color: #D5121E;
+  color: var(--color-primary-action);
   font-size: 0.875rem;
   font-weight: 400;
   line-height: 1;

@@ -2,6 +2,7 @@
 
 import { useLocalization } from '@/lib/stores/localization.store';
 import { cn } from '@/lib/cn';
+import { useUsageStore, useDictionaryStore } from '@/lib/stores';
 import type { DateRangeFilter as DateRangeFilterType } from '@/lib/dataProcessing';
 import FieldGroup from './FieldGroup';
 import DateRangeFilter from './DateRangeFilter';
@@ -52,6 +53,73 @@ export default function FilterBar({
   hasActiveFilters,
 }: FilterBarProps) {
   const { t } = useLocalization();
+  
+  // Get data from stores
+  const usageStore = useUsageStore();
+  const dictionaryStore = useDictionaryStore();
+  
+  // Get filter state from store
+  const filters = usageStore.filters;
+  
+  // Handle filter changes - update both store and notify parent
+  const handleProcessChange = (value: string) => {
+    usageStore.setFilter('processGroup', value);
+    onProcessChange?.(value);
+  };
+  
+  const handleChannelChange = (value: string) => {
+    usageStore.setFilter('channel', value);
+    onChannelChange?.(value);
+  };
+  
+  const handleRoleChange = (value: string) => {
+    usageStore.setFilter('marketRole', value);
+    onRoleChange?.(value);
+  };
+  
+  const handleClearFilters = () => {
+    usageStore.clearFilters();
+    onClearFilters();
+  };
+  
+  // Check if there are active filters in the store
+  const hasStoreFilters = filters.processGroup !== 'all' || filters.channel !== 'all' || filters.marketRole !== 'all';
+  
+  // Get available options for filters with date range awareness
+  // These return objects with { value, disabled } properties
+  const processGroupOptions = usageStore.getProcessGroupOptions(dateRange).sort((a, b) => {
+    // Extract numeric part from DH-NNN format
+    const isDH_A = a.value.startsWith('DH-');
+    const isDH_B = b.value.startsWith('DH-');
+    
+    // DH processes should come before others
+    if (isDH_A && !isDH_B) return -1;
+    if (!isDH_A && isDH_B) return 1;
+    
+    // If both are DH processes, sort by numeric part
+    if (isDH_A && isDH_B) {
+      const getNumericPart = (str: string) => {
+        const match = str.match(/DH-(\d+)/);
+        return match ? parseInt(match[1], 10) : 0;
+      };
+      return getNumericPart(a.value) - getNumericPart(b.value);
+    }
+    
+    // Otherwise sort alphabetically
+    return a.value.localeCompare(b.value);
+  });
+  
+  const channelOptions = usageStore.getChannelOptions(dateRange).sort((a, b) => {
+    const descA = dictionaryStore.getChannelDescription(a.value);
+    const descB = dictionaryStore.getChannelDescription(b.value);
+    return descA.localeCompare(descB);
+  });
+  
+  const marketRoleOptions = usageStore.getMarketRoleOptions(dateRange).sort((a, b) => {
+    const nameA = dictionaryStore.getMarketRoleDescription(a.value);
+    const nameB = dictionaryStore.getMarketRoleDescription(b.value);
+    return nameA.localeCompare(nameB);
+  });
 
   // Shared style objects matching StickyChartControls pattern
   const styles = {
@@ -138,46 +206,73 @@ export default function FilterBar({
         {/* Process dropdown */}
         <FieldGroup label={t('statistics.filters.mainProcess')} className="flex-1 min-w-[12rem]">
           <select
-            value={selectedProcess}
-            onChange={(e) => onProcessChange?.(e.target.value)}
+            value={filters.processGroup}
+            onChange={(e) => handleProcessChange(e.target.value)}
             className={cn(styles.select, "h-[34px] w-full")}
           >
             <option value="all">{t('common.all')}</option>
-            {/* Add more options as needed */}
+            {processGroupOptions.map((option) => (
+              <option 
+                key={option.value} 
+                value={option.value}
+                disabled={option.disabled}
+                className={option.disabled ? "text-slate-400" : ""}
+              >
+                {option.value}
+              </option>
+            ))}
           </select>
         </FieldGroup>
 
         {/* Channel dropdown */}
         <FieldGroup label={t('statistics.filters.channel')} className="flex-1 min-w-[12rem]">
           <select
-            value={selectedChannel}
-            onChange={(e) => onChannelChange?.(e.target.value)}
+            value={filters.channel}
+            onChange={(e) => handleChannelChange(e.target.value)}
             className={cn(styles.select, "h-[34px] w-full")}
           >
             <option value="all">{t('common.all')}</option>
-            {/* Add more options as needed */}
+            {channelOptions.map((option) => (
+              <option 
+                key={option.value} 
+                value={option.value}
+                disabled={option.disabled}
+                className={option.disabled ? "text-slate-400" : ""}
+              >
+                {dictionaryStore.getChannelDescription(option.value)} ({option.value})
+              </option>
+            ))}
           </select>
         </FieldGroup>
 
         {/* Role dropdown */}
         <FieldGroup label={t('statistics.filters.marketRole')} className="flex-1 min-w-[12rem]">
           <select
-            value={selectedRole}
-            onChange={(e) => onRoleChange?.(e.target.value)}
+            value={filters.marketRole}
+            onChange={(e) => handleRoleChange(e.target.value)}
             className={cn(styles.select, "h-[34px] w-full")}
           >
             <option value="all">{t('common.all')}</option>
-            {/* Add more options as needed */}
+            {marketRoleOptions.map((option) => (
+              <option 
+                key={option.value} 
+                value={option.value}
+                disabled={option.disabled}
+                className={option.disabled ? "text-slate-400" : ""}
+              >
+                {dictionaryStore.getMarketRoleDescription(option.value)} ({option.value})
+              </option>
+            ))}
           </select>
         </FieldGroup>
 
         {/* Clear filters button */}
         <button
-          onClick={onClearFilters}
-          disabled={!hasActiveFilters}
+          onClick={handleClearFilters}
+          disabled={!hasStoreFilters && !hasActiveFilters}
           className={cn(
             "px-4 bg-white outline-2 outline-offset-[-2px] transition-colors text-sm font-medium leading-none h-[34px] flex-shrink-0",
-            hasActiveFilters
+            hasStoreFilters || hasActiveFilters
               ? "outline outline-slate-500 text-[var(--color-text)] cursor-pointer hover:bg-[var(--color-background-level-2)]"
               : "outline outline-slate-300 text-slate-300 cursor-not-allowed"
           )}

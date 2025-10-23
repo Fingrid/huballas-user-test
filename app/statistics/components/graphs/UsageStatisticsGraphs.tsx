@@ -27,6 +27,9 @@ export default function UsageStatisticsGraphs({ stackingType, activeDateRange, o
   
   const usageStore = useUsageStore();
   const dictionaryStore = useDictionaryStore();
+  
+  // Subscribe to filter changes
+  const filters = usageStore.filters;
 
   // Grouping options for usage statistics
   const groupingOptions = useMemo(() => [
@@ -35,23 +38,20 @@ export default function UsageStatisticsGraphs({ stackingType, activeDateRange, o
     { value: 'marketRoleCode', label: t('statistics.grouping.marketRoles') },
   ], [t]);
 
-  // Prepare usage data for the selected date range
+  // Prepare usage data for the selected date range and apply filters from store
   const usageDataArray = useMemo(() => {
-    const usageData = usageStore._rawdata || {};
-    
-    // Combine all available data
-    const allData: UsageDataRecord[] = Object.values(usageData)
-      .flat()
-      .filter(record => record !== undefined);
+    // Get filtered data from store (applies process, channel, and market role filters)
+    // When all filters are 'all', this returns all data
+    const filteredByStore = usageStore.getFilteredData();
 
-    // Filter by date range
-    const filteredData = allData.filter(record => {
+    // Apply date range filter
+    const filteredData = filteredByStore.filter(record => {
       const recordDate = new Date(record.event_timestamp).toISOString().split('T')[0]; // Get YYYY-MM-DD part
       return recordDate >= activeDateRange.startDate && recordDate <= activeDateRange.endDate;
     });
     
     return filteredData;
-  }, [usageStore._rawdata, activeDateRange]);
+  }, [usageStore, activeDateRange, filters]); // Added filters dependency
 
   return (
     <div className="space-y-6">

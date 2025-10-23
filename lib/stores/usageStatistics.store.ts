@@ -62,13 +62,33 @@ export interface UsageStatisticsStore {
     loading: boolean;
     error: string | null;
     lastUpdate: Date | null;
+    
+    // Filters
+    filters: {
+        processGroup: string;
+        channel: string;
+        marketRole: string;
+    };
+    
     fetchUsageData: (month: string, config?: DataFetchConfig) => Promise<void>;
     fetchAnnualData: (year: string, config?: DataFetchConfig) => Promise<void>;
     processMonthlyData: (month: string) => void;
     processAnnualData: (year: string) => void;
     
+    // Filter methods
+    setFilter: (filterType: 'processGroup' | 'channel' | 'marketRole', value: string) => void;
+    clearFilters: () => void;
+    getFilteredData: () => UsageDataRecord[];
+    
     // Helper functions for components
     getProcessGroups: () => string[];
+    getChannels: () => string[];
+    getMarketRoles: () => string[];
+    
+    // Date-aware helper functions that return options with disabled state
+    getProcessGroupOptions: (dateRange?: { startDate: string; endDate: string }) => Array<{ value: string; disabled: boolean }>;
+    getChannelOptions: (dateRange?: { startDate: string; endDate: string }) => Array<{ value: string; disabled: boolean }>;
+    getMarketRoleOptions: (dateRange?: { startDate: string; endDate: string }) => Array<{ value: string; disabled: boolean }>;
 }
 
 export const createUsageStatisticsStore: StateCreator<
@@ -83,6 +103,13 @@ export const createUsageStatisticsStore: StateCreator<
     loading: false,
     error: null,
     lastUpdate: null,
+    
+    // Filter state
+    filters: {
+        processGroup: 'all',
+        channel: 'all',
+        marketRole: 'all',
+    },
 
     fetchUsageData: async (month: string, config: DataFetchConfig = { synthesize: 'on_missing_data' }) => {
         set({ loading: true, error: null });
@@ -744,22 +771,330 @@ export const createUsageStatisticsStore: StateCreator<
         console.log(`Successfully processed annual data for ${year}`);
     },
 
+    // Filter methods
+    setFilter: (filterType: 'processGroup' | 'channel' | 'marketRole', value: string) => {
+        set((state) => ({
+            filters: {
+                ...state.filters,
+                [filterType]: value,
+            },
+        }));
+    },
+
+    clearFilters: () => {
+        set({
+            filters: {
+                processGroup: 'all',
+                channel: 'all',
+                marketRole: 'all',
+            },
+        });
+    },
+
+    getFilteredData: (): UsageDataRecord[] => {
+        const rawData = get()._rawdata;
+        const filters = get().filters;
+        
+        if (!rawData) return [];
+        
+        // Combine all months into a single array
+        let allRecords: UsageDataRecord[] = [];
+        Object.values(rawData).forEach(monthData => {
+            if (Array.isArray(monthData)) {
+                allRecords = allRecords.concat(monthData);
+            }
+        });
+        
+        // Apply filters
+        return allRecords.filter(record => {
+            if (filters.processGroup !== 'all' && record.process_group !== filters.processGroup) {
+                return false;
+            }
+            if (filters.channel !== 'all' && record.channel !== filters.channel) {
+                return false;
+            }
+            if (filters.marketRole !== 'all' && record.marketRoleCode !== filters.marketRole) {
+                return false;
+            }
+            return true;
+        });
+    },
+
     // Helper functions for components
     getProcessGroups: (): string[] => {
         const rawData = get()._rawdata;
+        const filters = get().filters;
+        
         if (!rawData) return [];
         
-        const groups = new Set<string>();
+        // Combine all months into a single array
+        let allRecords: UsageDataRecord[] = [];
         Object.values(rawData).forEach(monthData => {
             if (Array.isArray(monthData)) {
-                monthData.forEach(record => {
-                    if (record.process_group) {
-                        groups.add(record.process_group);
-                    }
-                });
+                allRecords = allRecords.concat(monthData);
+            }
+        });
+        
+        // Apply only channel and marketRole filters (not processGroup)
+        // This allows the dropdown to show available process groups for the current channel/role selection
+        const filteredRecords = allRecords.filter(record => {
+            if (filters.channel !== 'all' && record.channel !== filters.channel) {
+                return false;
+            }
+            if (filters.marketRole !== 'all' && record.marketRoleCode !== filters.marketRole) {
+                return false;
+            }
+            return true;
+        });
+        
+        const groups = new Set<string>();
+        filteredRecords.forEach(record => {
+            if (record.process_group) {
+                groups.add(record.process_group);
             }
         });
         
         return Array.from(groups);
+    },
+
+    getChannels: (): string[] => {
+        const rawData = get()._rawdata;
+        const filters = get().filters;
+        
+        if (!rawData) return [];
+        
+        // Combine all months into a single array
+        let allRecords: UsageDataRecord[] = [];
+        Object.values(rawData).forEach(monthData => {
+            if (Array.isArray(monthData)) {
+                allRecords = allRecords.concat(monthData);
+            }
+        });
+        
+        // Apply only processGroup and marketRole filters (not channel)
+        // This allows the dropdown to show available channels for the current process/role selection
+        const filteredRecords = allRecords.filter(record => {
+            if (filters.processGroup !== 'all' && record.process_group !== filters.processGroup) {
+                return false;
+            }
+            if (filters.marketRole !== 'all' && record.marketRoleCode !== filters.marketRole) {
+                return false;
+            }
+            return true;
+        });
+        
+        const channels = new Set<string>();
+        filteredRecords.forEach(record => {
+            if (record.channel) {
+                channels.add(record.channel);
+            }
+        });
+        
+        return Array.from(channels);
+    },
+
+    getMarketRoles: (): string[] => {
+        const rawData = get()._rawdata;
+        const filters = get().filters;
+        
+        if (!rawData) return [];
+        
+        // Combine all months into a single array
+        let allRecords: UsageDataRecord[] = [];
+        Object.values(rawData).forEach(monthData => {
+            if (Array.isArray(monthData)) {
+                allRecords = allRecords.concat(monthData);
+            }
+        });
+        
+        // Apply only processGroup and channel filters (not marketRole)
+        // This allows the dropdown to show available market roles for the current process/channel selection
+        const filteredRecords = allRecords.filter(record => {
+            if (filters.processGroup !== 'all' && record.process_group !== filters.processGroup) {
+                return false;
+            }
+            if (filters.channel !== 'all' && record.channel !== filters.channel) {
+                return false;
+            }
+            return true;
+        });
+        
+        const roles = new Set<string>();
+        filteredRecords.forEach(record => {
+            if (record.marketRoleCode) {
+                roles.add(record.marketRoleCode);
+            }
+        });
+        
+        return Array.from(roles);
+    },
+
+    // Date-aware helper functions that return options with disabled state
+    getProcessGroupOptions: (dateRange?: { startDate: string; endDate: string }) => {
+        const rawData = get()._rawdata;
+        const filters = get().filters;
+        
+        if (!rawData) return [];
+        
+        // Combine all months into a single array
+        let allRecords: UsageDataRecord[] = [];
+        Object.values(rawData).forEach(monthData => {
+            if (Array.isArray(monthData)) {
+                allRecords = allRecords.concat(monthData);
+            }
+        });
+        
+        // Apply only channel and marketRole filters (not processGroup)
+        const filteredRecords = allRecords.filter(record => {
+            if (filters.channel !== 'all' && record.channel !== filters.channel) {
+                return false;
+            }
+            if (filters.marketRole !== 'all' && record.marketRoleCode !== filters.marketRole) {
+                return false;
+            }
+            return true;
+        });
+        
+        // Get all unique process groups
+        const allGroups = new Set<string>();
+        filteredRecords.forEach(record => {
+            if (record.process_group) {
+                allGroups.add(record.process_group);
+            }
+        });
+        
+        // If no date range provided, all options are enabled
+        if (!dateRange) {
+            return Array.from(allGroups).map(value => ({ value, disabled: false }));
+        }
+        
+        // Filter by date range to find which groups are available
+        const availableGroups = new Set<string>();
+        filteredRecords.forEach(record => {
+            const recordDate = new Date(record.event_timestamp).toISOString().split('T')[0];
+            if (recordDate >= dateRange.startDate && recordDate <= dateRange.endDate) {
+                if (record.process_group) {
+                    availableGroups.add(record.process_group);
+                }
+            }
+        });
+        
+        // Return all groups with disabled state
+        return Array.from(allGroups).map(value => ({
+            value,
+            disabled: !availableGroups.has(value)
+        }));
+    },
+
+    getChannelOptions: (dateRange?: { startDate: string; endDate: string }) => {
+        const rawData = get()._rawdata;
+        const filters = get().filters;
+        
+        if (!rawData) return [];
+        
+        // Combine all months into a single array
+        let allRecords: UsageDataRecord[] = [];
+        Object.values(rawData).forEach(monthData => {
+            if (Array.isArray(monthData)) {
+                allRecords = allRecords.concat(monthData);
+            }
+        });
+        
+        // Apply only processGroup and marketRole filters (not channel)
+        const filteredRecords = allRecords.filter(record => {
+            if (filters.processGroup !== 'all' && record.process_group !== filters.processGroup) {
+                return false;
+            }
+            if (filters.marketRole !== 'all' && record.marketRoleCode !== filters.marketRole) {
+                return false;
+            }
+            return true;
+        });
+        
+        // Get all unique channels
+        const allChannels = new Set<string>();
+        filteredRecords.forEach(record => {
+            if (record.channel) {
+                allChannels.add(record.channel);
+            }
+        });
+        
+        // If no date range provided, all options are enabled
+        if (!dateRange) {
+            return Array.from(allChannels).map(value => ({ value, disabled: false }));
+        }
+        
+        // Filter by date range to find which channels are available
+        const availableChannels = new Set<string>();
+        filteredRecords.forEach(record => {
+            const recordDate = new Date(record.event_timestamp).toISOString().split('T')[0];
+            if (recordDate >= dateRange.startDate && recordDate <= dateRange.endDate) {
+                if (record.channel) {
+                    availableChannels.add(record.channel);
+                }
+            }
+        });
+        
+        // Return all channels with disabled state
+        return Array.from(allChannels).map(value => ({
+            value,
+            disabled: !availableChannels.has(value)
+        }));
+    },
+
+    getMarketRoleOptions: (dateRange?: { startDate: string; endDate: string }) => {
+        const rawData = get()._rawdata;
+        const filters = get().filters;
+        
+        if (!rawData) return [];
+        
+        // Combine all months into a single array
+        let allRecords: UsageDataRecord[] = [];
+        Object.values(rawData).forEach(monthData => {
+            if (Array.isArray(monthData)) {
+                allRecords = allRecords.concat(monthData);
+            }
+        });
+        
+        // Apply only processGroup and channel filters (not marketRole)
+        const filteredRecords = allRecords.filter(record => {
+            if (filters.processGroup !== 'all' && record.process_group !== filters.processGroup) {
+                return false;
+            }
+            if (filters.channel !== 'all' && record.channel !== filters.channel) {
+                return false;
+            }
+            return true;
+        });
+        
+        // Get all unique market roles
+        const allRoles = new Set<string>();
+        filteredRecords.forEach(record => {
+            if (record.marketRoleCode) {
+                allRoles.add(record.marketRoleCode);
+            }
+        });
+        
+        // If no date range provided, all options are enabled
+        if (!dateRange) {
+            return Array.from(allRoles).map(value => ({ value, disabled: false }));
+        }
+        
+        // Filter by date range to find which roles are available
+        const availableRoles = new Set<string>();
+        filteredRecords.forEach(record => {
+            const recordDate = new Date(record.event_timestamp).toISOString().split('T')[0];
+            if (recordDate >= dateRange.startDate && recordDate <= dateRange.endDate) {
+                if (record.marketRoleCode) {
+                    availableRoles.add(record.marketRoleCode);
+                }
+            }
+        });
+        
+        // Return all roles with disabled state
+        return Array.from(allRoles).map(value => ({
+            value,
+            disabled: !availableRoles.has(value)
+        }));
     },
 });
