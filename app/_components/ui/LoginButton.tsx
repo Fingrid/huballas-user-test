@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { useTranslation } from '../lib/stores/localization.store';
+import { useTranslation } from '@/lib/stores/localization.store';
 
 export default function LoginButton() {
   const { t } = useTranslation();

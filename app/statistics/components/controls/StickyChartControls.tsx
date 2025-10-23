@@ -1,10 +1,10 @@
 'use client';
 
-import { cn } from '@/lib/cn';
+import { cn } from '@/lib/utils/cn';
 import { useLocalization } from '@/lib/stores/localization.store';
 import DateRangeFilter from './DateRangeFilter';
 import FilterBar from './FilterBar';
-import type { DateRangeFilter as DateRangeFilterType } from '@/lib/dataProcessing';
+import type { DateRangeFilter as DateRangeFilterType } from '@/lib/utils/dataProcessing';
 import { DateRangeOption } from '@/lib/hooks/useDataAccess';
 
 type SectionType = 'usage' | 'errors' | 'response_times';

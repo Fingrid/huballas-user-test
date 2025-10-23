@@ -2,7 +2,7 @@
  * Utility functions for common chart data transformations
  */
 
-import type { ResponseTimeRecord } from '../lib/types';
+import type { ResponseTimeRecord } from '@/lib/types';
 
 import dayjs from 'dayjs';
 

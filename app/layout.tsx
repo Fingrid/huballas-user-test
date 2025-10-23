@@ -1,9 +1,9 @@
 import './globals.css'
-import TwoLevelNavigation from '../components/TwoLevelNavigation'
+import TwoLevelNavigation from './_components/ui/TwoLevelNavigation'
 import { labGrotesqueWeb } from './_fonts/fonts'
-import { cn } from '../lib/cn'
+import { cn } from '@/lib/utils/cn'
 import { LoadingProvider } from '../lib/contexts/LoadingContext'
-import Footer from '@/components/Footer'
+import Footer from '@/app/_components/ui/Footer'
 
 // Style objects for consistent styling
 const styles = {

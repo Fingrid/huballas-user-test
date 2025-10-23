@@ -1,6 +1,6 @@
 import Papa from 'papaparse';
 import dayjs from 'dayjs';
-import type { ResponseTimeRecord, ErrorRecord, ChannelDescription, MarketRoleDescription, EventDescription, UsageDataRecord, FetchResult } from './types';
+import type { ResponseTimeRecord, ErrorRecord, ChannelDescription, MarketRoleDescription, EventDescription, UsageDataRecord, FetchResult } from '../types';
 
 const dataSets = {
   usageStatistics: 'data_usage_statistics.csv',

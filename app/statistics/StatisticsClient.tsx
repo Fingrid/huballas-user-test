@@ -8,7 +8,7 @@ import {
   useDateRangeCalculation, 
   DateRangeOption
 } from "@/lib/hooks/useDataAccess";
-import type { DateRangeFilter } from "@/lib/dataProcessing";
+import type { DateRangeFilter } from "@/lib/utils/dataProcessing";
 import {
   StatisticsSummary,
   StatisticsHeader,
@@ -16,7 +16,7 @@ import {
   ErrorStatisticsGraphs,
   ResponseTimeStatisticsGraphs,
 } from "./components";
-import { cn } from "@/lib/cn";
+import { cn } from "@/lib/utils/cn";
 
 type UsageStackingType = "channel" | "process_group" | "marketRoleCode";
 type ErrorStackingType = "errortype" | "type";

@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import type { Statistics, DatasetStatistics } from '../utils/chartUtils';
+import type { Statistics, DatasetStatistics } from '@/lib/utils/chartUtils';
 
 interface StatisticsPanelProps {
   title: string;

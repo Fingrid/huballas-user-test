@@ -1,8 +1,8 @@
 "use client";
 
 import React from 'react';
-import { useTranslation, type Locale } from '../lib/stores/localization.store';
-import { cn } from '../lib/cn';
+import { useTranslation, type Locale } from '@/lib/stores/localization.store';
+import { cn } from '@/lib/utils/cn';
 
 export default function LanguageSelector() {
   const { locale, setLocale, isLoading } = useTranslation();

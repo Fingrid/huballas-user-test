@@ -8,7 +8,7 @@ import {
   useDateRangeCalculation, 
   DateRangeOption
 } from "@/lib/hooks/useDataAccess";
-import type { DateRangeFilter } from "@/lib/dataProcessing";
+import type { DateRangeFilter } from "@/lib/utils/dataProcessing";
 import {
   StatisticsSummary,
   UsageStatisticsGraphs,

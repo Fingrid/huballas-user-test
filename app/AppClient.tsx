@@ -6,7 +6,7 @@ import { useCombinedStore } from '../lib/stores';
 import { useLoadingState, useError } from '../lib/contexts/LoadingContext';
 import { getRouteConfig, getDefaultRoute } from '../lib/config/routeConfig';
 import { StoreData } from '../lib/types/pageConfig';
-import ErrorBoundary from '../lib/components/ErrorBoundary';
+import ErrorBoundary from './_components/layout/ErrorBoundary';
 
 // Style objects for consistent styling
 const styles = {

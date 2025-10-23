@@ -1,7 +1,7 @@
 import { StateCreator } from "zustand";
 import dayjs from "dayjs";
 import type { ResponseTimeRecord, DataFetchConfig } from "../types";
-import { fetchResponseTimes } from "../csvUtils";
+import { fetchResponseTimes } from "../utils/csvUtils";
 
 export interface ConfidenceStats {
     date: string;
@@ -118,7 +118,7 @@ export const createMonthlyReportsStore: StateCreator<
                     const csvFetchResponse = await fetchResponseTimes();
                     if (csvFetchResponse.success && csvFetchResponse.data) {
                         // Filter data for the specific month
-                        responseTimeData = csvFetchResponse.data.filter(record => {
+                        responseTimeData = csvFetchResponse.data.filter((record: ResponseTimeRecord) => {
                             const recordMonth = dayjs(record.timestamp).format('YYYY-MM');
                             return recordMonth === month;
                         });
@@ -449,7 +449,7 @@ export const createMonthlyReportsStore: StateCreator<
         
         Object.values(state._rawdata).forEach(monthData => {
             if (monthData) {
-                const filteredData = monthData.filter(record => {
+                const filteredData = monthData.filter((record: ResponseTimeRecord) => {
                     const recordDate = record.timestamp.toISOString().split('T')[0];
                     const isInDateRange = recordDate >= startDate && recordDate <= endDate;
                     
@@ -546,7 +546,7 @@ export const createMonthlyReportsStore: StateCreator<
         
         Object.values(state._rawdata).forEach(monthData => {
             if (monthData) {
-                const filteredData = monthData.filter(record => {
+                const filteredData = monthData.filter((record: ResponseTimeRecord) => {
                     const recordDate = record.timestamp.toISOString().split('T')[0];
                     return recordDate >= startDate && recordDate <= endDate;
                     // Note: No channel filtering here - we want all channels for breakdown

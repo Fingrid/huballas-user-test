@@ -3,7 +3,7 @@
  * Functions for transforming and aggregating data without complex abstractions
  */
 
-import type { UsageDataRecord, ErrorRecord, ResponseTimeRecord } from './types';
+import type { UsageDataRecord, ErrorRecord, ResponseTimeRecord } from '../types';
 
 // Date range interface
 export interface DateRangeFilter {

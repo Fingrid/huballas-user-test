@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { cn } from '@/lib/cn';
+import { cn } from '@/lib/utils/cn';
 import { useLocalization } from '@/lib/stores/localization.store';
 import DateRangeFilter from './DateRangeFilter';
 import { DateRangeOption } from '@/lib/hooks/useDataAccess';

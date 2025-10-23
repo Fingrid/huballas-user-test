@@ -5,14 +5,14 @@
 
 import { useEffect, useMemo, useCallback } from 'react';
 import { useUsageStore, useDictionaryStore, useErrorStore } from '../stores';
-import type { DateRangeFilter } from '../dataProcessing';
+import type { DateRangeFilter } from '../utils/dataProcessing';
 import type { DataFetchConfig } from '../types';
 import { 
   aggregateUsageByField, 
   aggregateUsageByDate, 
   filterUsageByDateRange, 
   getDataDateRange 
-} from '../dataProcessing';
+} from '../utils/dataProcessing';
 
 export type DateRangeOption = '30days' | '60days' | '90days' | 'year' | 'custom';
 

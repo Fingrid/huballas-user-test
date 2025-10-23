@@ -4,7 +4,7 @@ import { useMemo, useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import { useResponseTimeStore, useDictionaryStore } from '@/lib/stores';
 import { useLocalization } from '@/lib/stores/localization.store';
-import { useECharts } from '@/hooks/useECharts';
+import { useECharts } from '@/lib/hooks/useECharts';
 import GroupingSelector from '../controls/GroupingSelector';
 import ResponseTimeBreakdownTable from '../tables/ResponseTimeBreakdownTable';
 

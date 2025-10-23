@@ -1,11 +1,11 @@
 'use client';
 
 import { useLocalization } from '@/lib/stores/localization.store';
-import { cn } from '@/lib/cn';
-import CallToActionLink from '@/components/CallToActionLink';
-import Breadcrumb from '@/components/Breadcrumb';
+import { cn } from '@/lib/utils/cn';
+import CallToActionLink from '@/app/_components/ui/CallToActionLink';
+import Breadcrumb from '@/app/_components/ui/Breadcrumb';
 import StickyChartControls from '../controls/StickyChartControls';
-import type { DateRangeFilter } from '@/lib/dataProcessing';
+import type { DateRangeFilter } from '@/lib/utils/dataProcessing';
 import { DateRangeOption } from '@/lib/hooks/useDataAccess';
 
 type SectionType = 'usage' | 'errors' | 'response_times';

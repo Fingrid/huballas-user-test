@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/lib/cn';
+import { cn } from '@/lib/utils/cn';
 
 export type CalloutBoxVariant = 'info' | 'success' | 'warning' | 'alert';
 

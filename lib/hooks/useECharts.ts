@@ -11,7 +11,7 @@ import {
 } from 'echarts/components';
 import { BarChart, LineChart } from 'echarts/charts';
 import { CanvasRenderer } from 'echarts/renderers';
-import echartsTheme from '../app/echarts.theme.json';
+import echartsTheme from '@/app/echarts.theme.json';
 
 // Register ECharts components
 echarts.use([

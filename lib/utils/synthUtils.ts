@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import type { ErrorRecord, ResponseTimeRecord, UsageDataRecord } from "./types";
+import type { ErrorRecord, ResponseTimeRecord, UsageDataRecord } from "../types";
 
 export function synthesizeUsageData(): UsageDataRecord[] {
   console.log("Synthesizing usage data...");

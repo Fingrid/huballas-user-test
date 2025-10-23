@@ -1,7 +1,7 @@
 'use client';
 
 import { useLocalization } from '@/lib/stores/localization.store';
-import { cn } from '@/lib/cn';
+import { cn } from '@/lib/utils/cn';
 
 interface BreadcrumbProps {
   currentPage: string;

@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { cn } from '@/lib/cn';
+import { cn } from '@/lib/utils/cn';
 import { useLocalization } from '@/lib/stores/localization.store';
-import type { DateRangeFilter as DateRangeFilterType } from '@/lib/dataProcessing';
+import type { DateRangeFilter as DateRangeFilterType } from '@/lib/utils/dataProcessing';
 import FieldGroup from './FieldGroup';
 import { DateRangeOption } from '@/lib/hooks/useDataAccess';
 

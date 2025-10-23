@@ -1,9 +1,9 @@
 'use client';
 
 import { useLocalization } from '@/lib/stores/localization.store';
-import { cn } from '@/lib/cn';
+import { cn } from '@/lib/utils/cn';
 import { useUsageStore, useDictionaryStore } from '@/lib/stores';
-import type { DateRangeFilter as DateRangeFilterType } from '@/lib/dataProcessing';
+import type { DateRangeFilter as DateRangeFilterType } from '@/lib/utils/dataProcessing';
 import FieldGroup from './FieldGroup';
 import DateRangeFilter from './DateRangeFilter';
 import { DateRangeOption } from '@/lib/hooks/useDataAccess';

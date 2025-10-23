@@ -8,4 +8,4 @@ export { routeConfigs, getRouteConfig, getDefaultRoute, validateMonthlyReportsDa
 export { LoadingProvider, useLoadingState, useIsLoading, useError } from '../contexts/LoadingContext';
 
 // Export error boundary and error classes
-export { default as ErrorBoundary, useErrorHandler, DataLoadError, ConfigurationError, ValidationError } from '../components/ErrorBoundary';
+export { default as ErrorBoundary, useErrorHandler, DataLoadError, ConfigurationError, ValidationError } from '@/app/_components/layout/ErrorBoundary';

@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import echartsTheme from "../../../echarts.theme.json";
 import type { UsageDataRecord } from "@/lib/types";
 import { useLocalization } from "@/lib/stores";
-import { useECharts } from "@/hooks/useECharts";
+import { useECharts } from "@/lib/hooks/useECharts";
 
 type StackingType = "channel" | "process_group" | "marketRoleCode";
 

@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import StackedChart from './StackedChart';
 import BreakdownTables from '../tables/BreakdownTables';
 import GroupingSelector from '../controls/GroupingSelector';
-import CalloutBox from '@/components/CalloutBox';
+import CalloutBox from '@/app/_components/ui/CalloutBox';
 import { useUsageStore, useDictionaryStore } from '@/lib/stores';
 import { useLocalization } from '@/lib/stores/localization.store';
 import type { UsageDataRecord } from '@/lib/types';

@@ -1,45 +1,13 @@
 'use client';
 
 import React, { memo } from 'react';
+import ChartSkeleton from '@/app/_components/charts/ChartSkeleton';
+import TableSkeleton from '@/app/_components/charts/TableSkeleton';
 
-// Skeleton loading components for better UX
-export const ChartSkeleton = memo(() => (
-  <div className="animate-pulse" role="status" aria-label="Loading chart">
-    <div className="h-64 bg-gray-200 rounded-md mb-4"></div>
-    <div className="space-y-2">
-      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-    </div>
-    <span className="sr-only">Loading chart data...</span>
-  </div>
-));
+// Re-export skeleton components from their new location
+export { ChartSkeleton, TableSkeleton };
 
-ChartSkeleton.displayName = 'ChartSkeleton';
-
-export const TableSkeleton = memo(() => (
-  <div className="animate-pulse" role="status" aria-label="Loading table">
-    <div className="space-y-4">
-      {/* Table header skeleton */}
-      <div className="grid grid-cols-4 gap-4">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-4 bg-gray-300 rounded"></div>
-        ))}
-      </div>
-      
-      {/* Table rows skeleton */}
-      {Array.from({ length: 5 }).map((_, i) => (
-        <div key={i} className="grid grid-cols-4 gap-4">
-          {Array.from({ length: 4 }).map((_, j) => (
-            <div key={j} className="h-4 bg-gray-200 rounded"></div>
-          ))}
-        </div>
-      ))}
-    </div>
-    <span className="sr-only">Loading table data...</span>
-  </div>
-));
-
-TableSkeleton.displayName = 'TableSkeleton';
+// Keep remaining components here
 
 export const CardSkeleton = memo(() => (
   <div className="animate-pulse bg-white border border-gray-200 p-6" role="status" aria-label="Loading card">

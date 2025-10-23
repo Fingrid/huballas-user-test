@@ -2,8 +2,8 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { cn } from '../lib/cn';
-import { useTranslation } from '../lib/stores/localization.store';
+import { cn } from '@/lib/utils/cn';
+import { useTranslation } from '@/lib/stores/localization.store';
 
 // Style objects for consistent styling
 const styles = {

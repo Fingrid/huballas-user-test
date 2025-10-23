@@ -1,7 +1,7 @@
 import { StateCreator } from "zustand";
 import dayjs from "dayjs";
 import type { ErrorRecord, DataFetchConfig } from "../types";
-import { fetchErrorStatistics } from "../csvUtils";
+import { fetchErrorStatistics } from "../utils/csvUtils";
 
 export interface ErrorStats {
     date: string;
@@ -84,7 +84,7 @@ export const createErrorStatisticsStore: StateCreator<
                     const csvFetchResponse = await fetchErrorStatistics();
                     if (csvFetchResponse.success && csvFetchResponse.data) {
                         // Filter data for the specific month
-                        errorData = csvFetchResponse.data.filter(record => {
+                        errorData = csvFetchResponse.data.filter((record: ErrorRecord) => {
                             const recordMonth = dayjs(record.event_timestamp).format('YYYY-MM');
                             return recordMonth === month;
                         });

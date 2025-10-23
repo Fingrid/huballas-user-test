@@ -1,7 +1,7 @@
 'use client';
 
 import React, { ErrorInfo, ReactNode } from 'react';
-import { ErrorState as ErrorStateType } from '../types/pageConfig';
+import { ErrorState as ErrorStateType } from '@/lib/types/pageConfig';
 
 interface ErrorBoundaryState {
   hasError: boolean;

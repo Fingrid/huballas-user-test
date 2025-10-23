@@ -4,7 +4,7 @@ import {
     fetchChannelDescriptions,
     fetchMarketRoleDescriptions,
     fetchEventDescriptions
-} from "../csvUtils";
+} from "../utils/csvUtils";
 
 // Dictionary item interfaces based on actual CSV data
 export interface DictionaryItem {

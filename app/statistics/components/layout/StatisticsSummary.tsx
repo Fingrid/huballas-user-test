@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useUsageStore, useErrorStore, useResponseTimeStore } from '@/lib/stores';
 import { useLocalization } from '@/lib/stores/localization.store';
-import { useECharts } from '@/hooks/useECharts';
-import { cn } from '@/lib/cn';
-import CallToActionLink from '@/components/CallToActionLink';
+import { useECharts } from '@/lib/hooks/useECharts';
+import { cn } from '@/lib/utils/cn';
+import CallToActionLink from '@/app/_components/ui/CallToActionLink';
 import type { UsageDataRecord, ErrorRecord, ResponseTimeRecord } from '@/lib/types';
 
 interface StatisticsSummaryProps {
