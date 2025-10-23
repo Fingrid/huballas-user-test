@@ -140,15 +140,18 @@ export function useChartContainer(
 ) {
   const chartRef = useRef<HTMLDivElement | null>(null);
   
-  const ChartContainer = React.useMemo(() => 
-    ({}: { children?: React.ReactNode }) => (
+  const ChartContainer = React.useMemo(() => {
+    const Container = ({}: { children?: React.ReactNode }) => (
       <ChartWithRef
         loading={loading}
         error={error}
         chartRef={chartRef}
         {...options}
       />
-    ), [loading, error, options]);
+    );
+    Container.displayName = 'ChartContainer';
+    return Container;
+  }, [loading, error, options]);
 
   return { chartRef, ChartContainer };
 }

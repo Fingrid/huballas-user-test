@@ -18,9 +18,10 @@ import {
 type StackingType = 'all' | "channel" | "process_group" | "marketRoleCode";
 type GraphStackingType = "channel" | "process_group" | "marketRoleCode";
 
-interface UsageClientProps {}
+// Empty props interface - no props needed for this component
+type UsageClientProps = Record<string, never>;
 
-export default function UsageClient({}: UsageClientProps) {
+export default function UsageClient(_props: UsageClientProps) {
   const { t } = useLocalization();
   const { measureInteraction } = usePerformanceMeasurement("UsagePage");
 
@@ -50,13 +51,21 @@ export default function UsageClient({}: UsageClientProps) {
   // Header ref
   const headerRef = useRef<HTMLDivElement>(null);
 
-  // Update custom date range when available data range changes
-  useEffect(() => {
+  // Calculate custom date range based on available data range
+  // Using useMemo instead of useEffect to avoid setState in effect
+  const calculatedDateRange = useMemo(() => {
     if (availableDataRange) {
-      const newDateRange = calculateRange(selectedRange, selectedRange === "custom" ? customDateRange : undefined, availableDataRange || undefined);
-      setCustomDateRange(newDateRange);
+      return calculateRange(selectedRange, selectedRange === "custom" ? customDateRange : undefined, availableDataRange || undefined);
     }
-  }, [availableDataRange, calculateRange]);
+    return customDateRange;
+  }, [availableDataRange, calculateRange, selectedRange, customDateRange]);
+
+  // Update custom date range when calculation changes
+  useEffect(() => {
+    if (calculatedDateRange !== customDateRange) {
+      setCustomDateRange(calculatedDateRange);
+    }
+  }, [calculatedDateRange]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleRangeChange = (range: DateRangeOption) => {
     measureInteraction("date-range-change");

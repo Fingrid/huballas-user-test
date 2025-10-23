@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useLocalization } from '@/lib/stores/localization.store';
 import { cn } from '@/lib/utils/cn';
 
@@ -13,7 +14,7 @@ export default function Breadcrumb({ currentPage, className }: BreadcrumbProps) 
 
   return (
     <nav aria-label="Breadcrumb" className={cn('breadcrumb-container', className)}>
-      <a href="/" className="breadcrumb-link">
+      <Link href="/" className="breadcrumb-link">
         <svg 
           className="breadcrumb-home-icon" 
           viewBox="0 0 16 16" 
@@ -37,13 +38,13 @@ export default function Breadcrumb({ currentPage, className }: BreadcrumbProps) 
           />
         </svg>
         {t('navigation.breadcrumb.home')}
-      </a>
+      </Link>
       
       <span className="breadcrumb-separator" aria-hidden="true">&gt;</span>
       
-      <a href="#" className="breadcrumb-link">
+      <Link href="#" className="breadcrumb-link">
         {t('navigation.breadcrumb.services')}
-      </a>
+      </Link>
       
       <span className="breadcrumb-separator" aria-hidden="true">&gt;</span>
       

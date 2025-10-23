@@ -22,9 +22,10 @@ type UsageStackingType = "channel" | "process_group" | "marketRoleCode";
 type ErrorStackingType = "errortype" | "type";
 type SectionType = "usage" | "errors" | "response_times";
 
-interface StatisticsClientProps {}
+// Empty props interface - no props needed for this component
+type StatisticsClientProps = Record<string, never>;
 
-export default function StatisticsClient({}: StatisticsClientProps) {
+export default function StatisticsClient(_props: StatisticsClientProps) {
   const { t } = useLocalization();
   const { measureInteraction } = usePerformanceMeasurement("StatisticsPage");
 
@@ -64,14 +65,21 @@ export default function StatisticsClient({}: StatisticsClientProps) {
     activeSectionRef.current = activeSection;
   }, [activeSection]);
 
-
-  // Update custom date range when available data range changes
-  useEffect(() => {
+  // Calculate custom date range based on available data range
+  // Using useMemo instead of useEffect to avoid setState in effect
+  const calculatedDateRange = useMemo(() => {
     if (availableDataRange) {
-      const newDateRange = calculateRange(selectedRange, selectedRange === "custom" ? customDateRange : undefined, availableDataRange || undefined);
-      setCustomDateRange(newDateRange);
+      return calculateRange(selectedRange, selectedRange === "custom" ? customDateRange : undefined, availableDataRange || undefined);
     }
-  }, [availableDataRange, calculateRange]); // Don't include selectedRange and customDateRange to avoid infinite loop
+    return customDateRange;
+  }, [availableDataRange, calculateRange, selectedRange, customDateRange]);
+
+  // Update custom date range when calculation changes
+  useEffect(() => {
+    if (calculatedDateRange !== customDateRange) {
+      setCustomDateRange(calculatedDateRange);
+    }
+  }, [calculatedDateRange]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Observe header to show/hide sticky controls
   useEffect(() => {

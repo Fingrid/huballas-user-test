@@ -10,6 +10,58 @@ import { DateRangeOption } from '@/lib/hooks/useDataAccess';
 type SectionType = 'usage' | 'errors' | 'response_times';
 type StackingType = 'all' | 'channel' | 'process_group' | 'marketRoleCode';
 
+// Section selector component - extracted to prevent recreation on each render
+interface SectionSelectorProps {
+  activeSection: SectionType;
+  onSectionChange: (section: SectionType) => void;
+  t: (key: string) => string;
+}
+
+function SectionSelector({ activeSection, onSectionChange, t }: SectionSelectorProps) {
+  return (
+    <div className="section-selector-container">
+      <label className="form-label">
+        {t('statistics.controls.statistics')}
+      </label>
+      <div className="section-selector-buttons">
+        <button
+          onClick={() => onSectionChange('usage')}
+          className={cn(
+            "section-selector-button",
+            activeSection === 'usage'
+              ? "section-selector-button-active"
+              : "section-selector-button-inactive"
+          )}
+        >
+          {t('statistics.sections.usage')}
+        </button>
+        <button
+          onClick={() => onSectionChange('errors')}
+          className={cn(
+            "section-selector-button section-selector-button-separator",
+            activeSection === 'errors'
+              ? "section-selector-button-active"
+              : "section-selector-button-inactive"
+          )}
+        >
+          {t('statistics.sections.errors')}
+        </button>
+        <button
+          onClick={() => onSectionChange('response_times')}
+          className={cn(
+            "section-selector-button section-selector-button-separator",
+            activeSection === 'response_times'
+              ? "section-selector-button-active"
+              : "section-selector-button-inactive"
+          )}
+        >
+          {t('monthlyReports.responseTimes')}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 interface StickyChartControlsProps {
   activeSection: SectionType;
   onSectionChange: (section: SectionType) => void;
@@ -61,57 +113,13 @@ export default function StickyChartControls({
 }: StickyChartControlsProps) {
   const { t } = useLocalization();
 
-  // Section selector component
-  const SectionSelector = () => (
-    <div className="section-selector-container">
-      <label className="form-label">
-        {t('statistics.controls.statistics')}
-      </label>
-      <div className="section-selector-buttons">
-        <button
-          onClick={() => onSectionChange('usage')}
-          className={cn(
-            "section-selector-button",
-            activeSection === 'usage'
-              ? "section-selector-button-active"
-              : "section-selector-button-inactive"
-          )}
-        >
-          {t('statistics.sections.usage')}
-        </button>
-        <button
-          onClick={() => onSectionChange('errors')}
-          className={cn(
-            "section-selector-button section-selector-button-separator",
-            activeSection === 'errors'
-              ? "section-selector-button-active"
-              : "section-selector-button-inactive"
-          )}
-        >
-          {t('statistics.sections.errors')}
-        </button>
-        <button
-          onClick={() => onSectionChange('response_times')}
-          className={cn(
-            "section-selector-button section-selector-button-separator",
-            activeSection === 'response_times'
-              ? "section-selector-button-active"
-              : "section-selector-button-inactive"
-          )}
-        >
-          {t('monthlyReports.responseTimes')}
-        </button>
-      </div>
-    </div>
-  );
-
   // Inline mode: 2-row layout for header (section on top, date on bottom)
   if (inlineMode) {
     return (
       <div className="sticky-controls-inline-container">
         {displaySectionSelect && (
           <div className="sticky-controls-inline-section">
-            <SectionSelector />
+            <SectionSelector activeSection={activeSection} onSectionChange={onSectionChange} t={t} />
           </div>
         )}
         {displayDateSelect && (
@@ -139,7 +147,7 @@ export default function StickyChartControls({
             {/* Section Toggle */}
             {displaySectionSelect && (
               <div className="sticky-controls-row-section">
-                <SectionSelector />
+                <SectionSelector activeSection={activeSection} onSectionChange={onSectionChange} t={t} />
               </div>
             )}
 

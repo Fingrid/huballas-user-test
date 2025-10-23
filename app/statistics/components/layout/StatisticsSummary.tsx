@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useUsageStore, useErrorStore, useResponseTimeStore } from '@/lib/stores';
 import { useLocalization } from '@/lib/stores/localization.store';
 import { useECharts } from '@/lib/hooks/useECharts';
@@ -103,12 +103,12 @@ export default function StatisticsSummary({ onSectionClick, className }: Statist
   // Always use current year (2025)
   const currentYear = new Date().getFullYear();
 
-  // Get raw data from stores
-  const usageRawData = usageStore._rawdata || {};
-  const errorRawData = errorStore._rawdata || {};
-  const responseRawData = responseStore._rawdata || {};
-
-  useEffect(() => {
+  // Calculate statistics using useMemo to avoid setState in effect
+  const calculatedStats = useMemo(() => {
+    // Get raw data from stores
+    const usageRawData = usageStore._rawdata || {};
+    const errorRawData = errorStore._rawdata || {};
+    const responseRawData = responseStore._rawdata || {};
     if (Object.keys(usageRawData).length > 0 && 
         Object.keys(errorRawData).length > 0 && 
         Object.keys(responseRawData).length > 0) {
@@ -161,17 +161,29 @@ export default function StatisticsSummary({ onSectionClick, className }: Statist
         ? ((totalEvents - prevYearTotal) / prevYearTotal) * 100 
         : 0;
 
-      setStats({
+      return {
         totalEvents,
         totalErrors,
         avgResponseTime,
         eventsGrowth
-      });
+      };
     }
-  }, [usageRawData, errorRawData, responseRawData, currentYear]);
+    return {
+      totalEvents: 0,
+      totalErrors: 0,
+      avgResponseTime: 0,
+      eventsGrowth: 0
+    };
+  }, [usageStore._rawdata, errorStore._rawdata, responseStore._rawdata, currentYear]);
+
+  // Update stats when calculation changes
+  useEffect(() => {
+    setStats(calculatedStats);
+  }, [calculatedStats]);
 
   // Response time chart
   const responseChartRef = useECharts((chart) => {
+    const responseRawData = responseStore._rawdata || {};
     if (Object.keys(responseRawData).length === 0) return;
 
     // Get response data for current year, limited to last 30 entries
@@ -179,7 +191,7 @@ export default function StatisticsSummary({ onSectionClick, className }: Statist
     Object.entries(responseRawData).forEach(([month, data]) => {
       const yearFromMonth = month.split('-')[0];
       if (yearFromMonth === currentYear.toString()) {
-        yearResponseData.push(...data);
+        yearResponseData.push(...(data as ResponseTimeRecord[]));
       }
     });
 
@@ -233,7 +245,7 @@ export default function StatisticsSummary({ onSectionClick, className }: Statist
         }
       }]
     });
-  }, { dependencies: [responseRawData, currentYear] });
+  }, { dependencies: [responseStore._rawdata, currentYear] });
 
   const isLoading = usageStore.loading || errorStore.loading || responseStore.loading;
 
