@@ -56,17 +56,7 @@ export default function UsageStatisticsGraphs({ stackingType, activeDateRange, o
   return (
     <div className="space-y-6">
       {/* Main Chart */}
-      <div className="bg-[var(--color-background-level-1)] relative">
-        {/* Grouping Selector in top right corner */}
-        <div className="absolute top-4 right-4 z-10">
-          <GroupingSelector
-            value={stackingType}
-            onChange={(value) => onStackingChange(value as StackingType)}
-            options={groupingOptions}
-            label={t('statistics.controls.grouping')}
-          />
-        </div>
-        
+      <div className="bg-[var(--color-background-level-1)] relative">        
         <StackedChart
           stackingType={stackingType}
           getChannelDescription={dictionaryStore.getChannelDescription}
