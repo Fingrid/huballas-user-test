@@ -22,7 +22,18 @@
       "join": "Liity Datahubiin",
       "contact": "Yhteydenotot ja ilmoitukset"
     },
-    "moreInfo": "Lisätietoja datasta"
+    "breadcrumb": {
+      "home": "Etusivu",
+      "services": "Palvelut"
+    },
+    "moreInfo": "Lisätietoja datasta",
+    "footer": {
+      "privacyPolicy": "Tietosuojaseloste",
+      "accessibilityStatement": "Saavutettavuusseloste",
+      "termsOfUse": "Käyttöehdot",
+      "cookies": "Evästeet",
+      "feedback": "Palaute"
+    }
   },
   "common": {
     "loading": "Ladataan...",
@@ -73,7 +84,7 @@
   },
   "statistics": {
     "pageTitle": "Datahubin tietojärjestelmän tila",
-    "pageDescription": "Datahub yhdistää tiedot Suomen 3,9 miljoonan sähkönkäyttöpisteen kulutuksesta samaan järjestelmään.",
+    "pageDescription": "Intro hubaLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
     "chartsAndFilters": "Kaaviot ja suodattimet",
     "breakdownTitle": "Tilastojen erittely",
     "average": "Keskiarvo",
@@ -88,7 +99,28 @@
       "totalEvents": "Tapahtumamäärät",
       "totalEventsDescription": "Ketä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiäKetä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiäKetä ne on ja mitä tarkoittaa. Tähän kohtaan tulee avaavaa selitys tekstiä",
       "totalErrors": "Virheitä yhteensä",
-      "avgResponseTime": "Keskimääräinen vasteaika"
+      "avgResponseTime": "Keskimääräinen vasteaika",
+      "events": {
+        "title": "Tapahtumat",
+        "unit": "kappaletta",
+        "comparedToPreviousYear": "Suhteessa edelliseen vuoteen",
+        "monthlyAverage": "Kuukauden keskiarvo",
+        "eventsPerMonth": "tapahtumaa/kuukausi",
+        "viewMore": "Tarkastele tarkemmin"
+      },
+      "errorRate": {
+        "title": "Virheiden osuus",
+        "unit": "kaikista tapahtumista",
+        "comparedToPreviousYear": "Suhteessa edelliseen vuoteen",
+        "technicalErrors": "Teknisiä virheitä",
+        "validationErrors": "Validointi virheitä",
+        "pieces": "kpl",
+        "viewMore": "Tarkastele tarkemmin"
+      },
+      "responseTimesYearToDate": {
+        "title": "Vasteajat vuoden alusta",
+        "viewMore": "Tarkastele tarkemmin"
+      }
     },
     "pageExtraInfo": {
       "title": "Lisätietoja tilastoista",
@@ -97,6 +129,10 @@
     "dailyEvents": {
       "title": "Tapahtumamäärät",
       "description": "Tässä osiossa näytetään päivittäiset tapahtumat valitulta aikaväliltä. Voit tarkastella tapahtumien jakautumista eri kanavien, prosessiryhmien ja markkinaroolien mukaan."
+    },
+    "calloutBox": {
+      "timelineTitle": "Näin käytät timeline - ominaisuutta",
+      "timelineDescription": "Tähän kuvaus siitä miten käyttäjä pystyy käyttämään timelinea."
     },
     "dateRange": {
       "label": "Aikaväli:",

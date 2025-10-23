@@ -3,7 +3,9 @@
 import { useLocalization } from '@/lib/stores/localization.store';
 import { cn } from '@/lib/cn';
 import type { DateRangeFilter as DateRangeFilterType } from '@/lib/dataProcessing';
-import type { DateRangeOption } from './DateRangeFilter';
+import FieldGroup from './FieldGroup';
+import DateRangeFilter from './DateRangeFilter';
+import { DateRangeOption } from '@/lib/hooks/useDataAccess';
 
 type StackingType = 'all' | 'channel' | 'process_group' | 'marketRoleCode';
 
@@ -72,10 +74,7 @@ export default function FilterBar({
       {/* Grouping and Date controls row */}
       <div className="flex justify-between items-end gap-8">
         {/* Grouping controls - Left aligned */}
-        <div className={styles.inputGroup}>
-          <label className={styles.label}>
-            {t('statistics.controls.groupBy')}
-          </label>
+        <FieldGroup label={t('statistics.controls.groupBy')}>
           <div className="flex outline-1 outline-offset-[-1px] outline-slate-500 overflow-hidden h-[34px]">
             <button
               onClick={() => onStackingChange('all')}
@@ -122,106 +121,55 @@ export default function FilterBar({
               {t('statistics.grouping.marketRoles')}
             </button>
           </div>
-        </div>
+        </FieldGroup>
 
         {/* Date Range Controls - Right aligned */}
-        <div className="flex items-end gap-2">
-          {/* Quick select dropdown */}
-          <div className={cn(styles.inputGroup, "w-48")}>
-            <label className={styles.label}>
-              {t('statistics.controls.quickSelect')}
-            </label>
-            <select
-              value={selectedRange}
-              onChange={(e) => onRangeChange(e.target.value as DateRangeOption)}
-              className={cn(styles.select, "h-[34px]")}
-            >
-              <option value="30days">30 {t('common.days')}</option>
-              <option value="90days">90 {t('common.days')}</option>
-              <option value="year">1 {t('common.year')}</option>
-              <option value="custom">{t('statistics.controls.custom')}</option>
-            </select>
-          </div>
-          
-          {/* Start date */}
-          <div className={cn(styles.inputGroup, "w-36")}>
-            <label className={styles.label}>
-              {t('statistics.controls.startDate')}
-            </label>
-            <input
-              type="date"
-              value={dateRange.startDate}
-              onChange={(e) => onDateRangeChange({ ...dateRange, startDate: e.target.value })}
-              className={cn(styles.dateInput, "h-[34px]")}
-            />
-          </div>
-          
-          {/* Separator */}
-          <div className={styles.dateSeparator}>
-            -
-          </div>
-          
-          {/* End date */}
-          <div className={cn(styles.inputGroup, "w-36")}>
-            <label className={styles.label}>
-              {t('statistics.controls.endDate')}
-            </label>
-            <input
-              type="date"
-              value={dateRange.endDate}
-              onChange={(e) => onDateRangeChange({ ...dateRange, endDate: e.target.value })}
-              className={cn(styles.dateInput, "h-[34px]")}
-            />
-          </div>
-        </div>
+        <DateRangeFilter
+          selectedRange={selectedRange}
+          dateRange={dateRange}
+          onRangeChange={onRangeChange}
+          onDateRangeChange={onDateRangeChange}
+          availableDataRange={availableDataRange}
+        />
       </div>
 
       {/* Dropdown filters */}
       <div className="flex items-end gap-8 overflow-x-auto">
         {/* Process dropdown */}
-        <div className={cn(styles.inputGroup, "flex-1 min-w-[12rem]")}>
-          <label className={styles.label}>
-            {t('statistics.filters.mainProcess')}
-          </label>
+        <FieldGroup label={t('statistics.filters.mainProcess')} className="flex-1 min-w-[12rem]">
           <select
             value={selectedProcess}
             onChange={(e) => onProcessChange?.(e.target.value)}
-            className={cn(styles.select, "h-[34px]")}
+            className={cn(styles.select, "h-[34px] w-full")}
           >
             <option value="all">{t('common.all')}</option>
             {/* Add more options as needed */}
           </select>
-        </div>
+        </FieldGroup>
 
         {/* Channel dropdown */}
-        <div className={cn(styles.inputGroup, "flex-1 min-w-[12rem]")}>
-          <label className={styles.label}>
-            {t('statistics.filters.channel')}
-          </label>
+        <FieldGroup label={t('statistics.filters.channel')} className="flex-1 min-w-[12rem]">
           <select
             value={selectedChannel}
             onChange={(e) => onChannelChange?.(e.target.value)}
-            className={cn(styles.select, "h-[34px]")}
+            className={cn(styles.select, "h-[34px] w-full")}
           >
             <option value="all">{t('common.all')}</option>
             {/* Add more options as needed */}
           </select>
-        </div>
+        </FieldGroup>
 
         {/* Role dropdown */}
-        <div className={cn(styles.inputGroup, "flex-1 min-w-[12rem]")}>
-          <label className={styles.label}>
-            {t('statistics.filters.marketRole')}
-          </label>
+        <FieldGroup label={t('statistics.filters.marketRole')} className="flex-1 min-w-[12rem]">
           <select
             value={selectedRole}
             onChange={(e) => onRoleChange?.(e.target.value)}
-            className={cn(styles.select, "h-[34px]")}
+            className={cn(styles.select, "h-[34px] w-full")}
           >
             <option value="all">{t('common.all')}</option>
             {/* Add more options as needed */}
           </select>
-        </div>
+        </FieldGroup>
 
         {/* Clear filters button */}
         <button

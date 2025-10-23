@@ -3,15 +3,14 @@ import TwoLevelNavigation from '../components/TwoLevelNavigation'
 import { labGrotesqueWeb } from './_fonts/fonts'
 import { cn } from '../lib/cn'
 import { LoadingProvider } from '../lib/contexts/LoadingContext'
+import Footer from '@/components/Footer'
 
 // Style objects for consistent styling
 const styles = {
   body: 'app-body',
   layoutContainer: 'flex flex-col min-h-screen',
+  header: 'app-header',
   main: 'app-main',
-  footer: 'app-footer',
-  footerContent: cn('content-container', 'app-footer-content'),
-  footerGrid: 'app-footer-grid'
 };
 
 export default function RootLayout({
@@ -23,7 +22,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={cn(`${labGrotesqueWeb.variable}`, styles.body)}>
         <div className={styles.layoutContainer}>
-          <TwoLevelNavigation />
+          <header className={styles.header}>
+            <TwoLevelNavigation />
+          </header>
 
           <main className={styles.main}>
             <LoadingProvider>
@@ -31,13 +32,7 @@ export default function RootLayout({
             </LoadingProvider>
           </main>
 
-          <footer className={styles.footer}>
-            <div className={styles.footerContent}>
-              <div className={styles.footerGrid}>
-
-              </div>
-            </div>
-          </footer>
+          <Footer />
         </div>
       </body>
     </html>

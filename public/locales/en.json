@@ -22,7 +22,18 @@
       "join": "Join Datahub",
       "contact": "Contact and Notifications"
     },
-    "moreInfo": "More information about the data"
+    "breadcrumb": {
+      "home": "Home",
+      "services": "Services"
+    },
+    "moreInfo": "More information about the data",
+    "footer": {
+      "privacyPolicy": "Privacy Policy",
+      "accessibilityStatement": "Accessibility Statement",
+      "termsOfUse": "Terms of Use",
+      "cookies": "Cookies",
+      "feedback": "Feedback"
+    }
   },
   "common": {
     "loading": "Loading...",
@@ -88,7 +99,28 @@
       "totalEvents": "Total events",
       "totalEventsDescription": "Comprehensive overview of all events processed through the system",
       "totalErrors": "Total errors",
-      "avgResponseTime": "Average response time"
+      "avgResponseTime": "Average response time",
+      "events": {
+        "title": "Events",
+        "unit": "pieces",
+        "comparedToPreviousYear": "Compared to previous year",
+        "monthlyAverage": "Monthly average",
+        "eventsPerMonth": "events/month",
+        "viewMore": "View more"
+      },
+      "errorRate": {
+        "title": "Error Rate",
+        "unit": "of all events",
+        "comparedToPreviousYear": "Compared to previous year",
+        "technicalErrors": "Technical errors",
+        "validationErrors": "Validation errors",
+        "pieces": "pcs",
+        "viewMore": "View more"
+      },
+      "responseTimesYearToDate": {
+        "title": "Response Times Year to Date",
+        "viewMore": "View more"
+      }
     },
     "pageExtraInfo": {
       "title": "Additional Statistics Information",
@@ -97,6 +129,10 @@
     "dailyEvents": {
       "title": "Daily Events",
       "description": "This section shows daily events for the selected time period. You can examine event distribution across different channels, process groups, and market roles."
+    },
+    "calloutBox": {
+      "timelineTitle": "How to use the timeline feature",
+      "timelineDescription": "Here is a description of how users can use the timeline."
     },
     "dateRange": {
       "label": "Time range:",

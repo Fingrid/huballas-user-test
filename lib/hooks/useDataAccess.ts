@@ -14,6 +14,8 @@ import {
   getDataDateRange 
 } from '../dataProcessing';
 
+export type DateRangeOption = '30days' | '60days' | '90days' | 'year' | 'custom';
+
 // Usage data hook with computed properties
 export function useUsageData(dateRange?: DateRangeFilter) {
   const usageStore = useUsageStore();
@@ -151,7 +153,7 @@ export function useLoadingState() {
 // Date range calculation hook
 export function useDateRangeCalculation() {
   const calculateDateRange = useCallback((
-    option: 'custom' | '30days' | '60days' | '90days',
+    option: DateRangeOption,
     customRange?: DateRangeFilter,
     availableDataRange?: DateRangeFilter
   ): DateRangeFilter => {
@@ -166,6 +168,7 @@ export function useDateRangeCalculation() {
       "30days": 30,
       "60days": 60,
       "90days": 90,
+      "year": 365,
       custom: 90, // fallback
     };
 

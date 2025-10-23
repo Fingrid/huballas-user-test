@@ -5,6 +5,7 @@ import { useUsageStore, useErrorStore, useResponseTimeStore } from '@/lib/stores
 import { useLocalization } from '@/lib/stores/localization.store';
 import { useECharts } from '@/hooks/useECharts';
 import { cn } from '@/lib/cn';
+import CallToActionLink from '@/components/CallToActionLink';
 import type { UsageDataRecord, ErrorRecord, ResponseTimeRecord } from '@/lib/types';
 
 interface StatisticsSummaryProps {
@@ -16,22 +17,75 @@ interface StatisticsSummaryProps {
 const styles = {
   container: 'stats-summary-container',
   box: 'stats-summary-box',
+  boxHeader: 'stats-summary-box-header',
+  boxContent: 'stats-summary-box-content',
+  boxSpacer: 'stats-summary-box-spacer',
   boxResponseTime: 'stats-summary-box-response-time',
   title: 'stats-summary-title',
   loading: 'stats-summary-loading',
   value: 'stats-summary-value',
   unit: 'stats-summary-unit',
   label: 'stats-summary-label',
+  labelBadgeRow: 'stats-summary-label-badge-row',
   badge: 'stats-summary-badge',
   badgeSuccess: 'stats-summary-badge-success',
   badgeError: 'stats-summary-badge-error',
   dividerSection: 'stats-summary-divider-section',
   multiSection: 'stats-summary-multi-section',
-  viewMore: 'stats-summary-view-more',
   chartContainer: 'stats-summary-chart-container',
   chartWrapper: 'stats-summary-chart-wrapper',
   chart: 'stats-summary-chart',
 };
+
+// Internal component for badge with label
+interface LabelWithBadgeProps {
+  label: string;
+  badgeValue: string;
+  badgeType: 'success' | 'error';
+}
+
+function LabelWithBadge({ label, badgeValue, badgeType }: LabelWithBadgeProps) {
+  return (
+    <div className={cn(styles.labelBadgeRow)}>
+      <div className={cn(styles.label)}>{label}</div>
+      <div className={cn(styles.badge, badgeType === 'success' ? styles.badgeSuccess : styles.badgeError)}>
+        <span>{badgeValue}</span>
+      </div>
+    </div>
+  );
+}
+
+// Internal component for divider section with text
+interface DividerSectionProps {
+  children: React.ReactNode;
+}
+
+function DividerSection({ children }: DividerSectionProps) {
+  return (
+    <div className={cn(styles.dividerSection)}>
+      <p>{children}</p>
+    </div>
+  );
+}
+
+// Internal component for multi-section content
+interface MultiSectionProps {
+  items: Array<{ label: string; value: string }>;
+}
+
+function MultiSection({ items }: MultiSectionProps) {
+  return (
+    <div className={cn(styles.multiSection)}>
+      {items.map((item, index) => (
+        <div key={index}>
+          <p>
+            {item.label} <span>{item.value}</span>
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function StatisticsSummary({ onSectionClick, className }: StatisticsSummaryProps) {
   const { t } = useLocalization();
@@ -193,129 +247,146 @@ export default function StatisticsSummary({ onSectionClick, className }: Statist
     <div className={cn(styles.container, className)}>
       {/* Events Box */}
       <div className={cn(styles.box)}>
-        <h3 className={cn(styles.title)}>
-          Tapahtumat
-        </h3>
-        
         {isLoading ? (
           <div className={cn(styles.loading)}>
             {t('statistics.loading')}
           </div>
         ) : (
           <>
-            <div className={cn(styles.value)}>
-              {stats.totalEvents.toLocaleString('fi-FI')}
-            </div>
-            <div className={cn(styles.unit)}>
-              kappaletta
-            </div>
-            
-            <div className={cn(styles.label)}>
-              Suhteessa edelliseen vuoteen
-            </div>
-            
-            <div className="mb-4">
-              <div className={cn(styles.badge, styles.badgeSuccess)}>
-                <span>
-                  + {Math.abs(stats.eventsGrowth).toFixed(1)}%
-                </span>
+            {/* Header */}
+            <div className={cn(styles.boxHeader)}>
+              <h3 className={cn(styles.title)}>
+                {t('statistics.summary.events.title')}
+              </h3>
+              <div className={cn(styles.value)}>
+                {stats.totalEvents.toLocaleString('fi-FI')}
+              </div>
+              <div className={cn(styles.unit)}>
+                {t('statistics.summary.events.unit')}
               </div>
             </div>
             
-            <div className={cn(styles.dividerSection)}>
-              <p>
-                Kuukauden keskiarvo <span>3500</span> tapahtumaa/kuukausi
-              </p>
+            {/* Content */}
+            <div className={cn(styles.boxContent)}>
+              <LabelWithBadge
+                label={t('statistics.summary.events.comparedToPreviousYear')}
+                badgeValue={`+ ${Math.abs(stats.eventsGrowth).toFixed(1)}%`}
+                badgeType="success"
+              />
+              
+              <DividerSection>
+                {t('statistics.summary.events.monthlyAverage')} <span>3500</span> {t('statistics.summary.events.eventsPerMonth')}
+              </DividerSection>
             </div>
             
-            <button 
+            {/* Spacer */}
+            <div className={cn(styles.boxSpacer)} />
+            
+            {/* Call to Action */}
+            <CallToActionLink
+              as="button"
               onClick={() => handleViewMore('usage')}
-              className={cn(styles.viewMore)}
+              className="stats-summary-view-more"
             >
-              Tarkastele tarkemmin <span>→</span>
-            </button>
+              {t('statistics.summary.events.viewMore')}
+            </CallToActionLink>
           </>
         )}
       </div>
 
       {/* Errors Box */}
       <div className={cn(styles.box)}>
-        <h3 className={cn(styles.title)}>
-          Virheiden osuus
-        </h3>
-        
         {isLoading ? (
           <div className={cn(styles.loading)}>
             {t('statistics.loading')}
           </div>
         ) : (
           <>
-            <div className={cn(styles.value)}>
-              1,3 %
-            </div>
-            <div className={cn(styles.unit)}>
-              kaikista tapahtumista
-            </div>
-            
-            <div className={cn(styles.label)}>
-              Suhteessa edelliseen vuoteen
-            </div>
-            
-            <div className="mb-4">
-              <div className={cn(styles.badge, styles.badgeError)}>
-                <span>
-                  + 2%
-                </span>
+            {/* Header */}
+            <div className={cn(styles.boxHeader)}>
+              <h3 className={cn(styles.title)}>
+                {t('statistics.summary.errorRate.title')}
+              </h3>
+              <div className={cn(styles.value)}>
+                1,3 %
+              </div>
+              <div className={cn(styles.unit)}>
+                {t('statistics.summary.errorRate.unit')}
               </div>
             </div>
             
-            <div className={cn(styles.multiSection)}>
-              <div>
-                <p>
-                  Teknisiä virheitä <span>4000 kpl</span>
-                </p>
-              </div>
-              <div>
-                <p>
-                  Validointi virheitä <span>1200 kpl</span>
-                </p>
-              </div>
+            {/* Content */}
+            <div className={cn(styles.boxContent)}>
+              <LabelWithBadge
+                label={t('statistics.summary.errorRate.comparedToPreviousYear')}
+                badgeValue="+ 2%"
+                badgeType="error"
+              />
+              
+              <MultiSection
+                items={[
+                  { 
+                    label: t('statistics.summary.errorRate.technicalErrors'), 
+                    value: `4000 ${t('statistics.summary.errorRate.pieces')}` 
+                  },
+                  { 
+                    label: t('statistics.summary.errorRate.validationErrors'), 
+                    value: `1200 ${t('statistics.summary.errorRate.pieces')}` 
+                  },
+                ]}
+              />
             </div>
             
-            <button 
+            {/* Spacer */}
+            <div className={cn(styles.boxSpacer)} />
+            
+            {/* Call to Action */}
+            <CallToActionLink
+              as="button"
               onClick={() => handleViewMore('errors')}
-              className={cn(styles.viewMore)}
+              className="stats-summary-view-more"
             >
-              Tarkastele tarkemmin <span>→</span>
-            </button>
+              {t('statistics.summary.errorRate.viewMore')}
+            </CallToActionLink>
           </>
         )}
       </div>
 
       {/* Response Times Box */}
       <div className={cn(styles.box, styles.boxResponseTime)}>
-        <h3 className={cn(styles.title)}>
-          Vasteajat vuoden alusta
-        </h3>
-        
         {isLoading ? (
           <div className={cn(styles.loading)}>
             {t('statistics.loading')}
           </div>
         ) : (
           <>
-            <div className={cn(styles.chartContainer)}>
-              <div className={cn(styles.chartWrapper)}>
-                <div ref={responseChartRef} className={cn(styles.chart)} />
+            {/* Header */}
+            <div className={cn(styles.boxHeader)}>
+              <h3 className={cn(styles.title)}>
+                {t('statistics.summary.responseTimesYearToDate.title')}
+              </h3>
+            </div>
+            
+            {/* Content */}
+            <div className={cn(styles.boxContent)}>
+              <div className={cn(styles.chartContainer)}>
+                <div className={cn(styles.chartWrapper)}>
+                  <div ref={responseChartRef} className={cn(styles.chart)} />
+                </div>
               </div>
             </div>
             
-            <button 
+            {/* Spacer */}
+            <div className={cn(styles.boxSpacer)} />
+            
+            {/* Call to Action */}
+            <CallToActionLink
+              as="button"
               onClick={() => handleViewMore('response_times')}
-              className={cn(styles.viewMore)}
+              className="stats-summary-view-more"
             >
-              Tarkastele tarkemmin <span>→</span>
-            </button>
+              {t('statistics.summary.responseTimesYearToDate.viewMore')}
+            </CallToActionLink>
           </>
         )}
       </div>

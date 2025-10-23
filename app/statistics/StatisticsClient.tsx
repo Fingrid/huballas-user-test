@@ -5,7 +5,8 @@ import { useLocalization } from "@/lib/stores/localization.store";
 import { usePerformanceMeasurement } from "@/lib/performance/monitoring";
 import { 
   useUsageData, 
-  useDateRangeCalculation 
+  useDateRangeCalculation, 
+  DateRangeOption
 } from "@/lib/hooks/useDataAccess";
 import type { DateRangeFilter } from "@/lib/dataProcessing";
 import {
@@ -16,8 +17,6 @@ import {
   ResponseTimeStatisticsGraphs,
 } from "./components";
 import { cn } from "@/lib/cn";
-
-import type { DateRangeOption } from "./components/controls/DateRangeFilter";
 
 type UsageStackingType = "channel" | "process_group" | "marketRoleCode";
 type ErrorStackingType = "errortype" | "type";
@@ -30,9 +29,9 @@ export default function StatisticsClient({}: StatisticsClientProps) {
   const { measureInteraction } = usePerformanceMeasurement("StatisticsPage");
 
   // Refs for scrolling to sections
-  const usageRef = useRef<HTMLDivElement>(null);
-  const errorRef = useRef<HTMLDivElement>(null);
-  const responseTimeRef = useRef<HTMLDivElement>(null);
+  const usageRef = useRef<HTMLElement>(null);
+  const errorRef = useRef<HTMLElement>(null);
+  const responseTimeRef = useRef<HTMLElement>(null);
   
   // Ref to track current active section for intersection observer
   const activeSectionRef = useRef<SectionType>("usage");
@@ -253,7 +252,7 @@ export default function StatisticsClient({}: StatisticsClientProps) {
 
   // Function to scroll to selected section (manual navigation)
   const scrollToSection = (section: SectionType) => {
-    let ref: React.RefObject<HTMLDivElement | null> | null = null;
+    let ref: React.RefObject<HTMLElement | null> | null = null;
     
     switch (section) {
       case "usage":
@@ -319,7 +318,7 @@ export default function StatisticsClient({}: StatisticsClientProps) {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <>
       {/* Header Section with Gradient Background */}
       <StatisticsHeader
         activeSection={activeSection}
@@ -338,97 +337,85 @@ export default function StatisticsClient({}: StatisticsClientProps) {
       <div className={styles.spacer}></div>
 
       {/* Statistics Summary Boxes */}
-      <div className="content-area pb-4">
+      <section className="content-area pb-4">
         <StatisticsSummary onSectionClick={handleSectionChange} />
-      </div>
+      </section>
 
       {/* Page Extra Info */}
-      <div className="content-area pt-4 pb-8 hidden">
-        <div className="statistics__section">
-          <h3 className="statistics__section-title">
-            {t("statistics.pageExtraInfo.title")}
-          </h3>
-          <p className="statistics__section-description">
-            {t("statistics.pageExtraInfo.content")}
-          </p>
-        </div>
-      </div>
+      <section className="content-area pt-4 pb-8 hidden">
+        <h3 className="statistics__section-title">
+          {t("statistics.pageExtraInfo.title")}
+        </h3>
+        <p className="statistics__section-description">
+          {t("statistics.pageExtraInfo.content")}
+        </p>
+      </section>
 
       {/* Usage Statistics Section */}
-      <div
+      <section
         ref={usageRef}
         data-section="usage"
         className="content-area pb-8"
       >
-        <div className="statistics__section">
-          <h2 className="statistics__section-title">
-            {t("statistics.usage.dailyEventsTitle")}
-          </h2>
-          <p className="statistics__section-description">
-            {t("statistics.usage.description")}
-          </p>
-          <UsageStatisticsGraphs
-            stackingType={usageStackingType}
-            activeDateRange={activeDateRange}
-            onStackingChange={setUsageStackingType}
-          />
-        </div>
-      </div>
+        <h2 className="statistics__section-title">
+          {t("statistics.usage.dailyEventsTitle")}
+        </h2>
+        <p className="statistics__section-description">
+          {t("statistics.usage.description")}
+        </p>
+        <UsageStatisticsGraphs
+          stackingType={usageStackingType}
+          activeDateRange={activeDateRange}
+          onStackingChange={setUsageStackingType}
+        />
+      </section>
 
       {/* Error Statistics Section */}
-      <div
+      <section
         ref={errorRef}
         data-section="errors"
         className="content-area pb-8"
       >
-        <div className="statistics__section">
-          <h2 className="statistics__section-title">
-            {t("statistics.errors.title")}
-          </h2>
-          <p className="statistics__section-description">
-            {t("statistics.errors.description")}
-          </p>
-          <ErrorStatisticsGraphs
-            stackingType={errorStackingType}
-            activeDateRange={activeDateRange}
-            onStackingChange={setErrorStackingType}
-          />
-        </div>
-      </div>
+        <h2 className="statistics__section-title">
+          {t("statistics.errors.title")}
+        </h2>
+        <p className="statistics__section-description">
+          {t("statistics.errors.description")}
+        </p>
+        <ErrorStatisticsGraphs
+          stackingType={errorStackingType}
+          activeDateRange={activeDateRange}
+          onStackingChange={setErrorStackingType}
+        />
+      </section>
 
       {/* Validation Errors Section - Placeholder */}
-      <div
-        className="content-area pb-8"
-      >
-        <div className="statistics__section">
-          <h2 className="statistics__section-title">
-            {t("statistics.validationErrors.title")}
-          </h2>
-          <p className="statistics__section-description">
-            {t("statistics.validationErrors.description")}
-          </p>
-          <div className={cn(styles.placeholderSection)}>
-            <p>Placeholder for Validation Errors graphs</p>
-          </div>
+      <section className="content-area pb-8">
+        <h2 className="statistics__section-title">
+          {t("statistics.validationErrors.title")}
+        </h2>
+        <p className="statistics__section-description">
+          {t("statistics.validationErrors.description")}
+        </p>
+        <div className={cn(styles.placeholderSection)}>
+          <p>Placeholder for Validation Errors graphs</p>
         </div>
-      </div>
+      </section>
 
       {/* ResponseTime Statistics Graph Section */}
-      <div 
+      <section 
         ref={responseTimeRef}
         data-section="response_times"
         className="content-area pb-8"
       >
-        <div className="statistics__section">
-          <h2 className="statistics__section-title">
-            {t("statistics.responseTime.title")}
-          </h2>
-          <p className="statistics__section-description">
-            {t("statistics.responseTime.noDataForRange")}
-          </p>
-          <ResponseTimeStatisticsGraphs activeDateRange={activeDateRange} />
-        </div>
-      </div>
-    </div>
+        <h2 className="statistics__section-title">
+          {t("statistics.responseTime.title")}
+        </h2>
+        <p className="statistics__section-description">
+          {t("statistics.responseTime.noDataForRange")}
+        </p>
+        <ResponseTimeStatisticsGraphs activeDateRange={activeDateRange} />
+      </section>
+    </>
   );
 }

@@ -2,9 +2,11 @@
 
 import { useLocalization } from '@/lib/stores/localization.store';
 import { cn } from '@/lib/cn';
+import CallToActionLink from '@/components/CallToActionLink';
+import Breadcrumb from '@/components/Breadcrumb';
 import StickyChartControls from '../controls/StickyChartControls';
 import type { DateRangeFilter } from '@/lib/dataProcessing';
-import type { DateRangeOption } from '../controls/DateRangeFilter';
+import { DateRangeOption } from '@/lib/hooks/useDataAccess';
 
 type SectionType = 'usage' | 'errors' | 'response_times';
 type StackingType = 'all' | 'channel' | 'process_group' | 'marketRoleCode';
@@ -75,10 +77,8 @@ export default function StatisticsHeader({
     descriptionContainer: 'stats-description-container',
     descriptionContent: 'stats-description-content',
     description: 'stats-description-text',
-    infoLink: 'stats-info-link',
     stickySection: 'stats-sticky-section',
     stickyContainer: 'stats-sticky-container',
-    infoIcon: 'w-6 h-6',
   };
 
   return (
@@ -88,6 +88,7 @@ export default function StatisticsHeader({
         <div className={cn(styles.headerContainer)}>
           {/* Page Title */}
           <div className={cn(styles.titleContainer)}>
+            <Breadcrumb currentPage={t("statistics.pageTitle")} />
             <h1 className={cn(styles.title)}>
               {t("statistics.pageTitle")}
             </h1>
@@ -120,15 +121,9 @@ export default function StatisticsHeader({
             <p className={cn(styles.description)}>
               {t("statistics.pageDescription")}
             </p>
-            <a 
-              href="#" 
-              className={cn(styles.infoLink)}
-            >
+            <CallToActionLink href="#">
               {t("navigation.moreInfo")}
-              <svg className={cn(styles.infoIcon)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </a>
+            </CallToActionLink>
           </div>
         </div>
       </div>

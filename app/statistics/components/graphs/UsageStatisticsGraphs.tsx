@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import StackedChart from './StackedChart';
 import BreakdownTables from '../tables/BreakdownTables';
 import GroupingSelector from '../controls/GroupingSelector';
+import CalloutBox from '@/components/CalloutBox';
 import { useUsageStore, useDictionaryStore } from '@/lib/stores';
 import { useLocalization } from '@/lib/stores/localization.store';
 import type { UsageDataRecord } from '@/lib/types';
@@ -73,6 +74,13 @@ export default function UsageStatisticsGraphs({ stackingType, activeDateRange, o
           usageData={usageDataArray}
         />
       </div>
+
+      {/* Callout Box - Timeline Info */}
+      <CalloutBox
+        variant="info"
+        title={t('statistics.calloutBox.timelineTitle')}
+        description={t('statistics.calloutBox.timelineDescription')}
+      />
 
       {/* Breakdown Tables */}
       <div className="bg-[var(--color-background-level-1)]">

@@ -5,7 +5,8 @@ import { useLocalization } from "@/lib/stores/localization.store";
 import { usePerformanceMeasurement } from "@/lib/performance/monitoring";
 import { 
   useUsageData, 
-  useDateRangeCalculation 
+  useDateRangeCalculation, 
+  DateRangeOption
 } from "@/lib/hooks/useDataAccess";
 import type { DateRangeFilter } from "@/lib/dataProcessing";
 import {
@@ -13,9 +14,6 @@ import {
   UsageStatisticsGraphs,
   StatisticsHeader,
 } from "../statistics/components";
-import { cn } from "@/lib/cn";
-
-import type { DateRangeOption } from "../statistics/components/controls/DateRangeFilter";
 
 type StackingType = 'all' | "channel" | "process_group" | "marketRoleCode";
 type GraphStackingType = "channel" | "process_group" | "marketRoleCode";
@@ -103,7 +101,7 @@ export default function UsageClient({}: UsageClientProps) {
 
   // Style objects for consistent styling
   const styles = {
-    spacer: "w-8 h-8 bg-gray-50",
+    spacer: "w-8 h-8",
     sectionHeaderRow: 'section-header-row',
     filterToggleButton: 'filter-toggle-button'
   };

@@ -34,19 +34,19 @@ export default function TwoLevelNavigation() {
   };
 
   return (
-    <div className="w-full max-w-[1440px] mx-auto py-4 border-b border-[var(--color-separator)] inline-flex flex-col justify-end items-start gap-6 px-10 lg:px-10 md:px-8 sm:px-4">
+    <div className="header-nav-container">
       {/* Upper Row: Logo (hidden) and Right-aligned items */}
-      <div className="self-stretch inline-flex justify-between items-start">
+      <div className="header-nav-upper-row">
         {/* Logo section - hidden as per concept */}
-        <div className="opacity-0 flex justify-end items-center gap-2">
-          <div className="text-right justify-start text-teal-600 text-xl font-bold leading-tight">Datahub</div>
+        <div className="header-nav-logo">
+          <div className="header-nav-logo-text">Datahub</div>
         </div>
         
         {/* Upper Navigation - Right side */}
-        <div className="flex justify-start items-center">
-          <div className="flex justify-start items-center">
+        <div className="header-nav-upper-items">
+          <div className="header-nav-upper-items">
             {/* Language Selector */}
-            <div className="px-2 flex justify-start items-center">
+            <div className="header-nav-upper-item">
               <LanguageSelector />
             </div>
             
@@ -58,9 +58,9 @@ export default function TwoLevelNavigation() {
                 return (
                   <div 
                     key={item.href}
-                    className={cn("flex justify-start items-center", isLast ? "pl-2" : "px-2")}
+                    className={cn("header-nav-upper-item", isLast && "header-nav-upper-item:last-child")}
                   >
-                    <div className="text-center justify-center text-[var(--color-text)] text-sm font-normal leading-none opacity-50 cursor-not-allowed">
+                    <div className="header-nav-upper-link-disabled">
                       {item.label}
                     </div>
                   </div>
@@ -70,11 +70,11 @@ export default function TwoLevelNavigation() {
               return (
                 <div 
                   key={item.href}
-                  className={cn("flex justify-start items-center", isLast ? "pl-2" : "px-2")}
+                  className={cn("header-nav-upper-item", isLast && "header-nav-upper-item:last-child")}
                 >
                   <Link
                     href={item.href}
-                    className="text-center justify-center text-[var(--color-text)] text-sm font-normal leading-none hover:text-[var(--color-primary)] transition-colors"
+                    className="header-nav-upper-link"
                   >
                     {item.label}
                   </Link>
@@ -86,27 +86,18 @@ export default function TwoLevelNavigation() {
       </div>
 
       {/* Lower Navigation */}
-      <div className="self-stretch h-6 inline-flex justify-between items-end">
+      <div className="header-nav-lower-row">
         {lowerNavItems.map((item, index) => {
           const active = isActive(item.href);
           const isFirst = index === 0;
-          const isAfterFirst = index === 1;
-          
-          // First item uses pr-4, items after first use px-4, last items use pl-4
-          let paddingClass = "px-4";
-          if (isFirst) {
-            paddingClass = "pr-4";
-          } else if (index >= lowerNavItems.length - 2) {
-            paddingClass = "pl-4";
-          }
           
           if (item.disabled) {
             return (
               <div
                 key={item.href}
-                className={cn("flex justify-start items-center", paddingClass)}
+                className="header-nav-lower-item"
               >
-                <div className="text-center justify-center text-slate-950 text-2xl font-normal leading-normal opacity-50 cursor-not-allowed">
+                <div className="header-nav-lower-link-disabled">
                   {item.label}
                 </div>
               </div>
@@ -116,15 +107,13 @@ export default function TwoLevelNavigation() {
           return (
             <div
               key={item.href}
-              className={cn("flex justify-start items-center", paddingClass)}
+              className="header-nav-lower-item"
             >
               <Link
                 href={item.href}
                 className={cn(
-                  "text-center justify-center text-2xl font-normal leading-normal transition-colors",
-                  active 
-                    ? "text-[var(--color-primary)] font-medium" 
-                    : "text-slate-950 hover:text-[var(--color-primary)]"
+                  "header-nav-lower-link",
+                  active && "header-nav-lower-link-active"
                 )}
               >
                 {item.label}
