@@ -43,9 +43,7 @@ export default function FilterBar({
   onRangeChange,
   onDateRangeChange,
   availableDataRange,
-  selectedProcess = 'all',
-  selectedChannel = 'all',
-  selectedRole = 'all',
+  // selectedProcess, selectedChannel, selectedRole - reserved for future use
   onProcessChange,
   onChannelChange,
   onRoleChange,
@@ -134,9 +132,9 @@ export default function FilterBar({
     <div className="w-full flex flex-col gap-4">
       {/* Title row */}
       <div className="flex justify-start items-center">
-        <h3 className="text-[var(--color-text)] text-base font-medium leading-normal">
+        <h4 className="text-[var(--color-text)] text-base font-medium leading-normal">
           {t('statistics.controls.filters')}
-        </h3>
+        </h4>
       </div>
 
       {/* Grouping and Date controls row */}

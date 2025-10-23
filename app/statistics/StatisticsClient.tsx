@@ -22,10 +22,7 @@ type UsageStackingType = "channel" | "process_group" | "marketRoleCode";
 type ErrorStackingType = "errortype" | "type";
 type SectionType = "usage" | "errors" | "response_times";
 
-// Empty props interface - no props needed for this component
-type StatisticsClientProps = Record<string, never>;
-
-export default function StatisticsClient(_props: StatisticsClientProps) {
+export default function StatisticsClient() {
   const { t } = useLocalization();
   const { measureInteraction } = usePerformanceMeasurement("StatisticsPage");
 

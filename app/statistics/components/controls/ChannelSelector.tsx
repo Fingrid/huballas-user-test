@@ -40,7 +40,6 @@ export default function ChannelSelector({
   };
 
   const isAllSelected = selectedChannels.length === availableChannels.length;
-  const isPartiallySelected = selectedChannels.length > 0 && selectedChannels.length < availableChannels.length;
 
   return (
     <div className={`space-y-3 ${className}`}>

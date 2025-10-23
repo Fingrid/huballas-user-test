@@ -3,11 +3,9 @@
 import { useMemo } from 'react';
 import StackedChart from './StackedChart';
 import BreakdownTables from '../tables/BreakdownTables';
-import GroupingSelector from '../controls/GroupingSelector';
 import CalloutBox from '@/app/_components/ui/CalloutBox';
 import { useUsageStore, useDictionaryStore } from '@/lib/stores';
 import { useLocalization } from '@/lib/stores/localization.store';
-import type { UsageDataRecord } from '@/lib/types';
 
 type StackingType = 'channel' | 'process_group' | 'marketRoleCode';
 
@@ -19,24 +17,14 @@ interface DateRange {
 interface UsageStatisticsGraphsProps {
   stackingType: StackingType;
   activeDateRange: DateRange;
-  onStackingChange: (type: StackingType) => void;
+  onStackingChange?: (type: StackingType) => void;
 }
 
-export default function UsageStatisticsGraphs({ stackingType, activeDateRange, onStackingChange }: UsageStatisticsGraphsProps) {
+export default function UsageStatisticsGraphs({ stackingType, activeDateRange }: UsageStatisticsGraphsProps) {
   const { t } = useLocalization();
   
   const usageStore = useUsageStore();
   const dictionaryStore = useDictionaryStore();
-  
-  // Subscribe to filter changes
-  const filters = usageStore.filters;
-
-  // Grouping options for usage statistics
-  const groupingOptions = useMemo(() => [
-    { value: 'channel', label: t('statistics.grouping.channels') },
-    { value: 'process_group', label: t('statistics.grouping.processGroups') },
-    { value: 'marketRoleCode', label: t('statistics.grouping.marketRoles') },
-  ], [t]);
 
   // Prepare usage data for the selected date range and apply filters from store
   const usageDataArray = useMemo(() => {
@@ -51,7 +39,7 @@ export default function UsageStatisticsGraphs({ stackingType, activeDateRange, o
     });
     
     return filteredData;
-  }, [usageStore, activeDateRange, filters]); // Added filters dependency
+  }, [usageStore, activeDateRange]);
 
   return (
     <div className="space-y-6">

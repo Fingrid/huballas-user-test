@@ -1,6 +1,5 @@
 import './globals.css'
 import TwoLevelNavigation from './_components/ui/TwoLevelNavigation'
-import { labGrotesqueWeb } from './_fonts/fonts'
 import { cn } from '@/lib/utils/cn'
 import { LoadingProvider } from '../lib/contexts/LoadingContext'
 import Footer from '@/app/_components/ui/Footer'
@@ -20,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={cn(`${labGrotesqueWeb.variable}`, styles.body)}>
+      <body className={cn(styles.body)}>
         <div className={styles.layoutContainer}>
           <header className={styles.header}>
             <TwoLevelNavigation />

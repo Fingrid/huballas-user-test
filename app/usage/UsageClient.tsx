@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef } from "react";
 import { useLocalization } from "@/lib/stores/localization.store";
 import { usePerformanceMeasurement } from "@/lib/performance/monitoring";
 import { 
@@ -16,12 +16,8 @@ import {
 } from "../statistics/components";
 
 type StackingType = 'all' | "channel" | "process_group" | "marketRoleCode";
-type GraphStackingType = "channel" | "process_group" | "marketRoleCode";
 
-// Empty props interface - no props needed for this component
-type UsageClientProps = Record<string, never>;
-
-export default function UsageClient(_props: UsageClientProps) {
+export default function UsageClient() {
   const { t } = useLocalization();
   const { measureInteraction } = usePerformanceMeasurement("UsagePage");
 
@@ -156,7 +152,7 @@ export default function UsageClient(_props: UsageClientProps) {
           </h2>
 
           <UsageStatisticsGraphs
-            stackingType={usageStackingType === 'all' ? 'channel' : usageStackingType as GraphStackingType}
+            stackingType={usageStackingType === 'all' ? 'channel' : usageStackingType}
             activeDateRange={activeDateRange}
             onStackingChange={handleUsageStackingChange}
           />

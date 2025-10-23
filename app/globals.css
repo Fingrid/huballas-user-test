@@ -1,11 +1,60 @@
 @import "tailwindcss";
 
+/* Lab Grotesque Web Font */
+@font-face {
+  font-family: 'Lab Grotesque Web';
+  src: url('./_fonts/LabGrotesqueWeb-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque Web';
+  src: url('./_fonts/LabGrotesqueWeb-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque Web';
+  src: url('./_fonts/LabGrotesqueWeb-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque Web';
+  src: url('./_fonts/LabGrotesqueWeb-Italic.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque Web';
+  src: url('./_fonts/LabGrotesqueWeb-BoldItalic.woff') format('woff');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lab Grotesque Web';
+  src: url('./_fonts/LabGrotesqueWeb-LightItalic.woff') format('woff');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
 :root {
   /* Fingrid Design System Colors */
   --color-text: #3E5660;
   
   /* Typography */
-  --font-family-primary: var(--font-lab-grotesque-web), -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  --font-family-primary: 'Lab Grotesque Web', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   
   --color-background-level-1: #ffffff;
   --color-background-level-2: #f3f6f8;
@@ -89,34 +138,43 @@ body {
 
 /* Typography - Fingrid style */
 h1 {
-  font-size: 2.5rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 2.5rem;
   color: var(--color-text);
+  font-family: var(--font-family-primary);
+  font-feature-settings: "liga" off, "clig" off;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 2.5rem;
+  font-size: 3rem;  
 }
 
 h2 {
+  color: var(--color-text);
+  font-family: var(--font-family-primary);
+  font-feature-settings: "liga" off, "clig" off;
   font-size: 2rem;
   font-style: normal;
   font-weight: 400;
-  line-height: 2rem;
-  color: var(--color-text);
+  line-height: 2rem; 
 }
 
 h3 {
+  color: var(--color-text);
+  font-family: var(--font-family-primary);
+  font-feature-settings: "liga" off, "clig" off;
+  font-style: normal;
   font-size: 1.5rem;
   font-weight: 400;
   line-height: 1.5rem;
-  color: var(--color-text);
 }
 
 h4 {
+  color: var(--color-text);
+  font-family: var(--font-family-primary);
+  font-feature-settings: "liga" off, "clig" off;
   font-size: 1rem;
   font-style: normal;
   font-weight: 500;
   line-height: 1.5rem;
-  color: var(--color-text);
 }
 
 /* Content container */

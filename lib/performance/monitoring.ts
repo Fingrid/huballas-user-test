@@ -362,7 +362,7 @@ export const checkPerformanceBudget = (
 };
 
 // Performance optimization recommendations
-export const getPerformanceRecommendations = (metrics: PerformanceMetrics[]): string[] => {
+export const getPerformanceRecommendations = (): string[] => {
   const recommendations: string[] = [];
   const avgMetrics = getPerformanceMonitor().getAverageMetrics();
 

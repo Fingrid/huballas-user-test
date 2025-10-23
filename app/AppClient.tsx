@@ -3,7 +3,7 @@
 import React, { useEffect, Suspense } from 'react';
 import { usePathname } from 'next/navigation';
 import { useCombinedStore } from '../lib/stores';
-import { useLoadingState, useError } from '../lib/contexts/LoadingContext';
+import { useLoadingState } from '../lib/contexts/LoadingContext';
 import { getRouteConfig, getDefaultRoute } from '../lib/config/routeConfig';
 import { StoreData } from '../lib/types/pageConfig';
 import ErrorBoundary from './_components/layout/ErrorBoundary';
@@ -26,7 +26,6 @@ function LoadingFallback() {
 export default function AppClient() {
   const pathname = usePathname();
   const { state, setCurrentPage, setPageDataReady, setLoadingMessage, isReady } = useLoadingState();
-  const error = useError();
   const combinedStore = useCombinedStore();
 
   // Get current route configuration

@@ -174,7 +174,6 @@ export default function StackedChart({
         },
         yAxis: {
           type: "value" as const,
-          name: "Kuukausittainen tapahtumamäärä",
           axisLabel: {
             formatter: (value: number) => value.toLocaleString(),
           }

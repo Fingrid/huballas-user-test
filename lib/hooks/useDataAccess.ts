@@ -72,7 +72,7 @@ export function useUsageData(dateRange?: DateRangeFilter) {
 }
 
 // Error data hook (simplified)
-export function useErrorData(dateRange?: DateRangeFilter) {
+export function useErrorData() {
   const errorStore = useErrorStore();
   
   useEffect(() => {

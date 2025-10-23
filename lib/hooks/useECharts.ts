@@ -69,6 +69,7 @@ export function useECharts(
         chartInstanceRef.current = null;
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, options.dependencies || []);
 
   return chartRef;

@@ -1,6 +1,6 @@
 import { StateCreator } from "zustand";
 import dayjs from "dayjs";
-import type { UsageDataRecord, DataFetchConfig, LoadingState } from "../types";
+import type { UsageDataRecord, DataFetchConfig } from "../types";
 import { fetchUsageStatistics } from "../utils/csvUtils";
 
 export interface UsageStats {

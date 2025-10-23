@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { cn } from '@/lib/utils/cn';
 
 interface ChartLoadingStateProps {
   loading: boolean;

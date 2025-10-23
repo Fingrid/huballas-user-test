@@ -87,9 +87,8 @@ export default function TwoLevelNavigation() {
 
       {/* Lower Navigation */}
       <div className="header-nav-lower-row">
-        {lowerNavItems.map((item, index) => {
+        {lowerNavItems.map((item) => {
           const active = isActive(item.href);
-          const isFirst = index === 0;
           
           if (item.disabled) {
             return (

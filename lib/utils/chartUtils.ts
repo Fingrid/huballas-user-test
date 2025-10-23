@@ -118,12 +118,8 @@ export function calculateDatasetStatistics(
   wholeData: ResponseTimeRecord[],
   filteredData: ResponseTimeRecord[]
 ): DatasetStatistics {
-  // Extract response times from whole dataset
+  // Extract response times from both datasets
   const wholeResponseTimes = wholeData.map(r => r.mean_response_time_ms);
-  const wholeStdDeviations = wholeData.map(r => r.std_deviation_ms);
-  const wholeEventCounts = wholeData.map(r => r.event_count);
-  
-  // Extract response times from filtered dataset
   const filteredResponseTimes = filteredData.map(r => r.mean_response_time_ms);
   const filteredStdDeviations = filteredData.map(r => r.std_deviation_ms);
   const filteredEventCounts = filteredData.map(r => r.event_count);

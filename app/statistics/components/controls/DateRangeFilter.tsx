@@ -1,17 +1,10 @@
 'use client';
 
-import { useState } from 'react';
 import { cn } from '@/lib/utils/cn';
 import { useLocalization } from '@/lib/stores/localization.store';
 import type { DateRangeFilter as DateRangeFilterType } from '@/lib/utils/dataProcessing';
 import FieldGroup from './FieldGroup';
 import { DateRangeOption } from '@/lib/hooks/useDataAccess';
-
-// Keep local DateRange interface for backward compatibility
-interface DateRange {
-  startDate: string;
-  endDate: string;
-}
 
 interface DateRangeFilterProps {
   selectedRange: DateRangeOption;
@@ -79,8 +72,6 @@ export default function DateRangeFilter({
     onDateRangeChange(newDateRange);
     
     // Check if the new date range matches any preset, if not switch to custom
-    const referenceEndDate = availableDataRange ? availableDataRange.endDate : new Date().toISOString().split('T')[0];
-    
     let matchesPreset = false;
     
     // Check 30, 60, 90, 365 day presets

@@ -8,6 +8,7 @@ import { useLocalization } from '@/lib/stores/localization.store';
 import { useECharts } from '@/lib/hooks/useECharts';
 import type { ErrorRecord } from '@/lib/types';
 
+
 type StackingType = 'errortype' | 'type';
 
 interface DateRange {

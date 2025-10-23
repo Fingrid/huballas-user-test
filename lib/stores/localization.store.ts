@@ -8,58 +8,6 @@ import enTranslations from '../../public/locales/en.json';
 // Supported locales
 export type Locale = 'fi' | 'en';
 
-// Translation interface - represents the structure of our translation files
-interface Translations {
-  navigation: {
-    annualStatistics: string;
-    monthlyReports: string;
-  };
-  common: {
-    loading: string;
-    error: string;
-    retry: string;
-    year: string;
-    month: string;
-    componentPlaceholder: string;
-    noDataAvailable: string;
-    loadingData: string;
-  };
-  annualStatistics: {
-    title: string;
-    datahubTitle: string;
-    datahubDescription: string;
-    hubAllasDescription: string;
-    usageTrends: string;
-    monthlyComparison: string;
-    marketRoleDistribution: string;
-    channelAnalysis: string;
-    processGroupBreakdown: string;
-    detailedBreakdown: string;
-    peakUsageAnalysis: string;
-    yearOverYearGrowth: string;
-    performanceMetrics: string;
-    errorLoadingData: string;
-    noUsageData: string;
-  };
-  monthlyReports: {
-    title: string;
-    loadingMonthlyReports: string;
-    errorLoadingReports: string;
-    selectMonth: string;
-    selectYear: string;
-    events: string;
-    responseTimes: string;
-    errors: string;
-    systemErrors: string;
-    validationErrors: string;
-  };
-  charts: {
-    noDataMessage: string;
-    loadingChart: string;
-    errorLoadingChart: string;
-  };
-}
-
 // Store interface
 interface LocalizationStore {
   locale: Locale;

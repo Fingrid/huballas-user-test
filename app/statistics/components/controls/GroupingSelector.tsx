@@ -1,7 +1,5 @@
 'use client';
 
-import { useLocalization } from '@/lib/stores/localization.store';
-
 interface GroupingOption {
   value: string;
   label: string;
@@ -22,7 +20,8 @@ export default function GroupingSelector({
   label,
   className = "",
 }: GroupingSelectorProps) {
-  const { t } = useLocalization();
+  // t function available for future localization needs
+  // const { t } = useLocalization();
 
   return (
     <div className={`flex items-center gap-2 ${className}`}>
