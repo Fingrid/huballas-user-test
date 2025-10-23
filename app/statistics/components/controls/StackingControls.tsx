@@ -3,7 +3,8 @@
 import React from 'react';
 import { cn } from '@/lib/cn';
 import { useLocalization } from '@/lib/stores/localization.store';
-import DateRangeFilter, { DateRangeOption } from './DateRangeFilter';
+import DateRangeFilter from './DateRangeFilter';
+import { DateRangeOption } from '@/lib/hooks/useDataAccess';
 
 type StackingType = 'channel' | 'process_group' | 'marketRoleCode' | 'errortype' | 'type';
 type SectionType = 'usage' | 'error';
