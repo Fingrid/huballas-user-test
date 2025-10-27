@@ -2,48 +2,48 @@
 
 /* Lab Grotesque Web Font */
 @font-face {
-  font-family: 'Lab Grotesque Web';
-  src: url('./_fonts/LabGrotesqueWeb-Regular.woff') format('woff');
+  font-family: "Lab Grotesque Web";
+  src: url("./_fonts/LabGrotesqueWeb-Regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Lab Grotesque Web';
-  src: url('./_fonts/LabGrotesqueWeb-Bold.woff') format('woff');
+  font-family: "Lab Grotesque Web";
+  src: url("./_fonts/LabGrotesqueWeb-Bold.woff") format("woff");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Lab Grotesque Web';
-  src: url('./_fonts/LabGrotesqueWeb-Light.woff') format('woff');
+  font-family: "Lab Grotesque Web";
+  src: url("./_fonts/LabGrotesqueWeb-Light.woff") format("woff");
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Lab Grotesque Web';
-  src: url('./_fonts/LabGrotesqueWeb-Italic.woff') format('woff');
+  font-family: "Lab Grotesque Web";
+  src: url("./_fonts/LabGrotesqueWeb-Italic.woff") format("woff");
   font-weight: 400;
   font-style: italic;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Lab Grotesque Web';
-  src: url('./_fonts/LabGrotesqueWeb-BoldItalic.woff') format('woff');
+  font-family: "Lab Grotesque Web";
+  src: url("./_fonts/LabGrotesqueWeb-BoldItalic.woff") format("woff");
   font-weight: 700;
   font-style: italic;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Lab Grotesque Web';
-  src: url('./_fonts/LabGrotesqueWeb-LightItalic.woff') format('woff');
+  font-family: "Lab Grotesque Web";
+  src: url("./_fonts/LabGrotesqueWeb-LightItalic.woff") format("woff");
   font-weight: 300;
   font-style: italic;
   font-display: swap;
@@ -51,59 +51,64 @@
 
 :root {
   /* Fingrid Design System Colors */
-  --color-text: #3E5660;
-  
+  --color-text: #3e5660;
+
   /* Typography */
-  --font-family-primary: 'Lab Grotesque Web', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  
+  --font-family-primary: "Lab Grotesque Web", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Roboto", sans-serif;
+
   --color-background-level-1: #ffffff;
   --color-background-level-2: #f3f6f8;
   --color-background-level-3: #e9eef2;
-  --color-background-level-4: #E9F7F7;
-  
+  --color-background-level-4: #e9f7f7;
+
   --color-separator: #d5dde3;
-  
+
   /* Primary theme colors */
-  --color-primary: #009A96;
-  --color-primary-light: #4D9D88;
-  --color-primary-action: #D5121E;
-  --color-primary-hover: #3E5660;
-  --color-secondary-action: #71828E;
-  --color-secondary-hover: #3E5660;
-  
+  --color-primary: #009a96;
+  --color-primary-light: #4d9d88;
+  --color-primary-action: #d5121e;
+  --color-primary-hover: #3e5660;
+  --color-secondary-action: #71828e;
+  --color-secondary-hover: #3e5660;
+
   --color-disabled: #b3b3b3;
   --color-breadcrumb: #7d8699;
-  
+
   /* Additional utility colors */
   --color-border-light: #e5e7eb;
   --color-border-lighter: #f3f4f6;
   --color-text-muted: #6b7280;
   --color-text-subtle: #999;
   --color-text-inverse: #ffffff;
-  --color-success: #F4FCE9;
+  --color-success: #f4fce9;
   --color-warning: #f59e0b;
-  --color-error: #FFEBE5;
+  --color-error: #ffebe5;
   --color-info: #4f46e5;
-  
+
   /* Notification Colors */
-  --color-notification-info-bg: #E8F8FC;
-  --color-notification-info-border: #A3E3F5;
-  --color-notification-info-text: #0A4A5C;
-  --color-notification-success-bg: #F4FCE9;
-  --color-notification-success-border: #8BC34A;
-  --color-notification-success-text: #558B2F;
-  --color-notification-alert-bg: #FFEBE5;
-  --color-notification-alert-border: #FF5722;
-  --color-notification-alert-text: #D84315;
-  --color-notification-warning-bg: #FFF3E0;
-  --color-notification-warning-border: #FF9800;
-  --color-notification-warning-text: #E65100;
-  
+  --color-notification-info-bg: #e8f8fc;
+  --color-notification-info-border: #a3e3f5;
+  --color-notification-info-text: #0a4a5c;
+  --color-notification-success-bg: #f4fce9;
+  --color-notification-success-border: #8bc34a;
+  --color-notification-success-text: #558b2f;
+  --color-notification-alert-bg: #ffebe5;
+  --color-notification-alert-border: #ff5722;
+  --color-notification-alert-text: #d84315;
+  --color-notification-warning-bg: #fff3e0;
+  --color-notification-warning-border: #ff9800;
+  --color-notification-warning-text: #e65100;
+
   /* Updated design system shadows and gradients */
-  --box-shadow-default: 0 4px 4px 0 rgba(0, 0, 0, 0.10);
-  --gradient-page-header: linear-gradient(180deg, rgba(255, 255, 255, 0.50) 0.64%, rgba(212, 238, 238, 0.50) 61.54%);
+  --box-shadow-default: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
+  --gradient-page-header: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.5) 0.64%,
+    rgba(212, 238, 238, 0.5) 61.54%
+  );
   --border-radius-default: 0.5rem;
-  
+
   /* Dark mode vars */
   --color-dark-text: #ffffff;
   --color-dark-background-level-1: #141517;
@@ -144,7 +149,7 @@ h1 {
   font-style: normal;
   font-weight: 700;
   line-height: 2.5rem;
-  font-size: 3rem;  
+  font-size: 3rem;
 }
 
 h2 {
@@ -154,7 +159,7 @@ h2 {
   font-size: 2rem;
   font-style: normal;
   font-weight: 400;
-  line-height: 2rem; 
+  line-height: 2rem;
 }
 
 h3 {
@@ -219,7 +224,7 @@ h4 {
     padding-left: 0;
     padding-right: 0;
   }
-  
+
   .nav-container {
     padding-left: 0;
     padding-right: 0;
@@ -231,19 +236,11 @@ h4 {
     padding-left: 0;
     padding-right: 0;
   }
-  
+
   .nav-container {
     padding-left: 0;
     padding-right: 0;
   }
-}
-
-/* Content area margins - no side padding */
-/* Content area margins - no side padding */
-.content-area {
-  max-width: 90rem;
-  padding-left: 0;
-  padding-right: 0;
 }
 
 /* Removed responsive padding - handled by app-main */
@@ -260,6 +257,25 @@ h4 {
     padding-left: 2rem;
     padding-right: 2rem;
   }
+}
+
+.content-area {
+  padding-left: 3.125rem;
+  padding-right: 3.125rem;
+}
+
+.content-area__statistics-summary {
+  margin-top: 2rem;
+  padding-bottom: 1rem;
+
+  h2 {
+    height: 2.75rem;
+  }
+}
+
+.content-area__statistics-section {
+  margin-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 /* Card styles - Fingrid inspired */
@@ -537,7 +553,6 @@ a:focus {
   font-weight: 400;
   color: var(--color-text);
   margin-bottom: 0.75rem;
-  line-height: 1.2;
 }
 
 .statistics__page-description {
@@ -560,9 +575,6 @@ a:focus {
 }
 
 .statistics__section-title {
-  font-size: 1.5rem;
-  font-weight: 500;
-  color: var(--color-text);
   margin-bottom: 0.5rem;
 }
 
@@ -770,9 +782,9 @@ a:focus {
   justify-content: flex-start;
   align-items: flex-start;
   border-radius: 0.5rem;
-  border: 1px solid #EFEFEF;
-  background: #FFF;
-  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.10);
+  border: 1px solid #efefef;
+  background: #fff;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
 }
 
@@ -913,56 +925,65 @@ a:focus {
   .statistics__page {
     padding: 1rem;
   }
-  
+
   .statistics__page-title {
     font-size: 1.75rem;
   }
-  
+
   .statistics__page-description {
     font-size: 0.875rem;
   }
-  
+
   .page-header-gradient-container {
     min-height: 120px;
   }
-  
+
   .statistics__controls {
     flex-direction: column;
   }
-  
+
   .statistics__control-group {
     min-width: unset;
   }
-  
+
   .statistics__summary {
     grid-template-columns: 1fr;
   }
-  
+
   .statistics__chart {
     height: 300px;
   }
-  
+
   .statistics__breakdown-table {
     font-size: 0.875rem;
   }
-  
+
   /* Reduce margins on mobile */
   .header-container {
     padding-left: 1rem;
     padding-right: 1rem;
   }
-  
+
   .content-area {
     padding-left: 1rem;
     padding-right: 1rem;
   }
 
-  
+  .content-area__statistics-summary {
+    margin-top: 2rem;
+    padding-bottom: 1rem;
+  }
+
+  .content-area__statistics-section {
+    margin-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
   .statistics__breakdown-table th,
   .statistics__breakdown-table td {
     padding: 0.5rem;
   }
-  
+
   .content-container-wide {
     padding-left: 1rem;
     padding-right: 1rem;
@@ -982,7 +1003,7 @@ a:focus {
 }
 
 .nav-link-active::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -2px;
   left: 0;
@@ -1324,7 +1345,7 @@ button:focus-visible {
   padding-left: 0;
 }
 
-.header-nav-lower-item:nth-last-child(-n+2) {
+.header-nav-lower-item:nth-last-child(-n + 2) {
   padding-left: 1rem;
   padding-right: 0;
 }
@@ -1398,7 +1419,7 @@ button:focus-visible {
 }
 
 .nav-lower-link.active::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -1rem;
   left: 0;
@@ -1413,23 +1434,23 @@ button:focus-visible {
     flex-wrap: wrap;
     gap: 1rem;
   }
-  
+
   .sticky-controls-row-section,
   .sticky-controls-row-date {
     width: 100%;
   }
-  
+
   /* Make navigation responsive */
   .w-\[1440px\] {
     width: 100%;
   }
-  
+
   /* Reduce padding on mobile */
   .px-10 {
     padding-left: 1rem;
     padding-right: 1rem;
   }
-  
+
   /* Reduce lower nav font size on mobile */
   .text-2xl {
     font-size: 1.25rem;
@@ -1807,7 +1828,7 @@ button:focus-visible {
   height: 24rem;
   background-color: white;
   border-radius: 0.5rem;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.10);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.1);
   border: 1px solid #f4f4f5;
   padding: 1.5rem;
   display: flex;

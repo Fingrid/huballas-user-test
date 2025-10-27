@@ -97,13 +97,6 @@ export default function UsageClient() {
     return customDateRange;
   }, [customDateRange]);
 
-  // Style objects for consistent styling
-  const styles = {
-    spacer: "w-8 h-8",
-    sectionHeaderRow: 'section-header-row',
-    filterToggleButton: 'filter-toggle-button'
-  };
-
   return (
     <>
       {/* Statistics Header - With integrated filter bar in sticky controls */}
@@ -131,12 +124,9 @@ export default function UsageClient() {
         hasActiveFilters={hasActiveFilters}
       />
 
-      {/* Spacer divs as per concept */}
-      <div className={styles.spacer}></div>
-      <div className={styles.spacer}></div>
-
       {/* Statistics Summary Boxes */}
-      <div className="content-area pb-4">
+      <div className="content-area content-area__statistics-summary">
+        <h2>{t("statistics.summary.title")}</h2>
         <StatisticsSummary onSectionClick={() => {}} />
       </div>
 
@@ -144,7 +134,7 @@ export default function UsageClient() {
       <div
         ref={usageRef}
         data-section="usage"
-        className="content-area pb-8"
+        className="content-area content-area__statistics-section"
       >
         <div className="statistics__section">
           <div className="statistics__section-header">

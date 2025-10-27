@@ -93,6 +93,7 @@
     "noDataMessage": "Ei dataa näytettäväksi valitulle ajanjaksolle",
     "loading": "Ladataan...",
     "summary": {
+      "title": "Vuoden alusta",
       "annualEvents": "Vuositapahtumat + trendi",
       "errors": "Virheet",
       "responseTimes": "Vasteajat",
