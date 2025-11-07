@@ -1,7 +1,7 @@
 'use client';
 
 import { useLocalization } from '@/lib/stores/localization.store';
-import { Breadcrumb } from '@/app/_components/ui';
+import { Breadcrumb, CallToActionLink } from '@/app/_components/ui';
 import { cn } from '@/lib/utils/cn';
 import styles from './UsageHeader.module.css';
 
@@ -27,9 +27,9 @@ export default function UsageHeader({ children }: UsageHeaderProps) {
           {t('usage.pageDescription')}
         </p>
         
-        <a href="#" className={cn(styles.ctaLink)}>
-          {t('navigation.moreInfo')} →
-        </a>
+        <CallToActionLink href="#">
+          {t('navigation.moreInfo')}
+        </CallToActionLink>
         
         <div className={cn(styles.summarySection)}>
           <h2 className={cn(styles.summaryTitle)}>

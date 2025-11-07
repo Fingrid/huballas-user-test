@@ -86,7 +86,7 @@ export default function UsageClient() {
       <>
         
         <UsageMainContent contentRef={usageRef}>
-          <div className="mb-8">
+          <div className="mt-8">
             <h2 className="text-[var(--color-text)] text-[1.75rem] font-bold leading-[1.3] mb-3">
               {t('usage.viewStatistics')}
             </h2>

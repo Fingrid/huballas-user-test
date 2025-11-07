@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils/cn';
+import styles from './CallToActionLink.module.css';
 
 interface CallToActionLinkProps {
   href?: string;
@@ -18,7 +19,7 @@ export default function CallToActionLink({
   const content = (
     <>
       {children}
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m-7-7l7 7-7 7" />
       </svg>
     </>
@@ -28,7 +29,7 @@ export default function CallToActionLink({
     return (
       <button
         onClick={onClick}
-        className={cn('stats-info-link', className)}
+        className={cn(styles.link, className)}
         type="button"
       >
         {content}
@@ -40,7 +41,7 @@ export default function CallToActionLink({
     <a
       href={href}
       onClick={onClick}
-      className={cn('stats-info-link', className)}
+      className={cn(styles.link, className)}
     >
       {content}
     </a>
