@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo, useRef } from "react";
 import { useLocalization } from "@/lib/stores/localization.store";
+import { useChartControls } from "@/lib/stores/chartControls.store";
 import { usePerformanceMeasurement } from "@/lib/performance/monitoring";
 import { 
   useUsageData, 
@@ -16,6 +17,7 @@ import {
   ErrorStatisticsGraphs,
   ResponseTimeStatisticsGraphs,
 } from "./components";
+import StickyChartControls from "./components/controls/StickyChartControls";
 import { cn } from "@/lib/utils/cn";
 
 type UsageStackingType = "channel" | "process_group" | "marketRoleCode";
@@ -25,6 +27,14 @@ type SectionType = "usage" | "errors" | "response_times";
 export default function StatisticsClient() {
   const { t } = useLocalization();
   const { measureInteraction } = usePerformanceMeasurement("StatisticsPage");
+
+  // Use chart controls store
+  const {
+    activeSection,
+    setActiveSection,
+    selectedRange,
+    setSelectedRange,
+  } = useChartControls();
 
   // Refs for scrolling to sections
   const usageRef = useRef<HTMLElement>(null);
@@ -42,13 +52,11 @@ export default function StatisticsClient() {
   // Get available date range from usage data
   const availableDataRange = usageData.availableDateRange;
 
-  // Chart controls state
-  const [activeSection, setActiveSection] = useState<SectionType>("usage");
+  // Local state for stacking types (not in store yet)
   const [usageStackingType, setUsageStackingType] =
     useState<UsageStackingType>("channel");
   const [errorStackingType, setErrorStackingType] =
     useState<ErrorStackingType>("errortype");
-  const [selectedRange, setSelectedRange] = useState<DateRangeOption>("90days");
   const [userCustomDateRange, setUserCustomDateRange] = useState<DateRangeFilter | null>(null);
   
   // State to track if sticky controls should be visible
@@ -192,7 +200,7 @@ export default function StatisticsClient() {
         }
       }
     };
-  }, []); // Remove activeSection from dependencies to prevent observer recreation
+  }, [setActiveSection]); // Include setActiveSection for proper cleanup
 
   // Fallback scroll-based section detection for better browser compatibility
   useEffect(() => {
@@ -247,7 +255,7 @@ export default function StatisticsClient() {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [setActiveSection]);
 
   // Function to scroll to selected section (manual navigation)
   const scrollToSection = (section: SectionType) => {
@@ -320,17 +328,23 @@ export default function StatisticsClient() {
   return (
     <>
       {/* Header Section with Gradient Background */}
-      <StatisticsHeader
-        activeSection={activeSection}
-        onSectionChange={handleSectionChange}
-        selectedRange={selectedRange}
-        dateRange={customDateRange}
-        onRangeChange={handleRangeChange}
-        onDateRangeChange={handleDateRangeChange}
-        availableDataRange={availableDataRange}
-        headerRef={headerRef}
-        showStickyControls={showStickyControls}
-      />
+      <StatisticsHeader headerRef={headerRef}>
+        {/* Sticky Controls as children - shown when header scrolls out of view */}
+        {showStickyControls && (
+          <StickyChartControls
+            activeSection={activeSection}
+            onSectionChange={handleSectionChange}
+            selectedRange={selectedRange}
+            dateRange={customDateRange}
+            onRangeChange={handleRangeChange}
+            onDateRangeChange={handleDateRangeChange}
+            availableDataRange={availableDataRange}
+            inlineMode={false}
+            displaySectionSelect={true}
+            displayDateSelect={true}
+          />
+        )}
+      </StatisticsHeader>
 
       {/* Spacer divs as per concept */}
       <div className={styles.spacer}></div>

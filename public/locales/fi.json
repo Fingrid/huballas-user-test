@@ -212,7 +212,10 @@
       "averageResponseTime": "Keskimääräinen vasteaika",
       "medianResponseTime": "Mediaani vasteaika",
       "standardDeviation": "Keskihajonta",
-      "noDataForRange": "Ei vasteaikatietoja valitulta aikaväliltä"
+      "noDataForRange": "Ei vasteaikatietoja valitulta aikaväliltä",
+      "p50": "Mediaani (p50)",
+      "p95": "95. persentiili (p95)",
+      "p99": "99. persentiili (p99)"
     },
     "breakdown": {
       "marketRoles": {
@@ -259,5 +262,14 @@
       "none": "Ei pinottuna",
       "stacked": "Pinottu"
     }
+  },
+  "usage": {
+    "pageTitle": "Käyttötilastot",
+    "pageDescription": "Seuraa ja analysoi Datahub-käyttöä, tapahtumamääriä ja järjestelmän aktiivisuutta kaikilla kanavilla ja markkinarooleilla.",
+    "yearToDate": "Vuoden alusta",
+    "viewStatistics": "Tarkastele tilastoja",
+    "selectDataDescription": "Valitse tarkasteltavat tiedot alla olevista vaihtoehdoista.",
+    "eventCounts": "Tapahtumamäärät",
+    "eventCountsDescription": "Päivittäiset tapahtumamäärät eri kanavilla ja markkinarooleilla"
   }
 }

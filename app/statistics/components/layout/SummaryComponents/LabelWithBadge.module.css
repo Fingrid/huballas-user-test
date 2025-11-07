@@ -1,0 +1,47 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.label {
+  color: var(--color-text);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.badge {
+  display: inline-flex;
+  padding: 0.25rem 1rem;
+  border-radius: 0.75rem;
+  outline: 1px solid;
+  outline-offset: -1px;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.badgeSuccess {
+  background-color: var(--color-background-level-4);
+  outline-color: var(--color-primary);
+}
+
+.badgeSuccess span {
+  color: var(--color-text);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.badgeError {
+  background-color: var(--color-error);
+  outline-color: var(--color-primary-action);
+}
+
+.badgeError span {
+  color: var(--color-primary-action);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1;
+}

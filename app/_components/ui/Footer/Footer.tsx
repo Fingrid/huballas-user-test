@@ -1,6 +1,7 @@
 'use client';
 
 import { useLocalization } from '@/lib/stores/localization.store';
+import styles from './Footer.module.css';
 
 export default function Footer() {
   const { t } = useLocalization();
@@ -14,14 +15,14 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="app-footer">
-      <div className="app-footer-content">
-        <nav className="app-footer-links" aria-label="Footer navigation">
+    <footer className={styles.footer}>
+      <div className={styles.content}>
+        <nav className={styles.links} aria-label="Footer navigation">
           {footerLinks.map((link) => (
             <a
               key={link.key}
               href={link.href}
-              className="app-footer-link"
+              className={styles.link}
             >
               {t(`navigation.footer.${link.key}`)}
             </a>

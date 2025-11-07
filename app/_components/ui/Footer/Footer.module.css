@@ -1,0 +1,34 @@
+.footer {
+  background-color: var(--color-primary);
+  color: white;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.content {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.links {
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 2.5rem;
+}
+
+.link {
+  color: white;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.link:hover {
+  opacity: 0.8;
+}

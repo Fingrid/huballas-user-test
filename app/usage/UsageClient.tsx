@@ -1,21 +1,19 @@
 "use client";
 
-import { useState, useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useLocalization } from "@/lib/stores/localization.store";
+import { useChartControls } from "@/lib/stores/chartControls.store";
 import { usePerformanceMeasurement } from "@/lib/performance/monitoring";
 import { 
   useUsageData, 
   useDateRangeCalculation, 
-  DateRangeOption
 } from "@/lib/hooks/useDataAccess";
-import type { DateRangeFilter } from "@/lib/utils/dataProcessing";
 import {
   StatisticsSummary,
   UsageStatisticsGraphs,
-  StatisticsHeader,
+  StickyChartControls,
 } from "../statistics/components";
-
-type StackingType = 'all' | "channel" | "process_group" | "marketRoleCode";
+import { UsageHeader, UsageMainContent, ChartSection } from "./components";
 
 export default function UsageClient() {
   const { t } = useLocalization();
@@ -23,6 +21,30 @@ export default function UsageClient() {
 
   // Ref for the usage section
   const usageRef = useRef<HTMLDivElement>(null);
+
+  // Use the chart controls store
+  const {
+    selectedRange,
+    customDateRange,
+    stackingType,
+    selectedProcess,
+    selectedChannel,
+    selectedRole,
+    setStackingType,
+    setSelectedRange,
+    setCustomDateRange,
+    setSelectedProcess,
+    setSelectedChannel,
+    setSelectedRole,
+    clearFilters,
+  } = useChartControls();
+
+  // Check if filters are active
+  const hasActiveFilters = 
+    stackingType !== "all" || 
+    selectedProcess !== "all" || 
+    selectedChannel !== "all" || 
+    selectedRole !== "all";
 
   // Use the new data access hooks
   const usageData = useUsageData();
@@ -32,125 +54,83 @@ export default function UsageClient() {
   // Get available date range from usage data
   const availableDataRange = usageData.availableDateRange;
 
-  // Chart controls state
-  const [usageStackingType, setUsageStackingType] = useState<StackingType>("all");
-  const [selectedRange, setSelectedRange] = useState<DateRangeOption>("30days");
-  const [userCustomDateRange, setUserCustomDateRange] = useState<DateRangeFilter | null>(null);
-  
-  // Filter controls state
-  const [selectedProcess, setSelectedProcess] = useState<string>('all');
-  const [selectedChannel, setSelectedChannel] = useState<string>('all');
-  const [selectedRole, setSelectedRole] = useState<string>('all');
-  
-  // Header ref
-  const headerRef = useRef<HTMLDivElement>(null);
-
   // Calculate date range based on selected option and available data
-  const customDateRange = useMemo(() => {
+  const activeDateRange = useMemo(() => {
     if (availableDataRange) {
       return calculateRange(
         selectedRange, 
-        selectedRange === "custom" ? userCustomDateRange || undefined : undefined, 
+        selectedRange === "custom" ? customDateRange || undefined : undefined, 
         availableDataRange
       );
     }
     return calculateRange(selectedRange, undefined, undefined);
-  }, [availableDataRange, calculateRange, selectedRange, userCustomDateRange]);
+  }, [availableDataRange, calculateRange, selectedRange, customDateRange]);
 
-  const handleRangeChange = (range: DateRangeOption) => {
-    measureInteraction("date-range-change");
-    setSelectedRange(range);
-    
-    // Reset user custom date range when switching away from custom
-    if (range === 'custom') {
-      setUserCustomDateRange(null);
-    }
-  };
-
-  const handleDateRangeChange = (dateRange: DateRangeFilter) => {
-    measureInteraction("custom-date-change");
-    setUserCustomDateRange(dateRange);
-  };
-
-  const handleUsageStackingChange = (type: StackingType) => {
+  const handleUsageStackingChange = (type: "all" | "channel" | "process_group" | "marketRoleCode") => {
     measureInteraction("usage-stacking-change");
-    setUsageStackingType(type);
+    setStackingType(type);
   };
-
-  const handleClearFilters = () => {
-    measureInteraction("clear-filters");
-    setUsageStackingType('all');
-    setSelectedProcess('all');
-    setSelectedChannel('all');
-    setSelectedRole('all');
-  };
-
-  const hasActiveFilters = useMemo(() => {
-    return usageStackingType !== 'all' || 
-           selectedProcess !== 'all' || 
-           selectedChannel !== 'all' || 
-           selectedRole !== 'all';
-  }, [usageStackingType, selectedProcess, selectedChannel, selectedRole]);
-
-  // Calculate the active date range based on selected option and custom range
-  const activeDateRange = useMemo(() => {
-    return customDateRange;
-  }, [customDateRange]);
 
   return (
     <>
-      {/* Statistics Header - With integrated filter bar in sticky controls */}
-      <StatisticsHeader
-        activeSection="usage"
-        onSectionChange={() => {}} // Not needed for single section page
-        selectedRange={selectedRange}
-        dateRange={activeDateRange}
-        onRangeChange={handleRangeChange}
-        onDateRangeChange={handleDateRangeChange}
-        availableDataRange={availableDataRange}
-        headerRef={headerRef}
-        alwaysShowStickyControls={true}
-        hideInlineDateControls={true}
-        displayFilters={true}
-        stackingType={usageStackingType}
-        onStackingChange={handleUsageStackingChange}
-        selectedProcess={selectedProcess}
-        selectedChannel={selectedChannel}
-        selectedRole={selectedRole}
-        onProcessChange={setSelectedProcess}
-        onChannelChange={setSelectedChannel}
-        onRoleChange={setSelectedRole}
-        onClearFilters={handleClearFilters}
-        hasActiveFilters={hasActiveFilters}
-      />
+      {/* Header block with gradient background */}
+      <UsageHeader>
+        <StatisticsSummary
+          onSectionClick={() => {
+            usageRef.current?.scrollIntoView({ behavior: "smooth" });
+          }}
+        />
+      </UsageHeader>
 
-      {/* Statistics Summary Boxes */}
-      <div className="content-area content-area__statistics-summary">
-        <h2>{t("statistics.summary.title")}</h2>
-        <StatisticsSummary onSectionClick={() => {}} />
-      </div>
-
-      {/* Usage Statistics Section */}
-      <div
-        ref={usageRef}
-        data-section="usage"
-        className="content-area content-area__statistics-section"
-      >
-        <div className="statistics__section">
-          <div className="statistics__section-header">
-            <h2 className="statistics__section-title">
-              {t("statistics.dailyEvents.title")}
+      {/* Main content area */}
+      <>
+        
+        <UsageMainContent contentRef={usageRef}>
+          <div className="mb-8">
+            <h2 className="text-[var(--color-text)] text-[1.75rem] font-bold leading-[1.3] mb-3">
+              {t('usage.viewStatistics')}
             </h2>
-            <p>{t("statistics.dailyEvents.description")}</p>
+            <p className="text-[var(--color-text)] text-base leading-[1.5] mb-2">
+              {t('usage.selectDataDescription')}
+            </p>
           </div>
+        </UsageMainContent>
+        {/* Controls for filtering and date selection */}
+        <StickyChartControls
+          activeSection="usage"
+          onSectionChange={() => {}} // Not used on this page
+          selectedRange={selectedRange}
+          dateRange={activeDateRange}
+          onRangeChange={setSelectedRange}
+          onDateRangeChange={setCustomDateRange}
+          availableDataRange={availableDataRange}
+          displaySectionSelect={false}
+          displayFilters={true}
+          stackingType={stackingType}
+          onStackingChange={setStackingType}
+          selectedProcess={selectedProcess}
+          selectedChannel={selectedChannel}
+          selectedRole={selectedRole}
+          onProcessChange={setSelectedProcess}
+          onChannelChange={setSelectedChannel}
+          onRoleChange={setSelectedRole}
+          onClearFilters={clearFilters}
+          hasActiveFilters={hasActiveFilters}
+        />
 
-          <UsageStatisticsGraphs
-            stackingType={usageStackingType === 'all' ? 'channel' : usageStackingType}
-            activeDateRange={activeDateRange}
-            onStackingChange={handleUsageStackingChange}
-          />
-        </div>
-      </div>
+        <UsageMainContent contentRef={usageRef}>
+          <ChartSection
+            title={t('usage.eventCounts')}
+            description={t('usage.eventCountsDescription')}
+          >
+            <UsageStatisticsGraphs
+              stackingType={stackingType === 'all' ? 'channel' : stackingType}
+              activeDateRange={activeDateRange}
+              onStackingChange={handleUsageStackingChange}
+            />
+          </ChartSection>
+        </UsageMainContent>
+      </>
     </>
   );
 }

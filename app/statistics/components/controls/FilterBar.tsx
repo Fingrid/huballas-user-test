@@ -7,7 +7,7 @@ import type { DateRangeFilter as DateRangeFilterType } from '@/lib/utils/dataPro
 import FieldGroup from './FieldGroup';
 import DateRangeFilter from './DateRangeFilter';
 import { DateRangeOption } from '@/lib/hooks/useDataAccess';
-import Select from '@/app/_components/ui/Select';
+import Select from '@/app/_components/ui/Select/Select';
 
 type StackingType = 'all' | 'channel' | 'process_group' | 'marketRoleCode';
 
@@ -138,13 +138,6 @@ export default function FilterBar({
 
   return (
     <div className="w-full flex flex-col gap-4">
-      {/* Title row */}
-      <div className="flex justify-start items-center">
-        <h4 className="text-[var(--color-text)] text-base font-medium leading-normal">
-          {t('statistics.controls.filters')}
-        </h4>
-      </div>
-
       {/* Grouping and Date controls row */}
       <div className="flex justify-between items-end gap-8">
         {/* Grouping controls - Left aligned */}

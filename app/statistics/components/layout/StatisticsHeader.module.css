@@ -1,0 +1,107 @@
+/* Statistics Header Component Styles */
+
+.header {
+  width: 100%;
+  max-width: 90rem;
+  padding-left: 0;
+  padding-right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  z-index: 2;
+}
+
+@media (min-width: 1024px) {
+  .header {
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+.titleSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+@media (min-width: 1024px) {
+  .titleSection {
+    width: 707px;
+  }
+}
+
+.title {
+  color: var(--color-text);
+  font-size: 1.875rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+@media (min-width: 640px) {
+  .title {
+    font-size: 2.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .title {
+    font-size: 3rem;
+    line-height: 2.5rem;
+  }
+}
+
+.controlsSection {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .controlsSection {
+    width: 651px;
+    justify-content: flex-end;
+  }
+}
+
+.descriptionSection {
+  width: 100%;
+  max-width: 90rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.description {
+  width: 100%;
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+@media (min-width: 640px) {
+  .description {
+    font-size: 1.125rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .description {
+    width: 900px;
+  }
+}

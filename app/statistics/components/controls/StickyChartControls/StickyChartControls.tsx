@@ -2,10 +2,12 @@
 
 import { cn } from '@/lib/utils/cn';
 import { useLocalization } from '@/lib/stores/localization.store';
-import DateRangeFilter from './DateRangeFilter';
-import FilterBar from './FilterBar';
+import { useEffect, useRef, useState } from 'react';
+import DateRangeFilter from '../DateRangeFilter';
+import FilterBar from '../FilterBar';
 import type { DateRangeFilter as DateRangeFilterType } from '@/lib/utils/dataProcessing';
 import { DateRangeOption } from '@/lib/hooks/useDataAccess';
+import styles from './StickyChartControls.module.css';
 
 type SectionType = 'usage' | 'errors' | 'response_times';
 type StackingType = 'all' | 'channel' | 'process_group' | 'marketRoleCode';
@@ -19,18 +21,15 @@ interface SectionSelectorProps {
 
 function SectionSelector({ activeSection, onSectionChange, t }: SectionSelectorProps) {
   return (
-    <div className="section-selector-container">
-      <label className="form-label">
-        {t('statistics.controls.statistics')}
-      </label>
-      <div className="section-selector-buttons">
+    <div className={cn(styles.sectionSelector)}>
+      <div className={cn(styles.sectionButtons)}>
         <button
           onClick={() => onSectionChange('usage')}
           className={cn(
-            "section-selector-button",
+            styles.sectionButton,
             activeSection === 'usage'
-              ? "section-selector-button-active"
-              : "section-selector-button-inactive"
+              ? styles.sectionButtonActive
+              : styles.sectionButtonInactive
           )}
         >
           {t('statistics.sections.usage')}
@@ -38,10 +37,11 @@ function SectionSelector({ activeSection, onSectionChange, t }: SectionSelectorP
         <button
           onClick={() => onSectionChange('errors')}
           className={cn(
-            "section-selector-button section-selector-button-separator",
+            styles.sectionButton,
+            styles.sectionButtonSeparator,
             activeSection === 'errors'
-              ? "section-selector-button-active"
-              : "section-selector-button-inactive"
+              ? styles.sectionButtonActive
+              : styles.sectionButtonInactive
           )}
         >
           {t('statistics.sections.errors')}
@@ -49,10 +49,11 @@ function SectionSelector({ activeSection, onSectionChange, t }: SectionSelectorP
         <button
           onClick={() => onSectionChange('response_times')}
           className={cn(
-            "section-selector-button section-selector-button-separator",
+            styles.sectionButton,
+            styles.sectionButtonSeparator,
             activeSection === 'response_times'
-              ? "section-selector-button-active"
-              : "section-selector-button-inactive"
+              ? styles.sectionButtonActive
+              : styles.sectionButtonInactive
           )}
         >
           {t('monthlyReports.responseTimes')}
@@ -112,18 +113,36 @@ export default function StickyChartControls({
   hasActiveFilters,
 }: StickyChartControlsProps) {
   const { t } = useLocalization();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isStuck, setIsStuck] = useState(false);
+
+  useEffect(() => {
+    if (!containerRef.current || inlineMode) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // When the element is stuck, it will be intersecting but at the top boundary
+        setIsStuck(entry.intersectionRatio < 1);
+      },
+      { threshold: [1], rootMargin: '-1px 0px 0px 0px' }
+    );
+
+    observer.observe(containerRef.current);
+
+    return () => observer.disconnect();
+  }, [inlineMode]);
 
   // Inline mode: 2-row layout for header (section on top, date on bottom)
   if (inlineMode) {
     return (
-      <div className="sticky-controls-inline-container">
+      <div className={cn(styles.inlineContainer)}>
         {displaySectionSelect && (
-          <div className="sticky-controls-inline-section">
+          <div className={cn(styles.inlineSection)}>
             <SectionSelector activeSection={activeSection} onSectionChange={onSectionChange} t={t} />
           </div>
         )}
         {displayDateSelect && (
-          <div className="sticky-controls-inline-date">
+          <div className={cn(styles.inlineDate)}>
             <DateRangeFilter
               selectedRange={selectedRange}
               dateRange={dateRange}
@@ -139,21 +158,21 @@ export default function StickyChartControls({
 
   // Sticky mode: both controls displayed on same row
   return (
-    <div className="sticky-controls-container">
-      <div className="sticky-controls-wrapper">
-        <div className="sticky-controls-content">
+    <div ref={containerRef} className={cn(styles.container, isStuck && styles.stuck)}>
+      <div className={cn(styles.wrapper)}>
+        <div className={cn(styles.content)}>
           {/* First row: Section Toggle and Date Range Filter */}
-          <div className="sticky-controls-main-row">
+          <div className={cn(styles.mainRow)}>
             {/* Section Toggle */}
             {displaySectionSelect && (
-              <div className="sticky-controls-row-section">
+              <div className={cn(styles.rowSection)}>
                 <SectionSelector activeSection={activeSection} onSectionChange={onSectionChange} t={t} />
               </div>
             )}
 
             {/* Date Range Filter - Only show if not displaying filters (filters include date controls) */}
             {displayDateSelect && !displayFilters && (
-              <div className="sticky-controls-date-container">
+              <div className={cn(styles.dateContainer)}>
                 <DateRangeFilter
                   selectedRange={selectedRange}
                   dateRange={dateRange}

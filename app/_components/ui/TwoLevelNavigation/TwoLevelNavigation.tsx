@@ -4,7 +4,8 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { cn } from '@/lib/utils/cn';
 import { useTranslation } from '@/lib/stores/localization.store';
-import LanguageSelector from './LanguageSelector';
+import LanguageSelector from '../LanguageSelector/LanguageSelector';
+import styles from './TwoLevelNavigation.module.css';
 
 export default function TwoLevelNavigation() {
   const pathname = usePathname();
@@ -34,33 +35,31 @@ export default function TwoLevelNavigation() {
   };
 
   return (
-    <div className="header-nav-container">
+    <div className={styles.container}>
       {/* Upper Row: Logo (hidden) and Right-aligned items */}
-      <div className="header-nav-upper-row">
+      <div className={styles.upperRow}>
         {/* Logo section - hidden as per concept */}
-        <div className="header-nav-logo">
-          <div className="header-nav-logo-text">Datahub</div>
+        <div className={styles.logo}>
+          <div className={styles.logoText}>Datahub</div>
         </div>
         
         {/* Upper Navigation - Right side */}
-        <div className="header-nav-upper-items">
-          <div className="header-nav-upper-items">
+        <div className={styles.upperItems}>
+          <div className={styles.upperItems}>
             {/* Language Selector */}
-            <div className="header-nav-upper-item">
+            <div className={styles.upperItem}>
               <LanguageSelector />
             </div>
             
             {/* Upper nav items */}
-            {upperNavItems.map((item, index) => {
-              const isLast = index === upperNavItems.length - 1;
-              
+            {upperNavItems.map((item) => {
               if (item.disabled) {
                 return (
                   <div 
                     key={item.href}
-                    className={cn("header-nav-upper-item", isLast && "header-nav-upper-item:last-child")}
+                    className={styles.upperItem}
                   >
-                    <div className="header-nav-upper-link-disabled">
+                    <div className={styles.upperLinkDisabled}>
                       {item.label}
                     </div>
                   </div>
@@ -70,11 +69,11 @@ export default function TwoLevelNavigation() {
               return (
                 <div 
                   key={item.href}
-                  className={cn("header-nav-upper-item", isLast && "header-nav-upper-item:last-child")}
+                  className={styles.upperItem}
                 >
                   <Link
                     href={item.href}
-                    className="header-nav-upper-link"
+                    className={styles.upperLink}
                   >
                     {item.label}
                   </Link>
@@ -86,7 +85,7 @@ export default function TwoLevelNavigation() {
       </div>
 
       {/* Lower Navigation */}
-      <div className="header-nav-lower-row">
+      <div className={styles.lowerRow}>
         {lowerNavItems.map((item) => {
           const active = isActive(item.href);
           
@@ -94,9 +93,9 @@ export default function TwoLevelNavigation() {
             return (
               <div
                 key={item.href}
-                className="header-nav-lower-item"
+                className={styles.lowerItem}
               >
-                <div className="header-nav-lower-link-disabled">
+                <div className={styles.lowerLinkDisabled}>
                   {item.label}
                 </div>
               </div>
@@ -106,13 +105,13 @@ export default function TwoLevelNavigation() {
           return (
             <div
               key={item.href}
-              className="header-nav-lower-item"
+              className={styles.lowerItem}
             >
               <Link
                 href={item.href}
                 className={cn(
-                  "header-nav-lower-link",
-                  active && "header-nav-lower-link-active"
+                  styles.lowerLink,
+                  active && styles.lowerLinkActive
                 )}
               >
                 {item.label}

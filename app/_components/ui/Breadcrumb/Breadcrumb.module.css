@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--color-primary-action);
+  font-size: 1rem;
+  line-height: 1.5rem;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.link:hover {
+  opacity: 0.8;
+}
+
+.homeIcon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.separator {
+  color: var(--color-text);
+  font-size: 1rem;
+  line-height: 1.5rem;
+  user-select: none;
+}
+
+.current {
+  color: var(--color-text);
+  font-size: 1rem;
+  line-height: 1.5rem;
+}

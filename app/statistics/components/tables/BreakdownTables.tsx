@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import type { UsageDataRecord } from '@/lib/types';
 import { useLocalization } from '@/lib/stores/localization.store';
+import ContentBox from '@/app/_components/ui/ContentBox/ContentBox';
+import { GridContainer } from '@/app/_components/layout';
 
 type SortField = 'name' | 'count';
 type SortDirection = 'asc' | 'desc';
@@ -28,9 +30,7 @@ interface BreakdownTableProps {
 
 // Style objects for consistent styling - referencing CSS classes from globals.css
 const styles = {
-  container: 'breakdown-tables-container',
   tableWrapper: 'breakdown-table-wrapper',
-  tableContainer: 'breakdown-table-container',
   tableHeader: 'breakdown-table-header',
   tableTitle: 'breakdown-table-title',
   tableDescription: 'breakdown-table-description',
@@ -114,15 +114,17 @@ function BreakdownTable({ title, items, description}: BreakdownTableProps) {
   });
   
   return (
-    <div className={styles.tableContainer}>
-      {/* Table header with title and description */}
-      <div className={styles.tableHeader}>
-        <h4 className={styles.tableTitle}>{title}</h4>
-        {description && (
-          <p className={styles.tableDescription}>{description}</p>
-        )}
-      </div>
-      
+    <ContentBox
+      variant="table"
+      header={
+        <div className={styles.tableHeader}>
+          <h4 className={styles.tableTitle}>{title}</h4>
+          {description && (
+            <p className={styles.tableDescription}>{description}</p>
+          )}
+        </div>
+      }
+    >
       {/* Table with column headers and data */}
       <div className={styles.scrollContainer}>
         <table className={styles.table}>
@@ -199,7 +201,7 @@ function BreakdownTable({ title, items, description}: BreakdownTableProps) {
           </tbody>
         </table>
       </div>
-    </div>
+    </ContentBox>
   );
 }
 
@@ -256,7 +258,7 @@ export default function BreakdownTables({
     }));
 
   return (
-    <div className={styles.container}>
+    <GridContainer direction="row">
       <div className={styles.tableWrapper}>
         <BreakdownTable 
           title={t('statistics.breakdown.marketRoles.title')} 
@@ -278,6 +280,6 @@ export default function BreakdownTables({
           items={channelItems} 
         />
       </div>
-    </div>
+    </GridContainer>
   );
 }

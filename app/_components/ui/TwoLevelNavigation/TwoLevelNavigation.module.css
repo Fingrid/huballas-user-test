@@ -1,0 +1,132 @@
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 1rem 2.5rem;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.upperRow {
+  width: 100%;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.logo {
+  opacity: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logoText {
+  text-align: right;
+  justify-content: flex-start;
+  color: var(--color-primary);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.75rem;
+}
+
+.upperItems {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.upperItem {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 0.5rem;
+}
+
+.upperItem:last-child {
+  padding-left: 0.5rem;
+  padding-right: 0;
+}
+
+.upperLink {
+  text-align: center;
+  justify-content: center;
+  color: var(--color-text);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.upperLink:hover {
+  color: var(--color-primary);
+}
+
+.upperLinkDisabled {
+  text-align: center;
+  justify-content: center;
+  color: var(--color-text);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.lowerRow {
+  width: 100%;
+  height: 1.5rem;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.lowerItem {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.lowerItem:first-child {
+  padding-right: 1rem;
+  padding-left: 0;
+}
+
+.lowerItem:nth-last-child(-n + 2) {
+  padding-left: 1rem;
+  padding-right: 0;
+}
+
+.lowerLink {
+  text-align: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+  color: var(--color-text);
+  transition: color 0.2s ease;
+}
+
+.lowerLink:hover {
+  color: var(--color-primary);
+}
+
+.lowerLinkActive {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.lowerLinkDisabled {
+  text-align: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+  color: var(--color-text);
+  opacity: 0.5;
+  cursor: not-allowed;
+}

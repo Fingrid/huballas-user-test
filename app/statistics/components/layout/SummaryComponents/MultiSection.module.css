@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.item {
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-separator);
+}
+
+.item p {
+  color: var(--color-text);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.item span {
+  font-weight: 700;
+}

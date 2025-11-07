@@ -5,12 +5,13 @@ import {
   GridComponent,
   LegendComponent,
   DataZoomComponent,
+  ToolboxComponent,
   TitleComponent,
   VisualMapComponent,
   GraphicComponent,
 } from 'echarts/components';
 import { BarChart, LineChart } from 'echarts/charts';
-import { CanvasRenderer } from 'echarts/renderers';
+import { CanvasRenderer, SVGRenderer } from 'echarts/renderers';
 import echartsTheme from '@/app/echarts.theme.json';
 
 // Register ECharts components
@@ -25,6 +26,8 @@ echarts.use([
   BarChart,
   LineChart,
   CanvasRenderer,
+  ToolboxComponent,
+  SVGRenderer
 ]);
 
 echarts.registerTheme('huballas', echartsTheme);
@@ -48,15 +51,44 @@ export function useECharts(
 
     // Initialize or get existing chart instance
     if (!chartInstanceRef.current) {
-      chartInstanceRef.current = echarts.init(chartRef.current, 'huballas');
+      chartInstanceRef.current = echarts.init(chartRef.current, 'huballas', {
+        renderer: 'svg',
+      });
     }
 
     chartInstanceRef.current.setOption({
       borderRadius: 0,
+      toolbox: {
+        show: true,
+        feature: {
+          restore: {},
+          saveAsImage: {},
+          //dataView: {},
+        },
+      },
+      grid: {
+        left: 0,
+        right: '33%',
+        top: '15%',
+        bottom: '15%',
+      },
       legend: {
         borderRadius: 0,
+        right: '18%',
+        top: 'center',
         icon: 'rect'
       },
+      dataZoom: [{
+        xAxisIndex: 0,
+        bottom: 0,
+        height: '10%',
+      },
+      {
+        yAxisIndex: 0,
+        bottom: "15%",
+        top: '20%',
+        left: '68%',
+      }],
     });
 
     // Render the chart

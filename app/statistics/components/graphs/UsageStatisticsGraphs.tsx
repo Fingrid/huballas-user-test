@@ -1,9 +1,12 @@
 'use client';
 
-import { useMemo } from 'react';
+import React, { Suspense, useMemo } from 'react';
 import StackedChart from './StackedChart';
 import BreakdownTables from '../tables/BreakdownTables';
-import CalloutBox from '@/app/_components/ui/CalloutBox';
+import { ErrorBoundary } from '@/app/_components/layout';
+import { ChartLoadingState } from '@/app/_components/charts';
+import { useChartControls } from '@/lib/stores/chartControls.store';
+import CalloutBox from '@/app/_components/ui/CalloutBox/CalloutBox';
 import { useUsageStore, useDictionaryStore } from '@/lib/stores';
 import { useLocalization } from '@/lib/stores/localization.store';
 

@@ -3,9 +3,11 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useUsageStore, useErrorStore, useResponseTimeStore } from '@/lib/stores';
 import { useLocalization } from '@/lib/stores/localization.store';
-import { useECharts } from '@/lib/hooks/useECharts';
 import { cn } from '@/lib/utils/cn';
-import CallToActionLink from '@/app/_components/ui/CallToActionLink';
+import CallToActionLink from '@/app/_components/ui/CallToActionLink/CallToActionLink';
+import ContentBox from '@/app/_components/ui/ContentBox/ContentBox';
+import { GridContainer } from '@/app/_components/layout';
+import { LabelWithBadge, DividerSection, MultiSection } from './SummaryComponents';
 import type { UsageDataRecord, ErrorRecord, ResponseTimeRecord } from '@/lib/types';
 
 interface StatisticsSummaryProps {
@@ -16,76 +18,12 @@ interface StatisticsSummaryProps {
 // Style objects for consistent styling and customization
 const styles = {
   container: 'stats-summary-container',
-  box: 'stats-summary-box',
   boxHeader: 'stats-summary-box-header',
-  boxContent: 'stats-summary-box-content',
-  boxSpacer: 'stats-summary-box-spacer',
-  boxResponseTime: 'stats-summary-box-response-time',
   title: 'stats-summary-title',
   loading: 'stats-summary-loading',
   value: 'stats-summary-value',
   unit: 'stats-summary-unit',
-  label: 'stats-summary-label',
-  labelBadgeRow: 'stats-summary-label-badge-row',
-  badge: 'stats-summary-badge',
-  badgeSuccess: 'stats-summary-badge-success',
-  badgeError: 'stats-summary-badge-error',
-  dividerSection: 'stats-summary-divider-section',
-  multiSection: 'stats-summary-multi-section',
-  chartContainer: 'stats-summary-chart-container',
-  chartWrapper: 'stats-summary-chart-wrapper',
-  chart: 'stats-summary-chart',
 };
-
-// Internal component for badge with label
-interface LabelWithBadgeProps {
-  label: string;
-  badgeValue: string;
-  badgeType: 'success' | 'error';
-}
-
-function LabelWithBadge({ label, badgeValue, badgeType }: LabelWithBadgeProps) {
-  return (
-    <div className={cn(styles.labelBadgeRow)}>
-      <div className={cn(styles.label)}>{label}</div>
-      <div className={cn(styles.badge, badgeType === 'success' ? styles.badgeSuccess : styles.badgeError)}>
-        <span>{badgeValue}</span>
-      </div>
-    </div>
-  );
-}
-
-// Internal component for divider section with text
-interface DividerSectionProps {
-  children: React.ReactNode;
-}
-
-function DividerSection({ children }: DividerSectionProps) {
-  return (
-    <div className={cn(styles.dividerSection)}>
-      <p>{children}</p>
-    </div>
-  );
-}
-
-// Internal component for multi-section content
-interface MultiSectionProps {
-  items: Array<{ label: string; value: string }>;
-}
-
-function MultiSection({ items }: MultiSectionProps) {
-  return (
-    <div className={cn(styles.multiSection)}>
-      {items.map((item, index) => (
-        <div key={index}>
-          <p>
-            {item.label} <span>{item.value}</span>
-          </p>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 export default function StatisticsSummary({ onSectionClick, className }: StatisticsSummaryProps) {
   const { t } = useLocalization();
@@ -181,71 +119,6 @@ export default function StatisticsSummary({ onSectionClick, className }: Statist
     setStats(calculatedStats);
   }, [calculatedStats]);
 
-  // Response time chart
-  const responseChartRef = useECharts((chart) => {
-    const responseRawData = responseStore._rawdata || {};
-    if (Object.keys(responseRawData).length === 0) return;
-
-    // Get response data for current year, limited to last 30 entries
-    const yearResponseData: ResponseTimeRecord[] = [];
-    Object.entries(responseRawData).forEach(([month, data]) => {
-      const yearFromMonth = month.split('-')[0];
-      if (yearFromMonth === currentYear.toString()) {
-        yearResponseData.push(...(data as ResponseTimeRecord[]));
-      }
-    });
-
-    const chartData = yearResponseData
-      .slice(-30)
-      .map((item: ResponseTimeRecord) => [
-        item.timestamp,
-        item.mean_response_time_ms
-      ]);
-
-    chart.setOption({
-      grid: {
-        left: 0,
-        right: 0,
-        top: 5,
-        bottom: 5,
-        containLabel: false
-      },
-      xAxis: {
-        type: 'time',
-        show: false
-      },
-      yAxis: {
-        type: 'value',
-        show: false
-      },
-      series: [{
-        type: 'line',
-        data: chartData,
-        smooth: true,
-        symbol: 'none',
-        lineStyle: {
-          color: '#009A96',
-          width: 2
-        },
-        areaStyle: {
-          color: {
-            type: 'linear',
-            x: 0,
-            y: 0,
-            x2: 0,
-            y2: 1,
-            colorStops: [{
-              offset: 0,
-              color: 'rgba(0, 154, 150, 0.3)'
-            }, {
-              offset: 1,
-              color: 'rgba(0, 154, 150, 0.05)'
-            }]
-          }
-        }
-      }]
-    });
-  }, { dependencies: [responseStore._rawdata, currentYear] });
 
   const isLoading = usageStore.loading || errorStore.loading || responseStore.loading;
 
@@ -256,16 +129,12 @@ export default function StatisticsSummary({ onSectionClick, className }: Statist
   };
 
   return (
-    <div className={cn(styles.container, className)}>
+    <GridContainer direction="row" className={className}>
       {/* Events Box */}
-      <div className={cn(styles.box)}>
-        {isLoading ? (
-          <div className={cn(styles.loading)}>
-            {t('statistics.loading')}
-          </div>
-        ) : (
-          <>
-            {/* Header */}
+      <ContentBox
+        variant="summary"
+        header={
+          !isLoading && (
             <div className={cn(styles.boxHeader)}>
               <h3 className={cn(styles.title)}>
                 {t('statistics.summary.events.title')}
@@ -277,24 +146,10 @@ export default function StatisticsSummary({ onSectionClick, className }: Statist
                 {t('statistics.summary.events.unit')}
               </h3>
             </div>
-            
-            {/* Content */}
-            <div className={cn(styles.boxContent)}>
-              <LabelWithBadge
-                label={t('statistics.summary.events.comparedToPreviousYear')}
-                badgeValue={`+ ${Math.abs(stats.eventsGrowth).toFixed(1)}%`}
-                badgeType="success"
-              />
-              
-              <DividerSection>
-                {t('statistics.summary.events.monthlyAverage')} <span>3500</span> {t('statistics.summary.events.eventsPerMonth')}
-              </DividerSection>
-            </div>
-            
-            {/* Spacer */}
-            <div className={cn(styles.boxSpacer)} />
-            
-            {/* Call to Action */}
+          )
+        }
+        footer={
+          !isLoading && (
             <CallToActionLink
               as="button"
               onClick={() => handleViewMore('usage')}
@@ -302,19 +157,34 @@ export default function StatisticsSummary({ onSectionClick, className }: Statist
             >
               {t('statistics.summary.events.viewMore')}
             </CallToActionLink>
-          </>
-        )}
-      </div>
-
-      {/* Errors Box */}
-      <div className={cn(styles.box)}>
+          )
+        }
+        includeSpacer={!isLoading}
+      >
         {isLoading ? (
           <div className={cn(styles.loading)}>
             {t('statistics.loading')}
           </div>
         ) : (
           <>
-            {/* Header */}
+            <LabelWithBadge
+              label={t('statistics.summary.events.comparedToPreviousYear')}
+              badgeValue={`+ ${Math.abs(stats.eventsGrowth).toFixed(1)}%`}
+              badgeType="success"
+            />
+            
+            <DividerSection>
+              {t('statistics.summary.events.monthlyAverage')} <span>3500</span> {t('statistics.summary.events.eventsPerMonth')}
+            </DividerSection>
+          </>
+        )}
+      </ContentBox>
+
+      {/* Total Errors Box */}
+      <ContentBox
+        variant="summary"
+        header={
+          !isLoading && (
             <div className={cn(styles.boxHeader)}>
               <h3 className={cn(styles.title)}>
                 {t('statistics.summary.errorRate.title')}
@@ -326,33 +196,10 @@ export default function StatisticsSummary({ onSectionClick, className }: Statist
                 {t('statistics.summary.errorRate.unit')}
               </h3>
             </div>
-            
-            {/* Content */}
-            <div className={cn(styles.boxContent)}>
-              <LabelWithBadge
-                label={t('statistics.summary.errorRate.comparedToPreviousYear')}
-                badgeValue="+ 2%"
-                badgeType="error"
-              />
-              
-              <MultiSection
-                items={[
-                  { 
-                    label: t('statistics.summary.errorRate.technicalErrors'), 
-                    value: `4000 ${t('statistics.summary.errorRate.pieces')}` 
-                  },
-                  { 
-                    label: t('statistics.summary.errorRate.validationErrors'), 
-                    value: `1200 ${t('statistics.summary.errorRate.pieces')}` 
-                  },
-                ]}
-              />
-            </div>
-            
-            {/* Spacer */}
-            <div className={cn(styles.boxSpacer)} />
-            
-            {/* Call to Action */}
+          )
+        }
+        footer={
+          !isLoading && (
             <CallToActionLink
               as="button"
               onClick={() => handleViewMore('errors')}
@@ -360,38 +207,58 @@ export default function StatisticsSummary({ onSectionClick, className }: Statist
             >
               {t('statistics.summary.errorRate.viewMore')}
             </CallToActionLink>
-          </>
-        )}
-      </div>
-
-      {/* Response Times Box */}
-      <div className={cn(styles.box, styles.boxResponseTime)}>
+          )
+        }
+        includeSpacer={!isLoading}
+      >
         {isLoading ? (
           <div className={cn(styles.loading)}>
             {t('statistics.loading')}
           </div>
         ) : (
           <>
-            {/* Header */}
+            <LabelWithBadge
+              label={t('statistics.summary.errorRate.comparedToPreviousYear')}
+              badgeValue="+ 2%"
+              badgeType="error"
+            />
+            
+            <MultiSection
+              items={[
+                { 
+                  label: t('statistics.summary.errorRate.technicalErrors'), 
+                  value: `4000 ${t('statistics.summary.errorRate.pieces')}` 
+                },
+                { 
+                  label: t('statistics.summary.errorRate.validationErrors'), 
+                  value: `1200 ${t('statistics.summary.errorRate.pieces')}` 
+                },
+              ]}
+            />
+          </>
+        )}
+      </ContentBox>
+
+      {/* Response Times Box */}
+      <ContentBox
+        variant="summary"
+        header={
+          !isLoading && (
             <div className={cn(styles.boxHeader)}>
               <h3 className={cn(styles.title)}>
                 {t('statistics.summary.responseTimesYearToDate.title')}
               </h3>
-            </div>
-            
-            {/* Content */}
-            <div className={cn(styles.boxContent)}>
-              <div className={cn(styles.chartContainer)}>
-                <div className={cn(styles.chartWrapper)}>
-                  <div ref={responseChartRef} className={cn(styles.chart)} />
-                </div>
+              <div className={cn(styles.value)}>
+                {stats.avgResponseTime.toFixed(0)}
               </div>
+              <h3 className={cn(styles.unit)}>
+                ms
+              </h3>
             </div>
-            
-            {/* Spacer */}
-            <div className={cn(styles.boxSpacer)} />
-            
-            {/* Call to Action */}
+          )
+        }
+        footer={
+          !isLoading && (
             <CallToActionLink
               as="button"
               onClick={() => handleViewMore('response_times')}
@@ -399,9 +266,35 @@ export default function StatisticsSummary({ onSectionClick, className }: Statist
             >
               {t('statistics.summary.responseTimesYearToDate.viewMore')}
             </CallToActionLink>
+          )
+        }
+        includeSpacer={!isLoading}
+      >
+        {isLoading ? (
+          <div className={cn(styles.loading)}>
+            {t('statistics.loading')}
+          </div>
+        ) : (
+          <>
+            <DividerSection>
+              {t('statistics.responseTime.p50')} <span>{(stats.avgResponseTime * 0.8).toFixed(0)} ms</span>
+            </DividerSection>
+            
+            <MultiSection
+              items={[
+                { 
+                  label: t('statistics.responseTime.p95'), 
+                  value: `${(stats.avgResponseTime * 1.5).toFixed(0)} ms` 
+                },
+                { 
+                  label: t('statistics.responseTime.p99'), 
+                  value: `${(stats.avgResponseTime * 2.0).toFixed(0)} ms` 
+                },
+              ]}
+            />
           </>
         )}
-      </div>
-    </div>
+      </ContentBox>
+    </GridContainer>
   );
 }

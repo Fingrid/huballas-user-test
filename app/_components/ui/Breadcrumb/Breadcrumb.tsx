@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useLocalization } from '@/lib/stores/localization.store';
 import { cn } from '@/lib/utils/cn';
+import styles from './Breadcrumb.module.css';
 
 interface BreadcrumbProps {
   currentPage: string;
@@ -13,10 +14,10 @@ export default function Breadcrumb({ currentPage, className }: BreadcrumbProps) 
   const { t } = useLocalization();
 
   return (
-    <nav aria-label="Breadcrumb" className={cn('breadcrumb-container', className)}>
-      <Link href="/" className="breadcrumb-link">
+    <nav aria-label="Breadcrumb" className={cn(styles.container, className)}>
+      <Link href="/" className={styles.link}>
         <svg 
-          className="breadcrumb-home-icon" 
+          className={styles.homeIcon}
           viewBox="0 0 16 16" 
           fill="none" 
           xmlns="http://www.w3.org/2000/svg"
@@ -40,15 +41,15 @@ export default function Breadcrumb({ currentPage, className }: BreadcrumbProps) 
         {t('navigation.breadcrumb.home')}
       </Link>
       
-      <span className="breadcrumb-separator" aria-hidden="true">&gt;</span>
+      <span className={styles.separator} aria-hidden="true">&gt;</span>
       
-      <Link href="#" className="breadcrumb-link">
+      <Link href="#" className={styles.link}>
         {t('navigation.breadcrumb.services')}
       </Link>
       
-      <span className="breadcrumb-separator" aria-hidden="true">&gt;</span>
+      <span className={styles.separator} aria-hidden="true">&gt;</span>
       
-      <span className="breadcrumb-current" aria-current="page">
+      <span className={styles.current} aria-current="page">
         {currentPage}
       </span>
     </nav>

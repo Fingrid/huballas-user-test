@@ -14,6 +14,16 @@ import { ErrorStatisticsStore, createErrorStatisticsStore } from "./errorStatist
 // Export localization store
 export { useLocalization, useTranslation, type Locale } from './localization.store';
 
+// Export chart controls store
+export { 
+  useChartControls, 
+  useActiveSection,
+  useDateRangeControls,
+  useFilterControls,
+  useHasActiveFilters,
+  type ChartControlsStore 
+} from './chartControls.store';
+
 // Combined store interface with namespaced stores to avoid property conflicts
 export interface CombinedHuballasStore {
     // Namespaced stores to avoid property conflicts

@@ -1,0 +1,15 @@
+.section {
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-separator);
+}
+
+.section p {
+  color: var(--color-text);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.section span {
+  font-weight: 700;
+}

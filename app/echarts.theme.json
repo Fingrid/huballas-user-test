@@ -149,10 +149,18 @@
     }
   },
   "toolbox": {
+    "show": true,
     "iconStyle": { "borderColor": "#999" },
     "emphasis": { "iconStyle": { "borderColor": "#666" } }
   },
-  "legend": { "textStyle": { "color": "#3e5660" }, "icon": "rect" },
+  "legend": {
+    "show": true,
+    "orient": "vertical",
+    "right": "10%",
+    "top": "center",
+    "textStyle": { "color": "#3e5660" },
+    "icon": "rect"
+  },
   "tooltip": {
     "axisPointer": {
       "lineStyle": { "color": "#d5121e", "width": 1 },
@@ -180,7 +188,7 @@
     }
   },
   "visualMap": { "color": ["#bf444c", "#d88273", "#f6efa6"] },
-  "dataZoom": { "handleSize": "undefined%", "textStyle": {} },
+  "dataZoom": { "handleSize": "100%" },
   "markPoint": {
     "label": { "color": "#ffffff" },
     "emphasis": { "label": { "color": "#ffffff" } }

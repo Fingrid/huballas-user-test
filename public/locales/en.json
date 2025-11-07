@@ -211,7 +211,10 @@
       "averageResponseTime": "Average Response Time",
       "medianResponseTime": "Median Response Time",
       "standardDeviation": "Standard Deviation",
-      "noDataForRange": "No response time data available for the selected time range"
+      "noDataForRange": "No response time data available for the selected time range",
+      "p50": "Median (p50)",
+      "p95": "95th percentile (p95)",
+      "p99": "99th percentile (p99)"
     },
     "breakdown": {
       "marketRoles": {
@@ -258,5 +261,14 @@
       "none": "None",
       "stacked": "Stacked"
     }
+  },
+  "usage": {
+    "pageTitle": "Usage Statistics",
+    "pageDescription": "Track and analyze Datahub usage patterns, event volumes, and system activity across all channels and market participants.",
+    "yearToDate": "Year to Date",
+    "viewStatistics": "View Statistics",
+    "selectDataDescription": "Select the data to view from the options below.",
+    "eventCounts": "Event Counts",
+    "eventCountsDescription": "Daily event counts across different channels and market roles"
   }
 }
